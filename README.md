@@ -4,7 +4,7 @@ Aplicação web para acompanhar o progresso de XP de 3 personagens (Elite
 Knight, Royal Paladin, Exalted Monk), com histórico persistente, recolha
 diária automática de XP via guildstats.eu, gráfico de progressão, uma
 calculadora de hunt com hunts guardadas e objetivos de nível definidos
-manualmente, e um planeador do Wheel of Destiny com conselheiro de IA.
+manualmente.
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -116,8 +116,6 @@ volta a correr esse script se algum dia precisares de regenerar o ficheiro.
 ## Estrutura do projeto
 
 ```
-api/
-  wheel-advisor.ts         # função serverless (Vercel) — proxy para a API da Anthropic
 data/
   scraped-history/        # <personagem>.json — histórico recolhido pelo robô (commitado pelo Actions)
 scripts/
@@ -129,7 +127,6 @@ src/
   config.ts               # GITHUB_REPO — preencher após criares o repositório
   data/
     tibia_experience_table.json  # dataset de referência de XP
-    wheel/                        # dados do Wheel of Destiny (mechanics.json + 1 ficheiro por vocação)
   domain/                # lógica pura, sem React — o "motor" da app
     types.ts             # tipos partilhados (CharacterId, HistoryEntry, ...)
     experienceTable.ts    # exp(level) e level(exp), fórmula oficial
@@ -137,16 +134,13 @@ src/
     historyStats.ts       # XP ganha entre leituras consecutivas
     huntCalculator.ts     # cenários de bónus (stamina 150%, stamina+boost 225%)
     validation.ts         # validação de inputs (inteiros, positivos, listas de nível)
-    wheel/                 # pontos por domínio, estágios de Revelation, carregamento dos dados por vocação
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
     huntStorage.ts         # leitura/escrita das hunts guardadas no localStorage
-    wheelBuildStorage.ts    # leitura/escrita das builds do Wheel guardadas no localStorage
   hooks/
     useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
     useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
-    useSavedWheelBuilds.ts  # estado (lista de builds do Wheel guardadas) de um personagem
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
@@ -154,7 +148,6 @@ src/
     xp/                     # input de XP, barra de progresso, cartão de nível
     charts/                  # gráfico de progressão, lista de histórico recente
     hunt/                    # formulário de hunt + cartão de hunt guardada
-    wheel/                    # planeador do Wheel of Destiny + conselheiro de IA
   styles/theme.css          # tema visual
 ```
 
@@ -204,49 +197,6 @@ lógica em `src/domain/levelPlan.ts` e `src/domain/dailySimulation.ts`):
   cada mês, para a tabela nunca ficar gigante. A data final escolhida
   aparece sempre como última linha (destacada a dourado), seja qual for a
   granularidade.
-
-## Wheel of Destiny
-
-Cada personagem tem um planeador do Wheel of Destiny (`src/components/wheel/`),
-com dados em `src/data/wheel/` recolhidos da TibiaWiki em 2026-07-09 (já
-refletindo a "Vocation Adjustments Update 2026" de 16/06/2026, que reformulou
-vários perks). **Nem todos os valores são 100% confirmados** — cada perk tem
-um campo `confidence`; onde a fonte disponível era anterior à reformulação
-(ou, no caso do Monk, inexistente), o valor está marcado como "a confirmar"
-em vez de inventado. A mecânica de pontos (4 domínios × 9 slices, custo por
-anel 50/75/100/150/200, limiares de Revelation aos 250/500/1000) está
-confirmada e cruzada entre duas fontes independentes.
-
-**Roda visual** (`components/wheel/WheelDiagram.tsx`): representação em nós
-ligados por linhas (não fatias de tarte), fiel à estrutura real do jogo —
-clicas num nó para preencheres os pontos até esse anel, cada domínio some 9
-nós (Dedication + Conviction combinados por slice, como no jogo). As posições
-exatas de cada perk dentro do domínio vêm de um dataset de referência
-open-source de 2025 ([Sheltz20/Tibia-Wheel](https://github.com/Sheltz20/Tibia-Wheel),
-licença CC BY-SA), com as substituições documentadas da reformulação de 2026
-já aplicadas (ex: Front Sweep em vez de Chivalrous Challenge). O Monk não
-existia nessa fonte de 2025, por isso as posições de Conviction Perks dessa
-vocação ficam sem posição atribuída — ver `positionConfidenceNote` em cada
-ficheiro de dados e a nota visível na própria página.
-
-O Gem Atelier está incluído como contexto mecânico (tamanhos de gema, slots
-de mod, afinidade de domínio) mas sem a lista exaustiva dos ~70 mods
-individuais — está fora do âmbito desta 1ª fase (ver `mechanics.json`).
-Simulação exata de dano/equipamento (armas, tiers, runas, charms) é uma
-fase futura, ainda não implementada.
-
-**Conselheiro de IA**: pedes uma sugestão descrevendo o teu objetivo em
-texto livre; a função serverless [`api/wheel-advisor.ts`](api/wheel-advisor.ts)
-(Vercel) envia os dados reais do Wheel + o teu objetivo para a API da
-Anthropic (`claude-sonnet-5`, com tool use para garantir resposta
-estruturada) e devolve uma distribuição sugerida + explicação. **Requer**
-a variável de ambiente `ANTHROPIC_API_KEY` configurada no Vercel (Settings →
-Environment Variables) — a chave nunca é exposta ao browser. Só funciona no
-site publicado, não em `npm run dev` local (Vite não corre funções
-serverless); usa `npx vercel dev` se quiseres testar isto localmente.
-
-Builds (manuais ou sugeridas pela IA) guardam-se por personagem em
-`localStorage` (`src/storage/wheelBuildStorage.ts`), para comparares depois.
 
 ## Validação de inputs
 

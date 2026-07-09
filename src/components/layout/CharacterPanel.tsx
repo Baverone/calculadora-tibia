@@ -6,7 +6,6 @@ import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { HuntCalculator } from '../hunt/HuntCalculator';
-import { WheelPlanner } from '../wheel/WheelPlanner';
 
 interface CharacterPanelProps {
   vocation: VocationMeta;
@@ -58,15 +57,6 @@ export function CharacterPanel({ vocation, isActive }: CharacterPanelProps) {
             <HuntCalculator
               characterId={vocation.id}
               idPrefix={`hunt-${vocation.id}`}
-              currentExperience={currentExperience}
-              accentColor={vocation.accentColor}
-            />
-          </div>
-
-          <div className="character-panel__block">
-            <h3>Wheel of Destiny</h3>
-            <WheelPlanner
-              characterId={vocation.id}
               currentExperience={currentExperience}
               accentColor={vocation.accentColor}
             />
