@@ -1,9 +1,16 @@
-// Vercel serverless function (Node.js runtime). Proxies a request to the
-// Anthropic API, keeping ANTHROPIC_API_KEY server-side only — the browser
-// never sees it. Set this env var in the Vercel project dashboard
-// (Settings → Environment Variables); it does NOT work locally with plain
-// `npm run dev` (Vite doesn't run serverless functions) — use `vercel dev`
-// or test against the deployed site.
+// Vercel Edge Function. Proxies a request to the Anthropic API, keeping
+// ANTHROPIC_API_KEY server-side only — the browser never sees it. Set this
+// env var in the Vercel project dashboard (Settings → Environment
+// Variables); it does NOT work locally with plain `npm run dev` (Vite
+// doesn't run serverless functions) — use `vercel dev` or test against the
+// deployed site.
+//
+// Must run on the Edge runtime, not the default Node.js runtime: this
+// handler uses the Web Fetch API signature (Request -> Response), which the
+// Node.js runtime doesn't invoke correctly (it expects the classic
+// (req, res) callback signature and the request hangs until timeout).
+export const config = { runtime: 'edge' };
+
 import eliteKnightData from '../src/data/wheel/elite-knight.json' with { type: 'json' };
 import royalPaladinData from '../src/data/wheel/royal-paladin.json' with { type: 'json' };
 import exaltedMonkData from '../src/data/wheel/exalted-monk.json' with { type: 'json' };
