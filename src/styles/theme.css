@@ -452,6 +452,262 @@ body {
   background: var(--bg-deep);
 }
 
+/* Wheel of Destiny */
+
+.wheel-planner__summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.wheel-planner__total.is-over {
+  color: var(--error);
+}
+
+.wheel-planner__domains {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.domain-card {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.domain-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.domain-card__header h4 {
+  margin: 0;
+  flex: 1;
+  min-width: 120px;
+}
+
+.domain-card__points-input {
+  width: 70px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: inherit;
+  text-align: right;
+}
+
+.domain-card__max {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.domain-card__description {
+  font-size: 0.85rem;
+  color: var(--text-parchment);
+  margin: 8px 0 4px;
+}
+
+.domain-card__confidence {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.domain-card__meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border-gold);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.domain-card__stages {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 0.78rem;
+}
+
+.domain-card__stages li {
+  padding: 5px 0;
+  border-top: 1px solid var(--border-gold);
+  color: var(--text-muted);
+}
+
+.domain-card__stages li.is-unlocked {
+  color: var(--text-parchment);
+}
+
+.domain-card__stage-label {
+  display: block;
+  font-weight: bold;
+}
+
+.domain-card__stage-effect {
+  display: block;
+  margin-top: 2px;
+}
+
+.wheel-planner__manual-save {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.wheel-planner__manual-save input {
+  flex: 1;
+  min-width: 200px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.wheel-planner__manual-save button {
+  border: none;
+  color: #1a1208;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.wheel-reference-panel {
+  margin-top: 20px;
+  border-top: 1px dashed var(--border-gold);
+  padding-top: 14px;
+}
+
+.wheel-reference-panel summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.wheel-reference-panel__section {
+  margin-top: 14px;
+}
+
+.wheel-reference-panel__section h5 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-size: 0.85rem;
+}
+
+.wheel-reference-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.wheel-reference-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-gold);
+}
+
+.wheel-reference-confidence {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.wheel-reference-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.wheel-reference-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.wheel-reference-table th,
+.wheel-reference-table td {
+  padding: 6px 8px;
+  border: 1px solid var(--border-gold);
+  text-align: left;
+}
+
+.wheel-reference-table th {
+  background: var(--bg-panel-alt);
+  color: var(--gold);
+  font-weight: normal;
+}
+
+.wheel-reference-table td {
+  background: var(--bg-deep);
+}
+
+.ai-advisor-section__goal-field {
+  flex: 2;
+  min-width: 220px;
+}
+
+.ai-advisor-result {
+  margin-top: 16px;
+}
+
+.ai-advisor-result__reasoning {
+  margin: 12px 2px 0;
+  font-size: 0.88rem;
+  color: var(--text-parchment);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.ai-advisor-result__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.ai-advisor-result__save-button {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.ai-advisor-result__save-button:hover {
+  background: var(--gold);
+  color: var(--bg-deep);
+}
+
+.saved-builds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .level-plan-total {
   margin: 10px 2px 0;
   font-size: 0.85rem;

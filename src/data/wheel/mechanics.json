@@ -1,0 +1,88 @@
+{
+  "_sourceNote": "Estrutura de pontos confirmada e cruzada entre tibia.fandom.com/wiki/Wheel_of_Destiny e o ficheiro data.yaml do projeto open-source github.com/Sheltz20/Tibia-Wheel (commit de 2025-06-16, pré-reformulação de junho 2026 mas a estrutura de pontos/anéis é mecânica de base e não foi alterada pela reformulação). Verificado em 2026-07-09.",
+  "totalDomains": 4,
+  "slicesPerDomain": 9,
+  "pointsPerLevel": {
+    "startingLevel": 51,
+    "note": "1 ponto por nível a partir do nível 51 em contas premium. Ex: nível 1000 = 950 pontos. Não inclui pontos extra de Promotion Scrolls (até 50), The Way of the Monk Quest (até 10), Hunting Task Shop (até 50) ou upgrades de Mods (até 69) — esses dependem de progresso de conteúdo, não só de nível, por isso não são calculados automaticamente aqui."
+  },
+  "maxPointsOverall": 4000,
+  "domainRings": {
+    "_note": "Cada domínio tem 5 anéis concêntricos, do centro (anel 1) para a borda (anel 5). Cada anel tem um número fixo de slices e um custo em pontos por slice. A soma bate certo com os dois marcos oficiais conhecidos: 575 pontos para alcançar o anel exterior (50+75+100+150+200), e 1000 pontos para maximizar um domínio inteiro (1×50 + 2×75 + 3×100 + 2×150 + 1×200).",
+    "ringPointCostPerSlice": [50, 75, 100, 150, 200],
+    "slicesPerRing": [1, 2, 3, 2, 1],
+    "pointsToReachOuterRing": 575,
+    "pointsToMaxDomain": 1000
+  },
+  "revelationPerks": {
+    "_note": "Cada domínio tem exatamente 1 Revelation Perk (4 no total por vocação), com 3 estágios desbloqueados consoante pontos investidos NESSE domínio.",
+    "stageThresholds": [250, 500, 1000],
+    "universalBonusPerStage": {
+      "_note": "Todos os estágios de Revelation Perk (independentemente de qual) dão também este bónus cumulativo de dano/cura, que se soma se desbloqueares vários perks a estágios diferentes.",
+      "stage1": 4,
+      "stage2": 9,
+      "stage3": 20,
+      "unit": "bónus fixo a todo o dano e cura causados"
+    }
+  },
+  "convictionPerks": {
+    "_note": "Desbloqueado ao maximizar um slice. Muitos Conviction Perks aparecem 2x na roda (efeitos somam-se). Posição exata de cada perk dentro do domínio não está confirmada com confiança pós-reformulação 2026 (ver nota nos ficheiros por vocação) — por isso listamos por vocação sem forçar a atribuição exata a um domínio específico.",
+    "generic": {
+      "_note": "Partilhados por todas as vocações, aparecem várias vezes na roda. Confirmado, atual.",
+      "perks": [
+        { "name": "Resistência a Fogo", "description": "+2% de proteção a fogo por unlock." },
+        { "name": "Resistência a Energia", "description": "+2% de proteção a energia por unlock." },
+        { "name": "Resistência a Gelo", "description": "+2% de proteção a gelo por unlock." },
+        { "name": "Resistência a Terra", "description": "+2% de proteção a terra por unlock." },
+        { "name": "Resistência a Sagrado/Morte", "description": "+1% de proteção a sagrado e morte por unlock." },
+        { "name": "Mana Leech", "description": "+0.25% de mana leech por unlock." },
+        { "name": "Life Leech", "description": "+0.75% de life leech por unlock." },
+        { "name": "Boost de skill principal", "description": "+1 na skill ofensiva principal da vocação (sword/axe/club, distance ou magic level, conforme aplicável) por unlock." },
+        { "name": "Vessel Resonance", "description": "+1 (ou +2 com Greater Gem) de bónus de dano/cura se o tamanho da gema corresponder à Vessel Resonance ativa no domínio." }
+      ]
+    }
+  },
+  "dedicationPerks": {
+    "_note": "Efeito pequeno e gradual por ponto investido, até ao máximo do slice. Categorias confirmadas pela TibiaWiki; magnitudes exatas por vocação marcadas como 'a confirmar' quando a fonte disponível é anterior à reformulação de junho 2026.",
+    "categories": [
+      { "id": "hp", "label": "HP máximo" },
+      { "id": "mana", "label": "Mana máxima" },
+      { "id": "capacity", "label": "Capacidade" },
+      { "id": "hp_regen_burst_chance", "label": "Chance de regeneração extra de HP" },
+      { "id": "mana_regen_burst_chance", "label": "Chance de regeneração extra de Mana" },
+      { "id": "mitigation", "label": "Multiplicador de mitigação (redução de dano)" }
+    ],
+    "mitigationPerPoint": {
+      "value": 0.075,
+      "unit": "% de multiplicador de mitigação por ponto",
+      "sourceNote": "Confirmado — alterado de 0.03% para 0.075% por ponto na Vocation Adjustments Update 2026 (16/06/2026)."
+    }
+  },
+  "gemAtelier": {
+    "_note": "Sistema adicional (Winter Update 2023) que soma bónus por cima da distribuição de pontos. Mecânica confirmada; lista exaustiva dos ~70 mods individuais não recolhida nesta fase (fora do âmbito da 1ª entrega) — usada como contexto geral para o conselheiro de IA, não como base de dados exata.",
+    "gemSizes": [
+      { "name": "Lesser Gem", "basicModSlots": 1, "supremeModSlots": 0, "primarySource": "Monstros influenciados; também dropam de monstros fiendish." },
+      { "name": "Regular Gem", "basicModSlots": 2, "supremeModSlots": 0, "primarySource": "Bosses Archfoe (loot coop); também dropam de monstros fiendish." },
+      { "name": "Greater Gem", "basicModSlots": 2, "supremeModSlots": 1, "primarySource": "Monstros fiendish; chance baixa em bosses Archfoe." }
+    ],
+    "modCounts": {
+      "basic": { "total": 49, "vocationSpecific": 18, "general": 31 },
+      "supreme": { "total": 23, "vocationSpecific": 19, "general": 4 },
+      "aConfirmar": "Lista exaustiva dos efeitos individuais de cada um destes ~70 mods — fora do âmbito da 1ª fase."
+    },
+    "domainAffinity": "Uma gema só pode ser encaixada num 'vessel' da mesma cor de domínio (afinidade). É possível pagar para rodar a afinidade de uma gema para o domínio seguinte (sentido horário).",
+    "vesselResonance": "Pelo menos uma Vessel Resonance do domínio tem de estar ativa antes dos bónus da gema serem aplicados.",
+    "maxGemsPerCharacter": 225,
+    "revealedGemsAreBound": true,
+    "mitigationPerLesserGem": {
+      "value": [20, 22, 24, 30],
+      "unit": "% de multiplicador de mitigação (Lesser Gem, escala com tier)",
+      "sourceNote": "Confirmado — alterado de 5/5.5/6/7.5% para 20/22/24/30% na Vocation Adjustments Update 2026."
+    }
+  },
+  "lastMajorUpdate": {
+    "name": "Vocation Adjustments Update 2026",
+    "date": "2026-06-16",
+    "note": "Reformulação significativa de perks do Wheel of Destiny para as 5 vocações. Os dados por vocação neste ficheiro refletem o estado pós-atualização conforme a TibiaWiki à data de 2026-07-09."
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "vocationId": "exalted-monk",
+  "vocationName": "Exalted Monk",
+  "verifiedAt": "2026-07-09",
+  "sourceNote": "tibia.fandom.com/wiki/Wheel_of_Destiny/Revelation_Perks e /Conviction_Perks, ambas já refletindo a Vocation Adjustments Update 2026 (2026-06-16). Monk é a vocação mais recente do jogo — não há fonte antiga (pré-2026) disponível para cruzar números de estágio, por isso mais valores aqui ficam 'a confirmar' do que nas outras 2 vocações.",
+  "domains": [
+    {
+      "id": "spiritual-outburst",
+      "revelationPerk": {
+        "name": "Spiritual Outburst",
+        "description": "Feitiço poderoso que consome Harmony. Liberta um ataque massivo que encadeia inimigos adicionais. Se usado com Harmony completa, repete-se após 1s por uma fração do dano original.",
+        "confidence": "descrição confirmada; nenhum número por estágio disponível em nenhuma fonte consultada",
+        "stages": [
+          { "stage": 1, "pointsRequired": 250, "effect": "Não documentado.", "confidence": "a confirmar" },
+          { "stage": 2, "pointsRequired": 500, "effect": "Não documentado.", "confidence": "a confirmar" },
+          { "stage": 3, "pointsRequired": 1000, "effect": "Não documentado.", "confidence": "a confirmar" }
+        ]
+      }
+    },
+    {
+      "id": "ascetic",
+      "revelationPerk": {
+        "name": "Ascetic",
+        "description": "Melhora todos os 'spenders' e permite que Mantra melhore o dano dos teus ataques.",
+        "confidence": "confirmado, atual",
+        "stages": [
+          { "stage": 1, "pointsRequired": 250, "effect": "+1% ao bónus base de Harmony; ataques automáticos causam dano adicional igual a 100% do teu Mantra.", "confidence": "confirmado" },
+          { "stage": 2, "pointsRequired": 500, "effect": "+2% ao bónus base de Harmony; +200% do Mantra.", "confidence": "confirmado" },
+          { "stage": 3, "pointsRequired": 1000, "effect": "+3% ao bónus base de Harmony; +300% do Mantra. Não é afetado por Serene.", "confidence": "confirmado" }
+        ]
+      }
+    },
+    {
+      "id": "gift-of-life",
+      "revelationPerk": {
+        "name": "Gift of Life",
+        "description": "Sob certas condições, cura o jogador antes de receber dano que seria fatal, dando uma segunda oportunidade. Também recupera uma % da mana máxima (adicionado na reformulação de 2026).",
+        "confidence": "descrição confirmada (partilhada entre vocações); números de estágio nunca confirmados especificamente para Monk",
+        "stages": [
+          { "stage": 1, "pointsRequired": 250, "effect": "Provavelmente ~20% cura / ~20% mana recuperada, por analogia com outras vocações.", "confidence": "a confirmar — extrapolado, não confirmado para Monk" },
+          { "stage": 2, "pointsRequired": 500, "effect": "Provavelmente ~25% / ~25%.", "confidence": "a confirmar — extrapolado" },
+          { "stage": 3, "pointsRequired": 1000, "effect": "Provavelmente ~30% / ~30%.", "confidence": "a confirmar — extrapolado" }
+        ]
+      }
+    },
+    {
+      "id": "avatar-of-balance",
+      "revelationPerk": {
+        "name": "Avatar of Balance",
+        "description": "Transforma o jogador num avatar poderoso durante um tempo limitado (padrão partilhado com os Avatars de outras vocações — Light, Nature, Steel, Storm).",
+        "confidence": "existência confirmada pelo nome; nenhum número de estágio encontrado para Monk especificamente",
+        "stages": [
+          { "stage": 1, "pointsRequired": 250, "effect": "Não documentado para Monk.", "confidence": "a confirmar" },
+          { "stage": 2, "pointsRequired": 500, "effect": "Não documentado para Monk.", "confidence": "a confirmar" },
+          { "stage": 3, "pointsRequired": 1000, "effect": "Não documentado para Monk.", "confidence": "a confirmar" }
+        ]
+      }
+    }
+  ],
+  "vocationConvictionPerks": [
+    {
+      "name": "Guiding Presence",
+      "description": "Ganhas uma aura que partilha 100% do teu Mantra com membros do grupo.",
+      "confidence": "confirmado, atual — aumentado de 50% para 100% na reformulação de 2026."
+    },
+    {
+      "name": "Sanctuary",
+      "description": "Consumir Harmony cria um campo que dura 5s, aumentando o teu dano e cura causados em 2% por cada Harmony consumida. Também aumenta em 10% o dano que causas a inimigos adjacentes e a cura que fazes a aliados adjacentes.",
+      "confidence": "confirmado, atual — efeito de área adjacente adicionado na reformulação de 2026."
+    }
+  ],
+  "augmentations": {
+    "_note": "Cada habilidade listada aparece 2x na roda (mecânica padrão); estágio 1 desbloqueia ao maximizar o primeiro slice, estágio 2 ao maximizar o segundo. Tabela confirmada atual (pós Vocation Adjustments 2026) — os augments de Thousand Fist Blows substituíram os antigos de Sweeping Takedown na reformulação.",
+    "confidence": "confirmado, atual",
+    "abilities": [
+      { "name": "Mass Spirit Mend", "stage1": "+8% cura base", "stage2": "cooldown reduzido em 4s" },
+      { "name": "Flurry of Blows", "stage1": "aumenta a área afetada", "stage2": "+15% dano base" },
+      { "name": "Mystic Repulse", "stage1": "cooldown reduzido em 6s", "stage2": "+40% dano base" },
+      { "name": "Thousand Fist Blows", "stage1": "+40% dano crítico extra", "stage2": "cooldown reduzido em 6s" },
+      { "name": "Chained Penance", "stage1": "salta para +1 alvo adicional", "stage2": "+18% dano base" }
+    ]
+  }
+}
