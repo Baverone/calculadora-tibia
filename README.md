@@ -217,6 +217,18 @@ em vez de inventado. A mecânica de pontos (4 domínios × 9 slices, custo por
 anel 50/75/100/150/200, limiares de Revelation aos 250/500/1000) está
 confirmada e cruzada entre duas fontes independentes.
 
+**Roda visual** (`components/wheel/WheelDiagram.tsx`): representação em nós
+ligados por linhas (não fatias de tarte), fiel à estrutura real do jogo —
+clicas num nó para preencheres os pontos até esse anel, cada domínio some 9
+nós (Dedication + Conviction combinados por slice, como no jogo). As posições
+exatas de cada perk dentro do domínio vêm de um dataset de referência
+open-source de 2025 ([Sheltz20/Tibia-Wheel](https://github.com/Sheltz20/Tibia-Wheel),
+licença CC BY-SA), com as substituições documentadas da reformulação de 2026
+já aplicadas (ex: Front Sweep em vez de Chivalrous Challenge). O Monk não
+existia nessa fonte de 2025, por isso as posições de Conviction Perks dessa
+vocação ficam sem posição atribuída — ver `positionConfidenceNote` em cada
+ficheiro de dados e a nota visível na própria página.
+
 O Gem Atelier está incluído como contexto mecânico (tamanhos de gema, slots
 de mod, afinidade de domínio) mas sem a lista exaustiva dos ~70 mods
 individuais — está fora do âmbito desta 1ª fase (ver `mechanics.json`).

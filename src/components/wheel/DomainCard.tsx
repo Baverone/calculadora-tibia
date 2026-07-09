@@ -1,5 +1,9 @@
-import { computeDomainProgress, DOMAIN_MAX_POINTS } from '../../domain/wheel/mechanics';
+import { computeDomainProgress, DOMAIN_MAX_POINTS, WHEEL_MECHANICS } from '../../domain/wheel/mechanics';
 import type { WheelDomain } from '../../domain/wheel/types';
+
+function dedicationLabel(id: string): string {
+  return WHEEL_MECHANICS.dedicationPerks.categories.find((c) => c.id === id)?.label ?? id;
+}
 
 interface DomainCardProps {
   domain: WheelDomain;
@@ -58,6 +62,39 @@ export function DomainCard({ domain, points, onPointsChange, accentColor }: Doma
           </li>
         ))}
       </ul>
+
+      {domain.nodes && (
+        <details className="domain-card__nodes">
+          <summary>Ver os 9 slices deste domínio</summary>
+          <table className="wheel-reference-table">
+            <thead>
+              <tr>
+                <th>Anel</th>
+                <th>Pts</th>
+                <th>Dedication</th>
+                <th>Conviction</th>
+              </tr>
+            </thead>
+            <tbody>
+              {domain.nodes.dedication.map((dedNode, i) => {
+                const convNode = domain.nodes!.conviction[i];
+                let sliceOfSameRing = 0;
+                for (let j = 0; j < i; j++) if (domain.nodes!.dedication[j].ring === dedNode.ring) sliceOfSameRing++;
+                const ringIdx = dedNode.ring - 1;
+                const unlocked = progress.slicesFilledPerRing[ringIdx] > sliceOfSameRing;
+                return (
+                  <tr key={i} className={unlocked ? 'is-unlocked' : undefined}>
+                    <td>{dedNode.ring}</td>
+                    <td>{dedNode.points}</td>
+                    <td>{dedicationLabel(dedNode.name)}</td>
+                    <td>{convNode?.name || '—'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </details>
+      )}
     </div>
   );
 }

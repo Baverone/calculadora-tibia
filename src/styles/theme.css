@@ -468,6 +468,81 @@ body {
   color: var(--error);
 }
 
+.wheel-diagram {
+  max-width: 480px;
+  margin: 10px auto 0;
+}
+
+.wheel-diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wheel-diagram__node-group {
+  cursor: pointer;
+}
+
+.wheel-diagram__node {
+  transition: fill 0.15s, r 0.1s;
+}
+
+.wheel-diagram__node-group:hover .wheel-diagram__node {
+  stroke-width: 2.5;
+}
+
+.wheel-diagram__hub-label {
+  font-size: 11px;
+  font-weight: bold;
+  fill: var(--gold);
+}
+
+.wheel-diagram__domain-label {
+  font-size: 12px;
+  fill: var(--text-parchment);
+}
+
+.wheel-diagram__hint {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 6px 0 0;
+}
+
+.wheel-diagram__confidence-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 10px 4px 0;
+  text-align: center;
+}
+
+.domain-card__nodes {
+  margin-top: 12px;
+  border-top: 1px dashed var(--border-gold);
+  padding-top: 10px;
+}
+
+.domain-card__nodes summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 0.78rem;
+}
+
+.domain-card__nodes table {
+  margin-top: 8px;
+  font-size: 0.72rem;
+}
+
+.domain-card__nodes tr.is-unlocked td {
+  color: var(--text-parchment);
+  font-weight: bold;
+}
+
+.domain-card__nodes tr:not(.is-unlocked) td {
+  color: var(--text-muted);
+}
+
 .wheel-planner__domains {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

@@ -47,6 +47,7 @@
     "categories": [
       { "id": "hp", "label": "HP máximo" },
       { "id": "mana", "label": "Mana máxima" },
+      { "id": "hp_mana", "label": "HP máximo + Mana máxima (combinado)" },
       { "id": "capacity", "label": "Capacidade" },
       { "id": "hp_regen_burst_chance", "label": "Chance de regeneração extra de HP" },
       { "id": "mana_regen_burst_chance", "label": "Chance de regeneração extra de Mana" },

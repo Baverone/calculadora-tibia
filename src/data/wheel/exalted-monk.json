@@ -11,10 +11,75 @@
         "description": "Feitiço poderoso que consome Harmony. Liberta um ataque massivo que encadeia inimigos adicionais. Se usado com Harmony completa, repete-se após 1s por uma fração do dano original.",
         "confidence": "descrição confirmada; nenhum número por estágio disponível em nenhuma fonte consultada",
         "stages": [
-          { "stage": 1, "pointsRequired": 250, "effect": "Não documentado.", "confidence": "a confirmar" },
-          { "stage": 2, "pointsRequired": 500, "effect": "Não documentado.", "confidence": "a confirmar" },
-          { "stage": 3, "pointsRequired": 1000, "effect": "Não documentado.", "confidence": "a confirmar" }
+          {
+            "stage": 1,
+            "pointsRequired": 250,
+            "effect": "Não documentado.",
+            "confidence": "a confirmar"
+          },
+          {
+            "stage": 2,
+            "pointsRequired": 500,
+            "effect": "Não documentado.",
+            "confidence": "a confirmar"
+          },
+          {
+            "stage": 3,
+            "pointsRequired": 1000,
+            "effect": "Não documentado.",
+            "confidence": "a confirmar"
+          }
         ]
+      },
+      "nodes": {
+        "dedication": [
+          {
+            "ring": 1,
+            "points": 50,
+            "name": "hp"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "mitigation"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "mana"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "capacity"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mitigation"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "hp"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "mana"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "mitigation"
+          },
+          {
+            "ring": 5,
+            "points": 200,
+            "name": "hp_mana"
+          }
+        ],
+        "conviction": []
       }
     },
     {
@@ -24,10 +89,75 @@
         "description": "Melhora todos os 'spenders' e permite que Mantra melhore o dano dos teus ataques.",
         "confidence": "confirmado, atual",
         "stages": [
-          { "stage": 1, "pointsRequired": 250, "effect": "+1% ao bónus base de Harmony; ataques automáticos causam dano adicional igual a 100% do teu Mantra.", "confidence": "confirmado" },
-          { "stage": 2, "pointsRequired": 500, "effect": "+2% ao bónus base de Harmony; +200% do Mantra.", "confidence": "confirmado" },
-          { "stage": 3, "pointsRequired": 1000, "effect": "+3% ao bónus base de Harmony; +300% do Mantra. Não é afetado por Serene.", "confidence": "confirmado" }
+          {
+            "stage": 1,
+            "pointsRequired": 250,
+            "effect": "+1% ao bónus base de Harmony; ataques automáticos causam dano adicional igual a 100% do teu Mantra.",
+            "confidence": "confirmado"
+          },
+          {
+            "stage": 2,
+            "pointsRequired": 500,
+            "effect": "+2% ao bónus base de Harmony; +200% do Mantra.",
+            "confidence": "confirmado"
+          },
+          {
+            "stage": 3,
+            "pointsRequired": 1000,
+            "effect": "+3% ao bónus base de Harmony; +300% do Mantra. Não é afetado por Serene.",
+            "confidence": "confirmado"
+          }
         ]
+      },
+      "nodes": {
+        "dedication": [
+          {
+            "ring": 1,
+            "points": 50,
+            "name": "mana"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "mitigation"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "mana"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "capacity"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mitigation"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mana"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "mana"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "mitigation"
+          },
+          {
+            "ring": 5,
+            "points": 200,
+            "name": "hp_mana"
+          }
+        ],
+        "conviction": []
       }
     },
     {
@@ -37,10 +167,75 @@
         "description": "Sob certas condições, cura o jogador antes de receber dano que seria fatal, dando uma segunda oportunidade. Também recupera uma % da mana máxima (adicionado na reformulação de 2026).",
         "confidence": "descrição confirmada (partilhada entre vocações); números de estágio nunca confirmados especificamente para Monk",
         "stages": [
-          { "stage": 1, "pointsRequired": 250, "effect": "Provavelmente ~20% cura / ~20% mana recuperada, por analogia com outras vocações.", "confidence": "a confirmar — extrapolado, não confirmado para Monk" },
-          { "stage": 2, "pointsRequired": 500, "effect": "Provavelmente ~25% / ~25%.", "confidence": "a confirmar — extrapolado" },
-          { "stage": 3, "pointsRequired": 1000, "effect": "Provavelmente ~30% / ~30%.", "confidence": "a confirmar — extrapolado" }
+          {
+            "stage": 1,
+            "pointsRequired": 250,
+            "effect": "Provavelmente ~20% cura / ~20% mana recuperada, por analogia com outras vocações.",
+            "confidence": "a confirmar — extrapolado, não confirmado para Monk"
+          },
+          {
+            "stage": 2,
+            "pointsRequired": 500,
+            "effect": "Provavelmente ~25% / ~25%.",
+            "confidence": "a confirmar — extrapolado"
+          },
+          {
+            "stage": 3,
+            "pointsRequired": 1000,
+            "effect": "Provavelmente ~30% / ~30%.",
+            "confidence": "a confirmar — extrapolado"
+          }
         ]
+      },
+      "nodes": {
+        "dedication": [
+          {
+            "ring": 1,
+            "points": 50,
+            "name": "capacity"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "hp"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "capacity"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "capacity"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "hp"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mana"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "capacity"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "hp"
+          },
+          {
+            "ring": 5,
+            "points": 200,
+            "name": "hp_mana"
+          }
+        ],
+        "conviction": []
       }
     },
     {
@@ -50,10 +245,75 @@
         "description": "Transforma o jogador num avatar poderoso durante um tempo limitado (padrão partilhado com os Avatars de outras vocações — Light, Nature, Steel, Storm).",
         "confidence": "existência confirmada pelo nome; nenhum número de estágio encontrado para Monk especificamente",
         "stages": [
-          { "stage": 1, "pointsRequired": 250, "effect": "Não documentado para Monk.", "confidence": "a confirmar" },
-          { "stage": 2, "pointsRequired": 500, "effect": "Não documentado para Monk.", "confidence": "a confirmar" },
-          { "stage": 3, "pointsRequired": 1000, "effect": "Não documentado para Monk.", "confidence": "a confirmar" }
+          {
+            "stage": 1,
+            "pointsRequired": 250,
+            "effect": "Não documentado para Monk.",
+            "confidence": "a confirmar"
+          },
+          {
+            "stage": 2,
+            "pointsRequired": 500,
+            "effect": "Não documentado para Monk.",
+            "confidence": "a confirmar"
+          },
+          {
+            "stage": 3,
+            "pointsRequired": 1000,
+            "effect": "Não documentado para Monk.",
+            "confidence": "a confirmar"
+          }
         ]
+      },
+      "nodes": {
+        "dedication": [
+          {
+            "ring": 1,
+            "points": 50,
+            "name": "mitigation"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "hp"
+          },
+          {
+            "ring": 2,
+            "points": 75,
+            "name": "capacity"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mitigation"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "hp"
+          },
+          {
+            "ring": 3,
+            "points": 100,
+            "name": "mana"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "capacity"
+          },
+          {
+            "ring": 4,
+            "points": 150,
+            "name": "hp"
+          },
+          {
+            "ring": 5,
+            "points": 200,
+            "name": "hp_mana"
+          }
+        ],
+        "conviction": []
       }
     }
   ],
@@ -73,11 +333,32 @@
     "_note": "Cada habilidade listada aparece 2x na roda (mecânica padrão); estágio 1 desbloqueia ao maximizar o primeiro slice, estágio 2 ao maximizar o segundo. Tabela confirmada atual (pós Vocation Adjustments 2026) — os augments de Thousand Fist Blows substituíram os antigos de Sweeping Takedown na reformulação.",
     "confidence": "confirmado, atual",
     "abilities": [
-      { "name": "Mass Spirit Mend", "stage1": "+8% cura base", "stage2": "cooldown reduzido em 4s" },
-      { "name": "Flurry of Blows", "stage1": "aumenta a área afetada", "stage2": "+15% dano base" },
-      { "name": "Mystic Repulse", "stage1": "cooldown reduzido em 6s", "stage2": "+40% dano base" },
-      { "name": "Thousand Fist Blows", "stage1": "+40% dano crítico extra", "stage2": "cooldown reduzido em 6s" },
-      { "name": "Chained Penance", "stage1": "salta para +1 alvo adicional", "stage2": "+18% dano base" }
+      {
+        "name": "Mass Spirit Mend",
+        "stage1": "+8% cura base",
+        "stage2": "cooldown reduzido em 4s"
+      },
+      {
+        "name": "Flurry of Blows",
+        "stage1": "aumenta a área afetada",
+        "stage2": "+15% dano base"
+      },
+      {
+        "name": "Mystic Repulse",
+        "stage1": "cooldown reduzido em 6s",
+        "stage2": "+40% dano base"
+      },
+      {
+        "name": "Thousand Fist Blows",
+        "stage1": "+40% dano crítico extra",
+        "stage2": "cooldown reduzido em 6s"
+      },
+      {
+        "name": "Chained Penance",
+        "stage1": "salta para +1 alvo adicional",
+        "stage2": "+18% dano base"
+      }
     ]
-  }
+  },
+  "positionConfidenceNote": "O Monk não existia na fonte de dados de referência de 2025, por isso não há baseline de posições de Conviction Perks para esta vocação — a lista de Conviction Perks é mostrada sem posição atribuída num anel/domínio específico. O layout de Dedication Perks é o mesmo para todas as vocações (confirmado ao comparar Knight e Paladin), por isso foi reutilizado aqui, assumindo que o domínio \"Gift of Life\" ocupa o mesmo índice (2) que nas outras vocações — esta correspondência de índice é uma inferência razoável, não uma confirmação direta."
 }

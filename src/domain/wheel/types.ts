@@ -14,9 +14,20 @@ export interface RevelationPerk {
   stages: RevelationStage[];
 }
 
+/** One node in a domain's ring layout — either a Dedication category id or a Conviction/Augmented perk name. */
+export interface WheelNode {
+  ring: number;
+  points: number;
+  name: string;
+}
+
 export interface WheelDomain {
   id: string;
   revelationPerk: RevelationPerk;
+  nodes?: {
+    dedication: WheelNode[];
+    conviction: WheelNode[];
+  };
 }
 
 export interface ConvictionPerk {
@@ -42,6 +53,7 @@ export interface VocationWheelData {
     confidence: string;
     abilities: Augmentation[];
   };
+  positionConfidenceNote?: string;
 }
 
 /** Points a user has manually allocated to one domain (0-1000). */

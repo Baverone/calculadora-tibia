@@ -65,6 +65,13 @@ export function computeDomainProgress(domainId: string, points: number): DomainP
   };
 }
 
+/** Points needed to fully fill every ring from the center up to and including the given ring (1-indexed). */
+export function cumulativePointsThroughRing(ring: number): number {
+  let total = 0;
+  for (let i = 0; i < ring; i++) total += RING_POINT_COSTS[i] * RING_SLICE_COUNTS[i];
+  return total;
+}
+
 export function totalAllocatedPoints(allocations: DomainAllocation[]): number {
   return allocations.reduce((sum, allocation) => sum + allocation.points, 0);
 }

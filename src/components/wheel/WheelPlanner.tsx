@@ -3,8 +3,14 @@ import type { CharacterId } from '../../domain/types';
 import type { DomainAllocation, WheelBuild } from '../../domain/wheel/types';
 import { getWheelData } from '../../domain/wheel/loadWheelData';
 import { levelForExperience } from '../../domain/experienceTable';
-import { pointsAvailableFromLevel, totalAllocatedPoints, validateAllocations } from '../../domain/wheel/mechanics';
+import {
+  cumulativePointsThroughRing,
+  pointsAvailableFromLevel,
+  totalAllocatedPoints,
+  validateAllocations,
+} from '../../domain/wheel/mechanics';
 import { useSavedWheelBuilds } from '../../hooks/useSavedWheelBuilds';
+import { WheelDiagram } from './WheelDiagram';
 import { DomainCard } from './DomainCard';
 import { WheelReferencePanel } from './WheelReferencePanel';
 import { AiAdvisorSection } from './AiAdvisorSection';
@@ -51,6 +57,15 @@ export function WheelPlanner({ characterId, currentExperience, accentColor }: Wh
     }));
   }
 
+  function handleNodeClick(domainId: string, ring: number) {
+    const current = allocations.find((a) => a.domainId === domainId)?.points ?? 0;
+    const throughRing = cumulativePointsThroughRing(ring);
+    const throughPreviousRing = cumulativePointsThroughRing(ring - 1);
+    // Toggle: if this ring is already filled, empty it (and everything past it); otherwise fill up to it.
+    const nextPoints = current >= throughRing ? throughPreviousRing : throughRing;
+    updateDomainPoints(domainId, nextPoints);
+  }
+
   function handleSaveManual() {
     addBuild({
       name: buildNameInput.trim() || 'Distribuição manual',
@@ -80,6 +95,15 @@ export function WheelPlanner({ characterId, currentExperience, accentColor }: Wh
         </span>
       </div>
       {!validation.ok && <p className="field-error">{validation.error}</p>}
+
+      <WheelDiagram
+        domains={wheelData.domains}
+        allocations={allocations}
+        vocationName={wheelData.vocationName}
+        accentColor={accentColor}
+        onNodeClick={handleNodeClick}
+      />
+      {wheelData.positionConfidenceNote && <p className="wheel-diagram__confidence-note">ℹ️ {wheelData.positionConfidenceNote}</p>}
 
       <div className="wheel-planner__domains">
         {wheelData.domains.map((domain) => {
