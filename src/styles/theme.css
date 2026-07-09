@@ -1,0 +1,524 @@
+/* Tibia-inspired theme: dark parchment + gold, no official assets used. */
+
+:root {
+  --bg-deep: #17120c;
+  --bg-panel: #241b12;
+  --bg-panel-alt: #2c2015;
+  --border-gold: #5a4630;
+  --text-parchment: #f0e0b8;
+  --text-muted: #b8a373;
+  --gold: #d4af37;
+  --error: #e74c3c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #2a2015 0%, var(--bg-deep) 60%);
+  color: var(--text-parchment);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  min-height: 100vh;
+}
+
+.app-shell {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.app-header h1 {
+  text-align: center;
+  color: var(--gold);
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+
+.tabs-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-gold);
+}
+
+.tabs-bar__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: color 0.15s, background 0.15s;
+}
+
+.tabs-bar__tab:hover {
+  color: var(--text-parchment);
+}
+
+.tabs-bar__tab--active {
+  color: var(--tab-accent, var(--gold));
+  background: var(--bg-panel-alt);
+  box-shadow: inset 0 3px 0 var(--tab-accent, var(--gold));
+}
+
+.tabs-bar__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Character panel */
+
+.character-panel--hidden {
+  display: none;
+}
+
+.character-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: 0 0 10px 10px;
+  padding: 20px;
+}
+
+.character-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.character-panel__header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.character-panel__header p {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.character-panel__icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.character-panel__block {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.character-panel__block h3 {
+  margin: 0 0 12px;
+  color: var(--gold);
+  font-size: 1.05rem;
+}
+
+/* XP input form */
+
+.xp-input-form label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.xp-input-form__row {
+  display: flex;
+  gap: 8px;
+}
+
+.xp-input-form input,
+.hunt-form input {
+  flex: 1;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.xp-input-form button,
+.hunt-form button {
+  border: none;
+  color: #1a1208;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.field-error {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin: 8px 0 0;
+}
+
+/* Level progress card */
+
+.level-progress-card {
+  margin-top: 16px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.level-progress-card__levels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.level-progress-card__label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.level-progress-card__value {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.level-progress-card__details {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.level-progress-card__details strong {
+  color: var(--text-parchment);
+}
+
+/* Progress bar */
+
+.progress-bar {
+  position: relative;
+  height: 22px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.progress-bar__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--text-parchment);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Chart */
+
+.chart-empty-state {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 20px;
+  text-align: center;
+  border: 1px dashed var(--border-gold);
+  border-radius: 8px;
+}
+
+.recent-history-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.recent-history-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-gold);
+  color: var(--text-muted);
+}
+
+.recent-history-list__xp {
+  color: var(--text-parchment);
+}
+
+.recent-history-list__source-tag {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-gold);
+  color: var(--gold);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.recent-history-list__gain.positive {
+  color: #6fbf73;
+}
+
+.recent-history-list__gain.negative {
+  color: var(--error);
+}
+
+/* Hunt calculator */
+
+.hunt-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+}
+
+.hunt-form__field {
+  flex: 1;
+  min-width: 140px;
+}
+
+.hunt-form__field label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.hunt-form__auto-tag {
+  color: var(--gold);
+  font-size: 0.7rem;
+}
+
+.saved-hunts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.saved-hunt-card {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+}
+
+.saved-hunt-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.saved-hunt-card__header h4 {
+  margin: 0;
+  color: var(--gold);
+}
+
+.saved-hunt-card__delete {
+  background: transparent;
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.saved-hunt-card__delete:hover {
+  background: var(--error);
+  color: var(--bg-deep);
+}
+
+.saved-hunt-card__meta {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: 4px 0 12px;
+}
+
+.hunt-scenario-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.hunt-scenario-table th,
+.hunt-scenario-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--border-gold);
+  text-align: left;
+}
+
+.hunt-scenario-table th {
+  background: var(--bg-panel-alt);
+  color: var(--gold);
+  font-weight: normal;
+}
+
+.hunt-scenario-table td {
+  background: var(--bg-deep);
+}
+
+.saved-hunt-card__subsection {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.saved-hunt-card__subsection h5 {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.level-plan-table-wrapper {
+  margin-top: 16px;
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+}
+
+.level-plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.level-plan-table th,
+.level-plan-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-gold);
+  text-align: left;
+}
+
+.level-plan-table thead tr {
+  height: 30px;
+}
+
+.level-plan-table thead tr:first-child th {
+  position: sticky;
+  top: 0;
+}
+
+.level-plan-table thead tr:last-child th {
+  position: sticky;
+  top: 30px;
+}
+
+.level-plan-table th {
+  background: var(--bg-panel-alt);
+  color: var(--gold);
+  font-weight: normal;
+  text-align: center;
+}
+
+.level-plan-table td {
+  background: var(--bg-deep);
+}
+
+.level-plan-total {
+  margin: 10px 2px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.level-plan-total strong {
+  color: var(--gold);
+}
+
+.daily-simulation-result {
+  margin-top: 14px;
+}
+
+.daily-simulation-summary {
+  margin: 0 2px;
+  font-size: 0.9rem;
+  color: var(--text-parchment);
+  line-height: 1.5;
+}
+
+.daily-simulation-summary strong {
+  color: var(--gold);
+}
+
+.daily-simulation-note {
+  margin: 8px 2px 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.simulation-table-wrapper {
+  margin-top: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+}
+
+.simulation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.simulation-table th,
+.simulation-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-gold);
+  text-align: left;
+}
+
+.simulation-table th {
+  background: var(--bg-panel-alt);
+  color: var(--gold);
+  font-weight: normal;
+  position: sticky;
+  top: 0;
+}
+
+.simulation-table td {
+  background: var(--bg-deep);
+}
+
+.simulation-table tr.is-final-row td {
+  color: var(--gold);
+  font-weight: bold;
+}

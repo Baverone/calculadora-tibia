@@ -1,0 +1,44 @@
+name: Scrape Tibia Experience
+
+# Two UTC triggers to cover Lisbon's 10:00 both in winter (UTC+0) and summer
+# (UTC+1) DST — the script itself checks the real Europe/Lisbon time and
+# no-ops if it's not actually ~10:00 there, so this is safe even during the
+# week the two schedules briefly overlap around a DST transition.
+on:
+  schedule:
+    - cron: '0 9 * * *'
+    - cron: '0 10 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Run scraper
+        run: node scripts/scrape-experience.mjs
+        env:
+          # workflow_dispatch (manual runs) always scrape, ignoring the time-of-day check.
+          FORCE_SCRAPE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
+
+      - name: Commit updated history
+        run: |
+          git config user.name "tibia-xp-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/scraped-history
+          if git diff --cached --quiet; then
+            echo "Sem alterações a commitar."
+          else
+            git commit -m "chore: atualizar histórico de XP ($(date -u +%Y-%m-%d))"
+            git push
+          fi
