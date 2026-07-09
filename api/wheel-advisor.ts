@@ -11,10 +11,10 @@
 // (req, res) callback signature and the request hangs until timeout).
 export const config = { runtime: 'edge' };
 
-import eliteKnightData from '../src/data/wheel/elite-knight.json' with { type: 'json' };
-import royalPaladinData from '../src/data/wheel/royal-paladin.json' with { type: 'json' };
-import exaltedMonkData from '../src/data/wheel/exalted-monk.json' with { type: 'json' };
-import mechanicsData from '../src/data/wheel/mechanics.json' with { type: 'json' };
+import eliteKnightData from '../src/data/wheel/elite-knight.json';
+import royalPaladinData from '../src/data/wheel/royal-paladin.json';
+import exaltedMonkData from '../src/data/wheel/exalted-monk.json';
+import mechanicsData from '../src/data/wheel/mechanics.json';
 
 const WHEEL_DATA_BY_CHARACTER: Record<string, unknown> = {
   'elite-knight': eliteKnightData,
