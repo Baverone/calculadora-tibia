@@ -17,6 +17,7 @@ function App() {
       </header>
 
       <RashidCard />
+      <TibiadromeSection />
       <TimersPanel />
 
       <TabsBar activeId={activeId} onChange={setActiveId} />
@@ -27,8 +28,6 @@ function App() {
           <CharacterPanel key={vocation.id} vocation={vocation} isActive={vocation.id === activeId} />
         ))}
       </main>
-
-      <TibiadromeSection />
     </div>
   );
 }
