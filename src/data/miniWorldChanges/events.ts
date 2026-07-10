@@ -26,7 +26,7 @@ export const MINI_WORLD_CHANGE_EVENTS: MiniWorldChangeEvent[] = [
   { name: 'Nomads', location: 'deserto de Ankrahmun' },
   { name: 'Noodles is Gone', location: 'arredores de Thais' },
   { name: 'Poacher Caves', location: 'Ferngrims Gate, norte do Green Claw Swamp' },
-  { name: 'Oriental Trader', location: 'Ankrahmun, Carlin ou Liberty Bay' },
+  { name: 'Yasir', location: 'Ankrahmun, Carlin ou Liberty Bay' },
   { name: 'River Flood', location: 'sul do Outlaw Camp' },
   { name: 'River Runs Deep', location: 'Zao Steppe' },
   { name: 'Shipwrecked', location: 'Krailos (norte)' },

@@ -35,7 +35,7 @@ const KNOWN_EVENTS = [
   'Nomads',
   'Noodles is Gone',
   'Poacher Caves',
-  'Oriental Trader',
+  'Yasir',
   'River Flood',
   'River Runs Deep',
   'Shipwrecked',

@@ -740,20 +740,34 @@ body {
   border-top: 1px dashed var(--border-gold);
 }
 
-.rotation-card__modifier-tags {
+.rotation-card__modifier-list {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 6px;
 }
 
+.rotation-card__modifier-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .rotation-card__modifier-tag {
+  align-self: flex-start;
   background: var(--bg-panel-alt);
   border: 1px solid var(--gold);
   color: var(--gold);
   border-radius: 999px;
   padding: 4px 12px;
   font-size: 0.85rem;
+}
+
+.rotation-card__modifier-description {
+  margin: 0;
+  padding-left: 4px;
+  font-size: 0.85rem;
+  color: var(--text-parchment);
 }
 
 .modifiers-submit-form {
@@ -977,8 +991,9 @@ body {
 
 .mwc-event-card__map {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  aspect-ratio: 3 / 1;
+  object-fit: contain;
+  background: var(--bg-deep);
   display: block;
   border-bottom: 1px solid var(--border-gold);
   image-rendering: pixelated;

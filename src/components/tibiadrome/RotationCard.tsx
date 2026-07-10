@@ -1,10 +1,15 @@
 import { formatDuration, formatRotationDate, type RotationState } from '../../domain/tibiadrome/rotation';
+import { TIBIADROME_MODIFIERS } from '../../data/tibiadrome/modifiers';
 
 interface RotationCardProps {
   state: RotationState;
   now: number;
   currentModifiers: string[] | null;
   isCurrentRotationRecorded: boolean;
+}
+
+function descriptionFor(modifierName: string): string {
+  return TIBIADROME_MODIFIERS.find((m) => m.name === modifierName)?.description ?? '';
 }
 
 export function RotationCard({ state, now, currentModifiers, isCurrentRotationRecorded }: RotationCardProps) {
@@ -34,11 +39,12 @@ export function RotationCard({ state, now, currentModifiers, isCurrentRotationRe
       {currentModifiers && currentModifiers.length > 0 && (
         <div className="rotation-card__modifiers">
           <span className="rotation-card__label">Modificadores ativos</span>
-          <div className="rotation-card__modifier-tags">
+          <div className="rotation-card__modifier-list">
             {currentModifiers.map((name) => (
-              <span key={name} className="rotation-card__modifier-tag">
-                {name}
-              </span>
+              <div key={name} className="rotation-card__modifier-item">
+                <span className="rotation-card__modifier-tag">{name}</span>
+                <p className="rotation-card__modifier-description">{descriptionFor(name)}</p>
+              </div>
             ))}
           </div>
         </div>
