@@ -70,7 +70,10 @@ async function scrapeCharacter(nick) {
 
   const cells = firstRow.find('td');
   const date = cells.eq(0).find('span.hidden.md\\:inline').first().text().trim();
-  const level = Number(cells.eq(3).text().trim());
+  // The level cell appends a "(+N)" level-up badge on days the character
+  // leveled up (e.g. "1150            (+1)") — parseInt reads the leading
+  // number and ignores that trailing text, where Number() would return NaN.
+  const level = parseInt(cells.eq(3).text().trim(), 10);
   const experience = Number(cells.eq(4).text().trim().replace(/,/g, ''));
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(level) || !Number.isFinite(experience)) {
