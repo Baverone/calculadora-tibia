@@ -5,8 +5,9 @@ Knight, Royal Paladin, Exalted Monk), com histórico persistente, recolha
 diária automática de XP via guildstats.eu, gráfico de progressão, uma
 calculadora de hunt com hunts guardadas e objetivos de nível definidos
 manualmente, timers de hunt (Pot Skills / Food ML) sempre visíveis
-independentemente do personagem ativo, e um Tibiadrome Tracker (rotação
-bissemanal + modificadores ativos).
+independentemente do personagem ativo, um Tibiadrome Tracker (rotação
+bissemanal + modificadores ativos), e um Rashid Tracker (onde está o NPC
+hoje).
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -135,6 +136,8 @@ src/
     tibiadrome/
       modifiers.ts          # os 9 modificadores possíveis, nomes/descrições oficiais
       rotationAnchor.ts      # âncora de uma vez só: número + início da rotação
+    rashid/
+      schedule.ts            # cidade/local do Rashid por dia da semana
   domain/                # lógica pura, sem React — o "motor" da app
     types.ts             # tipos partilhados (CharacterId, HistoryEntry, ...)
     experienceTable.ts    # exp(level) e level(exp), fórmula oficial
@@ -146,6 +149,8 @@ src/
     tibiadrome/
       rotation.ts           # cálculo da rotação atual (número/início/fim) a partir da âncora
       parseModifiers.ts      # deteta os 2 modificadores no texto colado
+    rashid/
+      rashidSchedule.ts      # dia de Tibia atual (recua 1 dia antes das 9h) + lookup na tabela
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
@@ -157,6 +162,7 @@ src/
     useCountdownTimer.ts   # timer regressivo com pausa/reset e loop automático ao terminar
     useRotationClock.ts     # recalcula a rotação atual a cada segundo
     useTibiadromeHistory.ts # busca o histórico de modificadores ao montar
+    useRashidClock.ts       # recalcula a localização do Rashid a cada segundo
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
@@ -166,6 +172,7 @@ src/
     hunt/                    # formulário de hunt + cartão de hunt guardada
     timers/                  # TimersPanel (Pot Skills + Food ML) com anel de progresso SVG
     tibiadrome/               # TibiadromeSection — cartão de rotação + submissão de modificadores
+    rashid/                   # RashidCard — ícone + cidade/local de hoje + countdown
   styles/theme.css          # tema visual
 ```
 
@@ -269,6 +276,20 @@ de XP mas correndo localmente em vez de agendado. O site lê esse JSON via
 `raw.githubusercontent.com` (`src/storage/tibiadromeHistory.ts`, mesmo
 padrão de `sharedHistory.ts`) para mostrar os modificadores da rotação
 atual no cartão e o histórico completo por rotação.
+
+## Rashid Tracker
+
+Cartão global (`src/components/rashid/RashidCard.tsx`) com o ícone do NPC
+(`public/rashid.png` — não incluído no código, coloca ali o teu ficheiro),
+a cidade/local de hoje e um countdown até à próxima mudança.
+
+Horário fixo por dia da semana em `src/data/rashid/schedule.ts`. O "dia de
+Tibia" só avança no server save, às 9:00 hora de Lisboa (`Europe/Lisbon`,
+ajusta-se sozinho a WEST/WET) — antes disso o dia ainda é o anterior, por
+isso a lógica (`src/domain/rashid/rashidSchedule.ts`) lê a hora atual em
+Lisboa e recua um dia se ainda não passaram as 9:00. Reutiliza o
+`formatDuration` do Tibiadrome Tracker para o countdown, a atualizar ao
+segundo (`src/hooks/useRashidClock.ts`).
 
 ## Validação de inputs
 

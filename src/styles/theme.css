@@ -888,3 +888,47 @@ body {
 .tibiadrome-history__table td {
   background: var(--bg-deep);
 }
+
+/* Rashid */
+
+.rashid-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.rashid-card__icon {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.rashid-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rashid-card__city {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.rashid-card__location {
+  font-size: 0.85rem;
+  color: var(--text-parchment);
+}
+
+.rashid-card__countdown {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+  margin-top: 2px;
+}

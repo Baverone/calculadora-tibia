@@ -5,6 +5,7 @@ import { TabsBar } from './components/layout/TabsBar';
 import { CharacterPanel } from './components/layout/CharacterPanel';
 import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
+import { RashidCard } from './components/rashid/RashidCard';
 
 function App() {
   const [activeId, setActiveId] = useState<CharacterId>(VOCATIONS[0].id);
@@ -15,6 +16,7 @@ function App() {
         <h1>Calculadora de Experiência do Tibia</h1>
       </header>
 
+      <RashidCard />
       <TimersPanel />
 
       <TabsBar activeId={activeId} onChange={setActiveId} />
