@@ -56,7 +56,7 @@ export interface VocationMeta {
 }
 
 export const VOCATIONS: VocationMeta[] = [
-  { id: 'elite-knight', name: 'Elite Knight', tagline: 'Força bruta', accentColor: '#c0392b', Icon: SwordIcon },
-  { id: 'royal-paladin', name: 'Royal Paladin', tagline: 'Precisão', accentColor: '#27ae60', Icon: BowIcon },
-  { id: 'exalted-monk', name: 'Exalted Monk', tagline: 'Disciplina', accentColor: '#8e44ad', Icon: LotusIcon },
+  { id: 'elite-knight', name: 'Serip Seomis', tagline: 'Elite Knight — Força bruta', accentColor: '#c0392b', Icon: SwordIcon },
+  { id: 'royal-paladin', name: 'Baverone', tagline: 'Royal Paladin — Precisão', accentColor: '#27ae60', Icon: BowIcon },
+  { id: 'exalted-monk', name: 'Bluey The Cat', tagline: 'Exalted Monk — Disciplina', accentColor: '#8e44ad', Icon: LotusIcon },
 ];
