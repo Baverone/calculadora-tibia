@@ -216,6 +216,12 @@ body {
   height: 20px;
 }
 
+/* Utilities tab (Rashid + Tibiadrome) */
+
+.app-utilities--hidden {
+  display: none;
+}
+
 /* Character panel */
 
 .character-panel--hidden {

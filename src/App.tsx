@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CharacterId } from './domain/types';
+import type { AppTabId } from './domain/types';
 import { VOCATIONS } from './constants/vocations';
 import { TabsBar } from './components/layout/TabsBar';
 import { CharacterPanel } from './components/layout/CharacterPanel';
@@ -8,7 +8,7 @@ import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
 
 function App() {
-  const [activeId, setActiveId] = useState<CharacterId>(VOCATIONS[0].id);
+  const [activeId, setActiveId] = useState<AppTabId>(VOCATIONS[0].id);
 
   return (
     <div className="app-shell">
@@ -16,11 +16,16 @@ function App() {
         <h1>Calculadora de Experiência do Tibia</h1>
       </header>
 
-      <RashidCard />
-      <TibiadromeSection />
       <TimersPanel />
 
       <TabsBar activeId={activeId} onChange={setActiveId} />
+
+      {/* Kept mounted (like the character panels below) so a draft in the
+          modifiers textarea never gets lost when switching tabs. */}
+      <section className={activeId === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
+        <RashidCard />
+        <TibiadromeSection />
+      </section>
 
       <main className="app-main">
         {/* All panels stay mounted so switching tabs never loses a character's draft input. */}
