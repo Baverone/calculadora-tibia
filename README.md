@@ -4,7 +4,8 @@ Aplicação web para acompanhar o progresso de XP de 3 personagens (Elite
 Knight, Royal Paladin, Exalted Monk), com histórico persistente, recolha
 diária automática de XP via guildstats.eu, gráfico de progressão, uma
 calculadora de hunt com hunts guardadas e objetivos de nível definidos
-manualmente.
+manualmente, e timers de hunt (Pot Skills / Food ML) sempre visíveis
+independentemente do personagem ativo.
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -134,6 +135,7 @@ src/
     historyStats.ts       # XP ganha entre leituras consecutivas
     huntCalculator.ts     # cenários de bónus (stamina 150%, stamina+boost 225%)
     validation.ts         # validação de inputs (inteiros, positivos, listas de nível)
+    timers/alerts.ts       # beep (Web Audio) + anúncio por voz (SpeechSynthesis) ao terminar um timer
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
@@ -141,6 +143,7 @@ src/
   hooks/
     useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
     useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
+    useCountdownTimer.ts   # timer regressivo com pausa/reset e loop automático ao terminar
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
@@ -148,6 +151,7 @@ src/
     xp/                     # input de XP, barra de progresso, cartão de nível
     charts/                  # gráfico de progressão, lista de histórico recente
     hunt/                    # formulário de hunt + cartão de hunt guardada
+    timers/                  # TimersPanel (Pot Skills + Food ML) com anel de progresso SVG
   styles/theme.css          # tema visual
 ```
 
@@ -197,6 +201,24 @@ lógica em `src/domain/levelPlan.ts` e `src/domain/dailySimulation.ts`):
   cada mês, para a tabela nunca ficar gigante. A data final escolhida
   aparece sempre como última linha (destacada a dourado), seja qual for a
   granularidade.
+
+## Timers de hunt
+
+Painel global (`src/components/timers/TimersPanel.tsx`), visível por cima
+das abas dos personagens independentemente de qual está ativa — não é
+específico de um personagem. Dois timers regressivos independentes:
+**Pot Skills** (10 min) e **Food ML** (1 hora), cada um com anel de
+progresso SVG, botão Iniciar/Pausar e Reiniciar, mais um botão "Iniciar
+ambos" no topo do painel para arrancar os dois em simultâneo.
+
+Ao chegar a zero, cada timer (`src/hooks/useCountdownTimer.ts`): toca um
+sinal sonoro via Web Audio API (`src/domain/timers/alerts.ts`, sem
+ficheiros de áudio externos), tenta anunciar por voz o nome do timer via
+`SpeechSynthesis` (pt-PT — falha silenciosamente se o browser não suportar
+ou bloquear), mostra "Terminado!" durante ~3s, e depois reinicia sozinho e
+continua a contar em loop contínuo até seres tu a pausar. O countdown segue
+um timestamp de fim (não conta ticks), por isso não desvia mesmo que o
+separador fique em segundo plano.
 
 ## Validação de inputs
 
