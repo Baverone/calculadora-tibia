@@ -4,6 +4,7 @@ import { VOCATIONS } from './constants/vocations';
 import { TabsBar } from './components/layout/TabsBar';
 import { CharacterPanel } from './components/layout/CharacterPanel';
 import { TimersPanel } from './components/timers/TimersPanel';
+import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 
 function App() {
   const [activeId, setActiveId] = useState<CharacterId>(VOCATIONS[0].id);
@@ -24,6 +25,8 @@ function App() {
           <CharacterPanel key={vocation.id} vocation={vocation} isActive={vocation.id === activeId} />
         ))}
       </main>
+
+      <TibiadromeSection />
     </div>
   );
 }

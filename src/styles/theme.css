@@ -658,3 +658,233 @@ body {
   color: var(--gold);
   font-weight: bold;
 }
+
+/* Tibiadrome */
+
+.tibiadrome-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-top: 24px;
+}
+
+.rotation-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.rotation-card__header h3 {
+  margin: 0;
+  color: var(--gold);
+}
+
+.rotation-card__number {
+  color: var(--text-parchment);
+  font-weight: bold;
+}
+
+.rotation-card__banner {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--gold);
+  font-weight: bold;
+  margin: 0 0 14px;
+}
+
+.rotation-card__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.rotation-card__column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rotation-card__label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rotation-card__date {
+  font-size: 1rem;
+  color: var(--text-parchment);
+}
+
+.rotation-card__relative {
+  font-size: 0.85rem;
+  color: var(--gold);
+  font-family: 'Courier New', monospace;
+}
+
+.rotation-card__modifiers {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.rotation-card__modifier-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.rotation-card__modifier-tag {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
+
+.modifiers-submit-form {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-gold);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modifiers-submit-form label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.modifiers-submit-form textarea {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.modifiers-submit-form button {
+  align-self: flex-start;
+  border: none;
+  color: #1a1208;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.modifiers-submit-form__result {
+  margin-top: 8px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.modifiers-submit-form__hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 8px 0 6px;
+}
+
+.modifiers-submit-form__command {
+  display: block;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  color: var(--text-parchment);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.modifiers-submit-form__copy {
+  margin-top: 10px;
+  background: transparent !important;
+  border: 1px solid var(--gold) !important;
+  color: var(--gold) !important;
+}
+
+.tibiadrome-reference,
+.tibiadrome-history {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.tibiadrome-reference summary,
+.tibiadrome-history summary {
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.tibiadrome-reference__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tibiadrome-reference__list li {
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 8px;
+}
+
+.tibiadrome-reference__list strong {
+  display: block;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+.tibiadrome-reference__list span {
+  color: var(--text-parchment);
+}
+
+.tibiadrome-reference__confidence {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.tibiadrome-history__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+.tibiadrome-history__table th,
+.tibiadrome-history__table td {
+  padding: 6px 8px;
+  border: 1px solid var(--border-gold);
+  text-align: left;
+}
+
+.tibiadrome-history__table th {
+  background: var(--bg-panel-alt);
+  color: var(--gold);
+  font-weight: normal;
+}
+
+.tibiadrome-history__table td {
+  background: var(--bg-deep);
+}

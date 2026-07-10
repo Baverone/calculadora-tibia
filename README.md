@@ -4,8 +4,9 @@ Aplicação web para acompanhar o progresso de XP de 3 personagens (Elite
 Knight, Royal Paladin, Exalted Monk), com histórico persistente, recolha
 diária automática de XP via guildstats.eu, gráfico de progressão, uma
 calculadora de hunt com hunts guardadas e objetivos de nível definidos
-manualmente, e timers de hunt (Pot Skills / Food ML) sempre visíveis
-independentemente do personagem ativo.
+manualmente, timers de hunt (Pot Skills / Food ML) sempre visíveis
+independentemente do personagem ativo, e um Tibiadrome Tracker (rotação
+bissemanal + modificadores ativos).
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -119,15 +120,21 @@ volta a correr esse script se algum dia precisares de regenerar o ficheiro.
 ```
 data/
   scraped-history/        # <personagem>.json — histórico recolhido pelo robô (commitado pelo Actions)
+  tibiadrome/
+    modifiers-history.json # modificadores por rotação — commitado por scripts/save-modifier-rotation.mjs
 scripts/
   generate-experience-table.mjs  # gera src/data/tibia_experience_table.json
   scrape-experience.mjs           # robô de recolha diária (corre no GitHub Actions)
+  save-modifier-rotation.mjs      # regista os 2 modificadores de uma rotação (corres tu, localmente)
 .github/workflows/
   scrape-experience.yml    # agenda + executa o scraper, faz commit dos dados
 src/
   config.ts               # GITHUB_REPO — preencher após criares o repositório
   data/
     tibia_experience_table.json  # dataset de referência de XP
+    tibiadrome/
+      modifiers.ts          # os 9 modificadores possíveis, nomes/descrições oficiais
+      rotationAnchor.ts      # âncora de uma vez só: número + início da rotação
   domain/                # lógica pura, sem React — o "motor" da app
     types.ts             # tipos partilhados (CharacterId, HistoryEntry, ...)
     experienceTable.ts    # exp(level) e level(exp), fórmula oficial
@@ -136,14 +143,20 @@ src/
     huntCalculator.ts     # cenários de bónus (stamina 150%, stamina+boost 225%)
     validation.ts         # validação de inputs (inteiros, positivos, listas de nível)
     timers/alerts.ts       # beep (Web Audio) + anúncio por voz (SpeechSynthesis) ao terminar um timer
+    tibiadrome/
+      rotation.ts           # cálculo da rotação atual (número/início/fim) a partir da âncora
+      parseModifiers.ts      # deteta os 2 modificadores no texto colado
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
     huntStorage.ts         # leitura/escrita das hunts guardadas no localStorage
+    tibiadromeHistory.ts    # busca o histórico de modificadores (GitHub raw)
   hooks/
     useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
     useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
     useCountdownTimer.ts   # timer regressivo com pausa/reset e loop automático ao terminar
+    useRotationClock.ts     # recalcula a rotação atual a cada segundo
+    useTibiadromeHistory.ts # busca o histórico de modificadores ao montar
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
@@ -152,6 +165,7 @@ src/
     charts/                  # gráfico de progressão, lista de histórico recente
     hunt/                    # formulário de hunt + cartão de hunt guardada
     timers/                  # TimersPanel (Pot Skills + Food ML) com anel de progresso SVG
+    tibiadrome/               # TibiadromeSection — cartão de rotação + submissão de modificadores
   styles/theme.css          # tema visual
 ```
 
@@ -219,6 +233,42 @@ ou bloquear), mostra "Terminado!" durante ~3s, e depois reinicia sozinho e
 continua a contar em loop contínuo até seres tu a pausar. O countdown segue
 um timestamp de fim (não conta ticks), por isso não desvia mesmo que o
 separador fique em segundo plano.
+
+## Tibiadrome Tracker
+
+Secção global (`src/components/tibiadrome/TibiadromeSection.tsx`), com duas partes:
+
+**Calendário de rotação**: rotações bissemanais (14 dias) encadeadas sem
+gaps, numeradas sequencialmente. Só é preciso definir uma âncora **uma
+única vez**: número da rotação + data/hora exata de início, em
+`src/data/tibiadrome/rotationAnchor.ts` (constante no código, tal como
+`GITHUB_REPO` em `config.ts` — não é um formulário que grava nada, porque o
+número e a janela de qualquer rotação passada ou futura são derivados dessa
+âncora por fórmula, sem estado mutável a manter sincronizado:
+`src/domain/tibiadrome/rotation.ts`). O cartão mostra o número da rotação
+atual, início/fim com data (fuso `Europe/Lisbon`, ajusta-se sozinho a
+WEST/WET) e tempo relativo ("há Xd HH:MM:SS" / "dentro de Xd HH:MM:SS"), a
+atualizar ao segundo.
+
+**Modificadores ativos**: lista de referência dos 9 modificadores possíveis
+(`src/data/tibiadrome/modifiers.ts` — nomes/descrições oficiais em inglês;
+os que não foram confirmados diretamente marcam um campo `confidence`, nunca
+inventados). Colas o anúncio in-game tal como aparece no jogo numa textarea
+e clicas "Submeter"; o parser (`src/domain/tibiadrome/parseModifiers.ts`)
+procura os 9 nomes no texto (tolerante a maiúsculas/pontuação/quebras de
+linha) e exige encontrar exatamente 2 — caso contrário mostra um erro claro
+em vez de assumir.
+
+Como o site é estático (sem backend), o botão "Submeter" não grava nada
+sozinho: mostra os 2 modificadores detetados e um comando pronto a copiar
+(`node scripts/save-modifier-rotation.mjs <rotação> "<mod1>" "<mod2>"`).
+Corres esse comando no terminal — ele valida os nomes, acrescenta a entrada
+a `data/tibiadrome/modifiers-history.json` (nunca sobrescreve rotações já
+registadas) e faz commit + push automaticamente, igual em espírito ao robô
+de XP mas correndo localmente em vez de agendado. O site lê esse JSON via
+`raw.githubusercontent.com` (`src/storage/tibiadromeHistory.ts`, mesmo
+padrão de `sharedHistory.ts`) para mostrar os modificadores da rotação
+atual no cartão e o histórico completo por rotação.
 
 ## Validação de inputs
 
