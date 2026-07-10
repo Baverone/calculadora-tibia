@@ -6,6 +6,7 @@ import { CharacterPanel } from './components/layout/CharacterPanel';
 import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
+import { MiniWorldChangesSection } from './components/miniWorldChanges/MiniWorldChangesSection';
 
 function App() {
   const [activeId, setActiveId] = useState<AppTabId>(VOCATIONS[0].id);
@@ -25,6 +26,7 @@ function App() {
       <section className={activeId === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
         <RashidCard />
         <TibiadromeSection />
+        <MiniWorldChangesSection />
       </section>
 
       <main className="app-main">

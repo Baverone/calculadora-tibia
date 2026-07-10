@@ -938,3 +938,80 @@ body {
   font-family: 'Courier New', monospace;
   margin-top: 2px;
 }
+
+/* Mini World Changes */
+
+.mwc-card__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mwc-card__header h3 {
+  margin: 0;
+  color: var(--gold);
+}
+
+.mwc-card__date {
+  color: var(--text-parchment);
+  font-weight: bold;
+}
+
+.mwc-event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.mwc-event-card {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mwc-event-card__map {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid var(--border-gold);
+  image-rendering: pixelated;
+}
+
+.mwc-event-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+}
+
+.mwc-event-card__info strong {
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.mwc-event-card__info span {
+  font-size: 0.78rem;
+  color: var(--text-parchment);
+}
+
+.mwc-card__empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.mwc-card__countdown {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-gold);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+}
