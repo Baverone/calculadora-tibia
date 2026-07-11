@@ -1030,3 +1030,95 @@ body {
   color: var(--text-muted);
   font-family: 'Courier New', monospace;
 }
+
+/* Quests & Bosses checklist */
+
+.access-boss-overview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.access-boss-overview .progress-bar {
+  flex: 1;
+}
+
+.access-boss-overview__count {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.access-boss-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 18px;
+  align-items: start;
+}
+
+.access-boss-table__column h4 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.access-boss-table__count {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.access-boss-table__column ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.access-boss-row {
+  border-bottom: 1px solid var(--border-gold);
+  padding-bottom: 6px;
+}
+
+.access-boss-row--sub {
+  margin-left: 18px;
+  border-left: 2px solid var(--border-gold);
+  padding-left: 8px;
+}
+
+.access-boss-row__main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-parchment);
+  cursor: pointer;
+}
+
+.access-boss-row__main input {
+  align-self: center;
+}
+
+.access-boss-row__main input:checked + .access-boss-row__label {
+  color: #4caf50;
+}
+
+.access-boss-row__parent-tag {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.access-boss-row__note {
+  margin: 4px 0 0;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}

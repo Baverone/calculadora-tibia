@@ -98,3 +98,27 @@ export interface DailySimulationResult {
   /** One row per checkpoint, ascending by date. Always includes day 0 (today) and the final target date. */
   checkpoints: SimulationCheckpoint[];
 }
+
+/**
+ * How this item relates to Tibia's in-game Quest Log:
+ * - 'own': has its own Quest Log entry.
+ * - 'none': no Quest Log entry exists — confirm some other way (achievement, NPC dialogue, etc).
+ * - 'sub': not an independent quest — it's a sub-part/rank/chapter of `parent`.
+ */
+export type AccessBossTag = 'own' | 'none' | 'sub';
+
+/** One "Útil", "Acesso" or "Boss" the user tracks. Completion is a plain manual checkbox the user ticks after verifying in-game. */
+export interface AccessBossItem {
+  id: string;
+  label: string;
+  tag: AccessBossTag;
+  /** Present when tag === 'sub': the quest this item is a part of. */
+  parent?: string;
+  /** Short reference text: where/how to confirm this in-game. */
+  note: string;
+}
+
+export interface AccessBossSectionData {
+  section: string;
+  items: AccessBossItem[];
+}

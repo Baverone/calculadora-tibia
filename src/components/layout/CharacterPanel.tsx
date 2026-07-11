@@ -6,6 +6,7 @@ import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { HuntCalculator } from '../hunt/HuntCalculator';
+import { AccessBossSection } from '../accessBoss/AccessBossSection';
 
 interface CharacterPanelProps {
   vocation: VocationMeta;
@@ -61,6 +62,8 @@ export function CharacterPanel({ vocation, isActive }: CharacterPanelProps) {
               accentColor={vocation.accentColor}
             />
           </div>
+
+          <AccessBossSection characterId={vocation.id} accentColor={vocation.accentColor} />
         </>
       )}
     </section>
