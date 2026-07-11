@@ -1058,7 +1058,7 @@ body {
   align-items: start;
 }
 
-.access-boss-table__column h4 {
+.access-boss-table__column h5 {
   margin: 0 0 8px;
   color: var(--gold);
   font-size: 0.9rem;
@@ -1080,6 +1080,44 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.access-boss-group {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.access-boss-group__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.access-boss-group--pending {
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: var(--bg-panel-alt);
+}
+
+.access-boss-group--pending .access-boss-group__title {
+  color: var(--gold);
+}
+
+.access-boss-group--pending .access-boss-table {
+  margin-top: 12px;
+}
+
+.access-boss-group--done {
+  opacity: 0.55;
+}
+
+.access-boss-group--done .access-boss-group__title {
+  color: var(--text-muted);
+}
+
+.access-boss-group--done .access-boss-row__note {
+  display: none;
 }
 
 .access-boss-row {
