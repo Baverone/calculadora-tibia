@@ -160,12 +160,15 @@ src/
       rashidSchedule.ts      # lookup na tabela semanal a partir do dia de Tibia (tibiaDay.ts)
     miniWorldChanges/
       parseMiniWorldChanges.ts # deteta N eventos (1 ou mais) no texto colado
+    accessBoss/
+      progress.ts             # progresso geral e por secção (done/total/percent)
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
     huntStorage.ts         # leitura/escrita das hunts guardadas no localStorage
     tibiadromeHistory.ts    # busca o histórico de modificadores (GitHub raw)
     miniWorldChangesHistory.ts # busca o histórico de mini world changes (GitHub raw)
+    accessBossStorage.ts    # leitura/escrita dos itens marcados no localStorage
   hooks/
     useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
     useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
@@ -175,6 +178,7 @@ src/
     useRashidClock.ts       # recalcula a localização do Rashid a cada segundo
     useTibiaDayClock.ts     # recalcula o dia de Tibia atual a cada segundo
     useMiniWorldChangesHistory.ts # busca o histórico de mini world changes ao montar
+    useCharacterAccessBoss.ts # itens marcados (Set) de um personagem
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
@@ -186,6 +190,7 @@ src/
     tibiadrome/               # TibiadromeSection — cartão de rotação + submissão de modificadores
     rashid/                   # RashidCard — ícone + cidade/local de hoje + countdown
     miniWorldChanges/         # MiniWorldChangesSection — cartão do dia + submissão de eventos
+    accessBoss/               # AccessBossSection — checklist Úteis/Acessos/Bosses por personagem
   styles/theme.css          # tema visual
 ```
 
@@ -235,6 +240,24 @@ lógica em `src/domain/levelPlan.ts` e `src/domain/dailySimulation.ts`):
   cada mês, para a tabela nunca ficar gigante. A data final escolhida
   aparece sempre como última linha (destacada a dourado), seja qual for a
   granularidade.
+
+## Quests & Bosses
+
+Checklist por personagem (`src/components/accessBoss/`, dentro do painel de
+cada personagem — ao contrário dos trackers globais, isto é progresso
+individual, faz sentido ficar por personagem), com os itens "Úteis" /
+"Acessos" / "Bosses" dados pelo utilizador (já confirmados contra a
+TibiaWiki/guias — `src/data/accessBoss/accessBossList.ts`, não inventar nem
+alterar sem confirmar primeiro). Barra de progresso geral + contagem por
+secção. Sub-itens (`tag: 'sub'`, ex. os capítulos de "Grimvale" ou os ranks
+de "Rathleton") aparecem indentados e ligados ao "parent" em vez de surgirem
+como quests independentes.
+
+Persistido por personagem em `localStorage`
+(`src/storage/accessBossStorage.ts`, `src/hooks/useCharacterAccessBoss.ts`)
+— mesmo padrão de `huntStorage.ts`, porque isto é progresso pessoal que o
+utilizador marca interativamente, ao contrário dos dados partilhados dos
+trackers na aba "Utilitários Tibia".
 
 ## Timers de hunt
 
