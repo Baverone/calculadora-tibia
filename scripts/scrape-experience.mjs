@@ -42,12 +42,19 @@ function levelForExperience(experience) {
   return low;
 }
 
-/** Only proceed if it's currently ~10:00 in Lisbon, regardless of which of the two UTC cron triggers fired (handles DST without hardcoding transition dates). */
-function isWithinLisbonMorningWindow() {
+/**
+ * Only proceed once the Tibia server save (09:00 Lisbon) has happened today.
+ * No upper bound — GitHub Actions "schedule" triggers can be delayed by
+ * hours under load, and a narrow window (e.g. "only 9-10am") means a
+ * delayed run silently misses the whole day. Safe to leave open-ended
+ * because the per-character "already recorded today" check below already
+ * makes repeated runs a no-op.
+ */
+function isAfterLisbonServerSave() {
   const hour = Number(
     new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Lisbon', hour: '2-digit', hour12: false }).format(new Date())
   );
-  return hour === 9 || hour === 10;
+  return hour >= 9;
 }
 
 async function scrapeCharacter(nick) {
@@ -100,7 +107,7 @@ function saveHistory(characterId, history) {
 }
 
 async function main() {
-  if (!isWithinLisbonMorningWindow() && process.env.FORCE_SCRAPE !== 'true') {
+  if (!isAfterLisbonServerSave() && process.env.FORCE_SCRAPE !== 'true') {
     console.log('Fora da janela das ~10h em Lisboa — a ignorar esta execução.');
     return;
   }

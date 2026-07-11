@@ -1,13 +1,20 @@
 name: Scrape Tibia Experience
 
-# Two UTC triggers to cover Lisbon's 10:00 both in winter (UTC+0) and summer
-# (UTC+1) DST — the script itself checks the real Europe/Lisbon time and
-# no-ops if it's not actually ~10:00 there, so this is safe even during the
-# week the two schedules briefly overlap around a DST transition.
+# Several UTC triggers spread through the day, covering Lisbon's 09:00 in
+# both winter (UTC+0) and summer (UTC+1) DST plus extra safety-net times —
+# the script checks the real Europe/Lisbon time and only proceeds once it's
+# past 09:00 there (no upper bound), and skips per character if today's
+# date is already recorded. So it's safe for multiple triggers to fire the
+# same day: GitHub Actions "schedule" runs can be delayed by hours under
+# load, and with only 1-2 triggers a delayed run can miss the whole day
+# silently (happened 2026-07-10 and 2026-07-11) — more triggers means more
+# chances for at least one to land after 09:00 Lisbon.
 on:
   schedule:
     - cron: '0 9 * * *'
     - cron: '0 10 * * *'
+    - cron: '0 13 * * *'
+    - cron: '0 17 * * *'
   workflow_dispatch: {}
 
 permissions:
