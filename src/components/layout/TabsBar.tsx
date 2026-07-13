@@ -1,5 +1,5 @@
 import type { AppTabId } from '../../domain/types';
-import { VOCATIONS } from '../../constants/vocations';
+import { TEAMS } from '../../constants/players';
 
 interface TabsBarProps {
   activeId: AppTabId;
@@ -8,9 +8,6 @@ interface TabsBarProps {
 
 const UTILITIES_TAB_ID: AppTabId = 'utilities';
 const UTILITIES_TAB_ACCENT = '#c9a227';
-
-const TEAM_TAB_ID: AppTabId = 'team';
-const TEAM_TAB_ACCENT = '#2980b9';
 
 function UtilitiesIcon({ className }: { className?: string }) {
   return (
@@ -53,27 +50,18 @@ export function TabsBar({ activeId, onChange }: TabsBarProps) {
         <UtilitiesIcon className="tabs-bar__icon" />
         Utilitários Tibia
       </button>
-      {VOCATIONS.map((vocation) => (
+      {TEAMS.map((team) => (
         <button
-          key={vocation.id}
-          className={vocation.id === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
-          style={{ '--tab-accent': vocation.accentColor } as React.CSSProperties}
-          onClick={() => onChange(vocation.id)}
+          key={team.id}
+          className={team.id === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
+          style={{ '--tab-accent': '#c9a227' } as React.CSSProperties}
+          onClick={() => onChange(team.id)}
           type="button"
         >
-          <vocation.Icon className="tabs-bar__icon" />
-          {vocation.name}
+          <TeamIcon className="tabs-bar__icon" />
+          {team.label}
         </button>
       ))}
-      <button
-        className={TEAM_TAB_ID === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
-        style={{ '--tab-accent': TEAM_TAB_ACCENT } as React.CSSProperties}
-        onClick={() => onChange(TEAM_TAB_ID)}
-        type="button"
-      >
-        <TeamIcon className="tabs-bar__icon" />
-        Equipa
-      </button>
     </nav>
   );
 }

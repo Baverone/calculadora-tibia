@@ -1,3 +1,5 @@
+import { GITHUB_REPO } from '../config';
+import { AUTO_TRACKED_TEAM_PLAYERS, findAutoTrackedPlayer } from '../data/team/autoTrackedPlayers';
 import type { ExpRecord, TeamData, TeamPlayer } from '../domain/team/types';
 
 // Team roster + daily EXP log, persisted in this browser only — separate
@@ -108,3 +110,49 @@ export function importTeamData(json: string): ImportResult {
   saveRecords(data.records);
   return { ok: true };
 }
+
+interface ScrapedTeamRecord {
+  date: string;
+  level: number;
+  experience: number;
+  scrapedAt: string;
+}
+
+const TEAM_RAW_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/main/data/team-history`;
+
+/**
+ * Fetches the automated daily EXP history for a player, if they're one of
+ * the fixed set the scraper tracks (scripts/scrape-team-experience.mjs).
+ * Never throws — matches sharedHistory.ts's fail-soft behavior (offline,
+ * nothing scraped yet, or a player not in the auto-tracked list all just
+ * yield an empty array, and the manual "Update diário" log still works).
+ */
+export async function fetchAutoHistoryForPlayer(playerName: string): Promise<ExpRecord[]> {
+  const tracked = findAutoTrackedPlayer(playerName);
+  if (!tracked) return [];
+
+  try {
+    const response = await fetch(`${TEAM_RAW_BASE_URL}/${tracked.slug}.json`, { cache: 'no-store' });
+    if (!response.ok) return [];
+
+    const scraped = (await response.json()) as ScrapedTeamRecord[];
+    if (!Array.isArray(scraped)) return [];
+
+    return scraped.map((entry) => ({ playerId: '', date: entry.date, exp: entry.experience }));
+  } catch {
+    return [];
+  }
+}
+
+/** Fetches auto-scraped history for every currently-tracked player at once, keyed by playerId. */
+export async function fetchAutoHistoryForPlayers(players: TeamPlayer[]): Promise<Record<string, ExpRecord[]>> {
+  const results = await Promise.all(
+    players.map(async (player) => {
+      const records = await fetchAutoHistoryForPlayer(player.name);
+      return [player.id, records.map((r) => ({ ...r, playerId: player.id }))] as const;
+    })
+  );
+  return Object.fromEntries(results.filter(([, records]) => records.length > 0));
+}
+
+export { AUTO_TRACKED_TEAM_PLAYERS };

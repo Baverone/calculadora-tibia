@@ -1,16 +1,27 @@
 import { useState } from 'react';
-import type { AppTabId } from './domain/types';
-import { VOCATIONS } from './constants/vocations';
+import type { AppTabId, TeamId } from './domain/types';
+import { PLAYERS, TEAMS, playersForTeam } from './constants/players';
 import { TabsBar } from './components/layout/TabsBar';
-import { CharacterPanel } from './components/layout/CharacterPanel';
+import { PlayerTabsBar } from './components/layout/PlayerTabsBar';
+import { PlayerPanel } from './components/layout/PlayerPanel';
 import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
 import { MiniWorldChangesSection } from './components/miniWorldChanges/MiniWorldChangesSection';
-import { TeamSection } from './components/team/TeamSection';
 
 function App() {
-  const [activeId, setActiveId] = useState<AppTabId>(VOCATIONS[0].id);
+  const [activeTab, setActiveTab] = useState<AppTabId>(TEAMS[0].id);
+  const [activePlayerId, setActivePlayerId] = useState<string>(playersForTeam(TEAMS[0].id)[0].id);
+
+  function handleTabChange(tab: AppTabId) {
+    setActiveTab(tab);
+    if (tab !== 'utilities') {
+      const firstPlayer = playersForTeam(tab as TeamId)[0];
+      if (firstPlayer) setActivePlayerId(firstPlayer.id);
+    }
+  }
+
+  const activeTeamPlayers = activeTab !== 'utilities' ? playersForTeam(activeTab as TeamId) : [];
 
   return (
     <div className="app-shell">
@@ -20,25 +31,24 @@ function App() {
 
       <TimersPanel />
 
-      <TabsBar activeId={activeId} onChange={setActiveId} />
+      <TabsBar activeId={activeTab} onChange={handleTabChange} />
 
-      {/* Kept mounted (like the character panels below) so a draft in the
+      {/* Kept mounted (like the player panels below) so a draft in the
           modifiers textarea never gets lost when switching tabs. */}
-      <section className={activeId === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
+      <section className={activeTab === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
         <RashidCard />
         <TibiadromeSection />
         <MiniWorldChangesSection />
       </section>
 
-      {/* Kept mounted too, so a draft in the daily-update form survives switching tabs. */}
-      <section className={activeId === 'team' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
-        <TeamSection />
-      </section>
+      {activeTab !== 'utilities' && (
+        <PlayerTabsBar players={activeTeamPlayers} activePlayerId={activePlayerId} onChange={setActivePlayerId} />
+      )}
 
       <main className="app-main">
-        {/* All panels stay mounted so switching tabs never loses a character's draft input. */}
-        {VOCATIONS.map((vocation) => (
-          <CharacterPanel key={vocation.id} vocation={vocation} isActive={vocation.id === activeId} />
+        {/* All player panels stay mounted so switching sub-tabs never loses a draft input. */}
+        {PLAYERS.map((player) => (
+          <PlayerPanel key={player.id} player={player} isActive={activeTab !== 'utilities' && player.id === activePlayerId} />
         ))}
       </main>
     </div>

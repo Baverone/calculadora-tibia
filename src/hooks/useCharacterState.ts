@@ -1,21 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { CharacterId, HistoryEntry } from '../domain/types';
+import type { HistoryEntry } from '../domain/types';
 import { parseNonNegativeInteger } from '../domain/validation';
 import { addHistoryEntry, getHistory } from '../storage/characterHistory';
 import { fetchSharedHistory } from '../storage/sharedHistory';
 
 /**
- * Owns everything about a single character tab: the draft XP input, the
- * persisted history, and the "commit" action that validates + saves a new
- * reading. Each character gets its own instance, so tabs never share state.
+ * Owns everything about a single character/player panel: the draft XP
+ * input, the persisted history, and the "commit" action that validates +
+ * saves a new reading. Each panel gets its own instance, so tabs never
+ * share state.
  *
  * History merges two sources: manual entries from localStorage (this
  * browser only) and the daily-scraped history fetched from the shared
- * GitHub repo (see src/storage/sharedHistory.ts). The fetch is best-effort —
- * if it fails or hasn't been set up yet, the app just falls back to
- * whatever's in localStorage.
+ * GitHub repo. `fetchShared` defaults to the main 3-character dataset
+ * (src/storage/sharedHistory.ts); pass `fetchTeamPlayerSharedHistory` for a
+ * team-only player instead. The fetch is best-effort — if it fails or
+ * hasn't been set up yet, the app just falls back to whatever's in
+ * localStorage.
  */
-export function useCharacterState(characterId: CharacterId) {
+export function useCharacterState(
+  characterId: string,
+  fetchShared: (id: string) => Promise<HistoryEntry[]> = fetchSharedHistory
+) {
   const [localHistory, setLocalHistory] = useState(() => getHistory(characterId));
   const [sharedHistory, setSharedHistory] = useState<HistoryEntry[]>([]);
   const [inputValue, setInputValue] = useState<string>(() => {
@@ -26,13 +32,13 @@ export function useCharacterState(characterId: CharacterId) {
 
   useEffect(() => {
     let cancelled = false;
-    fetchSharedHistory(characterId).then((entries) => {
+    fetchShared(characterId).then((entries) => {
       if (!cancelled) setSharedHistory(entries);
     });
     return () => {
       cancelled = true;
     };
-  }, [characterId]);
+  }, [characterId, fetchShared]);
 
   const history = useMemo(() => {
     return [...localHistory, ...sharedHistory].sort((a, b) => a.timestamp - b.timestamp);

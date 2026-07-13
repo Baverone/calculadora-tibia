@@ -32,17 +32,22 @@ jobs:
 
       - run: npm ci
 
-      - name: Run scraper
+      - name: Run scraper (3 personagens)
         run: node scripts/scrape-experience.mjs
         env:
           # workflow_dispatch (manual runs) always scrape, ignoring the time-of-day check.
+          FORCE_SCRAPE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
+
+      - name: Run scraper (jogadores da Equipa)
+        run: node scripts/scrape-team-experience.mjs
+        env:
           FORCE_SCRAPE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
 
       - name: Commit updated history
         run: |
           git config user.name "tibia-xp-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/scraped-history
+          git add data/scraped-history data/team-history
           if git diff --cached --quiet; then
             echo "Sem alterações a commitar."
           else

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ExpRecord, TeamPlayer } from '../../domain/team/types';
 import { todayDateKey } from '../../domain/team/calculations';
+import { findAutoTrackedPlayer } from '../../data/team/autoTrackedPlayers';
 
 interface DailyUpdateFormProps {
   players: TeamPlayer[];
@@ -65,6 +66,9 @@ export function DailyUpdateForm({ players, records, onSubmit }: DailyUpdateFormP
         {players.map((player) => (
           <label key={player.id} className="team-daily-update__field">
             {player.name}
+            {findAutoTrackedPlayer(player.name) && (
+              <span className="team-daily-update__auto-tag">atualização automática diária — só precisas disto para corrigir um valor</span>
+            )}
             {existingForDate.has(player.id) && <span className="team-daily-update__existing-tag">já tem registo — vai atualizar</span>}
             <input
               type="number"

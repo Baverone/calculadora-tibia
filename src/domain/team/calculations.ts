@@ -17,6 +17,17 @@ export function recordsForPlayer(records: ExpRecord[], playerId: string): ExpRec
   return records.filter((r) => r.playerId === playerId).sort((a, b) => a.date.localeCompare(b.date));
 }
 
+/**
+ * Combines manually-entered records with the automated daily scrape.
+ * Manual wins on any date both have — lets a user override/correct a bad
+ * auto-scraped reading, or just fill in days the scraper doesn't cover.
+ */
+export function mergeManualAndAutoRecords(manual: ExpRecord[], auto: ExpRecord[]): ExpRecord[] {
+  const manualDates = new Set(manual.map((r) => `${r.playerId}|${r.date}`));
+  const autoOnly = auto.filter((r) => !manualDates.has(`${r.playerId}|${r.date}`));
+  return [...manual, ...autoOnly];
+}
+
 export function latestRecord(records: ExpRecord[], playerId: string): ExpRecord | null {
   const sorted = recordsForPlayer(records, playerId);
   return sorted.length > 0 ? sorted[sorted.length - 1] : null;

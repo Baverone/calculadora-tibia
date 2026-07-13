@@ -1,10 +1,34 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import * as teamStorage from '../storage/teamStorage';
+import type { ExpRecord } from '../domain/team/types';
+import { mergeManualAndAutoRecords } from '../domain/team/calculations';
 
-/** Owns the team roster + daily EXP log, backed by localStorage. */
+/**
+ * Owns the team roster + daily EXP log. Manual entries are backed by
+ * localStorage; players that match the fixed auto-tracked list (see
+ * src/data/team/autoTrackedPlayers.ts) also get their daily EXP fetched
+ * from the shared GitHub-scraped history and merged in — manual entries
+ * win on any date both have, so a bad reading can always be corrected.
+ */
 export function useTeamData() {
   const [players, setPlayers] = useState(() => teamStorage.getPlayers());
-  const [records, setRecords] = useState(() => teamStorage.getRecords());
+  const [manualRecords, setManualRecords] = useState(() => teamStorage.getRecords());
+  const [autoRecordsByPlayer, setAutoRecordsByPlayer] = useState<Record<string, ExpRecord[]>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    teamStorage.fetchAutoHistoryForPlayers(players).then((result) => {
+      if (!cancelled) setAutoRecordsByPlayer(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [players]);
+
+  const records = useMemo(() => {
+    const autoRecords = Object.values(autoRecordsByPlayer).flat();
+    return mergeManualAndAutoRecords(manualRecords, autoRecords);
+  }, [manualRecords, autoRecordsByPlayer]);
 
   const addPlayer = useCallback((name: string) => setPlayers(teamStorage.addPlayer(name)), []);
 
@@ -16,16 +40,16 @@ export function useTeamData() {
   const removePlayer = useCallback((playerId: string) => {
     const result = teamStorage.removePlayer(playerId);
     setPlayers(result.players);
-    setRecords(result.records);
+    setManualRecords(result.records);
   }, []);
 
   const upsertRecord = useCallback(
-    (playerId: string, date: string, exp: number) => setRecords(teamStorage.upsertRecord(playerId, date, exp)),
+    (playerId: string, date: string, exp: number) => setManualRecords(teamStorage.upsertRecord(playerId, date, exp)),
     []
   );
 
   const deleteRecord = useCallback(
-    (playerId: string, date: string) => setRecords(teamStorage.deleteRecord(playerId, date)),
+    (playerId: string, date: string) => setManualRecords(teamStorage.deleteRecord(playerId, date)),
     []
   );
 
@@ -33,7 +57,7 @@ export function useTeamData() {
     const result = teamStorage.importTeamData(json);
     if (result.ok) {
       setPlayers(teamStorage.getPlayers());
-      setRecords(teamStorage.getRecords());
+      setManualRecords(teamStorage.getRecords());
     }
     return result;
   }, []);

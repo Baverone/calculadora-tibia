@@ -216,6 +216,47 @@ body {
   height: 20px;
 }
 
+/* Secondary tab row: the players within the active team's big tab */
+
+.player-tabs-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: -8px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-gold);
+}
+
+.player-tabs-bar__tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.player-tabs-bar__tab:hover {
+  color: var(--text-parchment);
+}
+
+.player-tabs-bar__tab--active {
+  color: var(--tab-accent, var(--gold));
+  border-color: var(--tab-accent, var(--gold));
+  background: var(--bg-panel);
+}
+
+.player-tabs-bar__icon {
+  width: 16px;
+  height: 16px;
+}
+
 /* Utilities tab (Rashid + Tibiadrome) */
 
 .app-utilities--hidden {
@@ -1300,6 +1341,12 @@ body {
 .team-daily-update__existing-tag {
   font-size: 0.7rem;
   color: var(--gold);
+  font-style: italic;
+}
+
+.team-daily-update__auto-tag {
+  font-size: 0.68rem;
+  color: #4caf50;
   font-style: italic;
 }
 

@@ -1,10 +1,18 @@
 // Shared domain types. Keep this file free of React/UI concerns so it can be
 // reused by any future feature (comparisons, hunt planner, highscores, etc).
 
-export type CharacterId = 'elite-knight' | 'royal-paladin' | 'exalted-monk';
+// Was a narrow union of just the 3 original characters — widened to a plain
+// string once players became a dynamic per-team roster (2026-07-13). The 3
+// originals keep these exact ids ('elite-knight' | 'royal-paladin' |
+// 'exalted-monk') for backward-compat with existing localStorage data and
+// the GitHub-scraped-history filenames; new team-only players use their
+// slug (e.g. 'bigodes-the-legend') instead.
+export type CharacterId = string;
 
-/** A character tab, the non-character "Utilitários Tibia" tab (Rashid + Tibiadrome Tracker), or the team EXP tracker tab. */
-export type AppTabId = CharacterId | 'utilities' | 'team';
+export type TeamId = 'baverone' | 'bluey' | 'solo';
+
+/** Top-level tab: the non-character "Utilitários Tibia" section, or one of the team tabs (each with its own player sub-tabs). */
+export type AppTabId = 'utilities' | TeamId;
 
 export interface ExperienceTableEntry {
   level: number;
