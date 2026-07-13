@@ -1574,87 +1574,82 @@ body {
   cursor: default;
 }
 
-.soul-core-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+.soul-core-grid {
   margin-bottom: 20px;
 }
 
-.soul-core-column {
-  background: var(--bg-panel-alt);
-  border: 1px solid var(--border-gold);
-  border-radius: 8px;
-  padding: 12px 14px;
-}
-
-.soul-core-column h4 {
-  margin: 0 0 4px;
-}
-
-.soul-core-column__count {
-  color: var(--text-muted);
-  font-size: 0.78rem;
-  margin: 0 0 10px;
-}
-
-.soul-core-column__add {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.soul-core-column__add input {
-  flex: 1;
+.soul-core-grid__search {
+  width: 100%;
   background: var(--bg-deep);
   border: 1px solid var(--border-gold);
   color: var(--text-parchment);
-  padding: 6px 8px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+  box-sizing: border-box;
 }
 
-.soul-core-column__add button {
-  background: var(--gold);
-  border: none;
-  color: #1a1208;
-  font-weight: bold;
-  border-radius: 6px;
-  padding: 0 12px;
+.soul-core-grid__class {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 4px 14px;
+  margin-bottom: 10px;
+}
+
+.soul-core-grid__class summary {
   cursor: pointer;
+  padding: 10px 0;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.soul-core-grid__class-count {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 0.82rem;
+}
+
+.soul-core-grid__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  padding: 4px 0 14px;
+}
+
+.soul-core-grid__card {
+  position: relative;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  border-radius: 6px;
+  padding: 10px 8px;
   font-family: inherit;
+  font-size: 0.8rem;
+  text-align: center;
+  cursor: pointer;
 }
 
-.soul-core-column__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 220px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.soul-core-grid__card--done {
+  border-width: 2px;
+  font-weight: bold;
 }
 
-.soul-core-column__list li {
+.soul-core-grid__badge {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px 0 6px 0;
+  color: #1a1208;
+  font-size: 0.7rem;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: var(--bg-deep);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.85rem;
-}
-
-.soul-core-column__list button {
-  background: transparent;
-  border: none;
-  color: var(--error);
-  cursor: pointer;
-  font-size: 0.9rem;
-  line-height: 1;
-  padding: 0 2px;
+  justify-content: center;
 }
 
 .soul-core-assignment {

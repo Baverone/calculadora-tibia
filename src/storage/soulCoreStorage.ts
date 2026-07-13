@@ -1,4 +1,5 @@
 import type { CharacterId } from '../domain/types';
+import { SOUL_CORE_SEED } from '../data/soulCore/seedData';
 
 // Persists, per character, which Soul Cores are already obtained, plus a
 // shared priority order (which of the 3 tracked characters should farm a
@@ -14,7 +15,7 @@ function doneKey(characterId: CharacterId): string {
 export function getDoneSoulCores(characterId: CharacterId): string[] {
   try {
     const raw = localStorage.getItem(doneKey(characterId));
-    if (!raw) return [];
+    if (!raw) return SOUL_CORE_SEED[characterId] ?? [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -43,6 +44,11 @@ export function removeDoneSoulCore(characterId: CharacterId, name: string): stri
     characterId,
     getDoneSoulCores(characterId).filter((n) => n !== name)
   );
+}
+
+export function toggleDoneSoulCore(characterId: CharacterId, name: string): string[] {
+  const current = getDoneSoulCores(characterId);
+  return current.includes(name) ? removeDoneSoulCore(characterId, name) : addDoneSoulCore(characterId, name);
 }
 
 export function getSoulCorePriority(defaultOrder: CharacterId[]): CharacterId[] {

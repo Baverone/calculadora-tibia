@@ -1,13 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { CharacterId } from '../domain/types';
 import { assignSoulCores, normalizeMonsterName, parseMonsterList } from '../domain/soulCore';
-import {
-  addDoneSoulCore,
-  getDoneSoulCores,
-  getSoulCorePriority,
-  removeDoneSoulCore,
-  saveSoulCorePriority,
-} from '../storage/soulCoreStorage';
+import { getDoneSoulCores, getSoulCorePriority, saveSoulCorePriority, toggleDoneSoulCore } from '../storage/soulCoreStorage';
 
 /** Owns the 3-character Soul Core priority order, each character's done list, and the pasted-list assignment. */
 export function useSoulCoreTracker(defaultOrder: CharacterId[]) {
@@ -29,12 +23,8 @@ export function useSoulCoreTracker(defaultOrder: CharacterId[]) {
     });
   }, []);
 
-  const addDone = useCallback((characterId: CharacterId, name: string) => {
-    setDoneByCharacter((current) => ({ ...current, [characterId]: addDoneSoulCore(characterId, name) }));
-  }, []);
-
-  const removeDone = useCallback((characterId: CharacterId, name: string) => {
-    setDoneByCharacter((current) => ({ ...current, [characterId]: removeDoneSoulCore(characterId, name) }));
+  const toggleDone = useCallback((characterId: CharacterId, name: string) => {
+    setDoneByCharacter((current) => ({ ...current, [characterId]: toggleDoneSoulCore(characterId, name) }));
   }, []);
 
   const doneSetsByCharacter = useMemo(() => {
@@ -54,8 +44,7 @@ export function useSoulCoreTracker(defaultOrder: CharacterId[]) {
     priorityOrder,
     moveInPriority,
     doneByCharacter,
-    addDone,
-    removeDone,
+    toggleDone,
     monsterListInput,
     setMonsterListInput,
     assignments,
