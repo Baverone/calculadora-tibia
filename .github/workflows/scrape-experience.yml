@@ -1,20 +1,16 @@
 name: Scrape Tibia Experience
 
-# Several UTC triggers spread through the day, covering Lisbon's 09:00 in
-# both winter (UTC+0) and summer (UTC+1) DST plus extra safety-net times —
-# the script checks the real Europe/Lisbon time and only proceeds once it's
-# past 09:00 there (no upper bound), and skips per character if today's
-# date is already recorded. So it's safe for multiple triggers to fire the
-# same day: GitHub Actions "schedule" runs can be delayed by hours under
-# load, and with only 1-2 triggers a delayed run can miss the whole day
-# silently (happened 2026-07-10 and 2026-07-11) — more triggers means more
-# chances for at least one to land after 09:00 Lisbon.
+# Hourly trigger from 09:00 to 23:00 UTC (covers Lisbon's 09:00 in both
+# winter/summer DST, then keeps checking every hour through the evening so
+# fresh guildstats.eu data gets picked up sooner instead of waiting for the
+# next fixed slot). The script checks the real Europe/Lisbon time and only
+# proceeds once it's past 09:00 there (no upper bound), and skips per
+# character/player if today's date is already recorded — so repeated
+# triggers the same day are cheap no-ops once data is in. This repo is
+# public, so Actions minutes are unlimited; each run only takes ~20-30s.
 on:
   schedule:
-    - cron: '0 9 * * *'
-    - cron: '0 10 * * *'
-    - cron: '0 13 * * *'
-    - cron: '0 17 * * *'
+    - cron: '0 9-23 * * *'
   workflow_dispatch: {}
 
 permissions:
