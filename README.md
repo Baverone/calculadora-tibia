@@ -8,8 +8,8 @@ gráfico de progressão, uma calculadora de hunt com hunts guardadas e
 objetivos de nível definidos manualmente, uma checklist de Quests & Bosses,
 timers de hunt (Pot Skills / Food ML) sempre visíveis independentemente do
 jogador ativo, e uma aba "Utilitários Tibia" com um Tibiadrome Tracker
-(rotação bissemanal + modificadores ativos), um Rashid Tracker (onde está o
-NPC hoje) e um Mini World Changes Tracker (eventos diários aleatórios).
+(rotação bissemanal + modificadores ativos) e um Rashid Tracker (onde está
+o NPC hoje).
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -126,14 +126,11 @@ data/
   team-history/            # <jogador-slug>.json — histórico dos jogadores da Equipa auto-rastreados (commitado pelo Actions)
   tibiadrome/
     modifiers-history.json # modificadores por rotação — commitado por scripts/save-modifier-rotation.mjs
-  mini-world-changes/
-    history.json           # eventos por dia — commitado por scripts/save-mini-world-changes.mjs
 scripts/
   generate-experience-table.mjs  # gera src/data/tibia_experience_table.json
   scrape-experience.mjs           # robô de recolha diária dos 3 personagens (corre no GitHub Actions)
   scrape-team-experience.mjs      # robô de recolha diária dos jogadores da Equipa (corre no GitHub Actions)
   save-modifier-rotation.mjs      # regista os 2 modificadores de uma rotação (corres tu, localmente)
-  save-mini-world-changes.mjs     # regista os eventos de um dia (corres tu, localmente)
 .github/workflows/
   scrape-experience.yml    # agenda + executa o scraper, faz commit dos dados
 src/
@@ -145,13 +142,11 @@ src/
       rotationAnchor.ts      # âncora de uma vez só: número + início da rotação
     rashid/
       schedule.ts            # cidade/local do Rashid por dia da semana
-    miniWorldChanges/
-      events.ts               # as 28 mini world changes possíveis, nome + localização
     team/
       autoTrackedPlayers.ts    # jogadores da Equipa cobertos pelo robô diário (mesma lista do script)
   domain/                # lógica pura, sem React — o "motor" da app
     types.ts             # tipos partilhados (CharacterId, HistoryEntry, AppTabId, ...)
-    tibiaDay.ts            # dia de Tibia atual (recua 1 dia antes das 9h em Lisboa) — partilhado por Rashid e Mini World Changes
+    tibiaDay.ts            # dia de Tibia atual (recua 1 dia antes das 9h em Lisboa) — usado pelo Rashid
     experienceTable.ts    # exp(level) e level(exp), fórmula oficial
     levelProgress.ts      # nível atual/próximo, % de progresso
     historyStats.ts       # XP ganha entre leituras consecutivas
@@ -163,8 +158,6 @@ src/
       parseModifiers.ts      # deteta os 2 modificadores no texto colado
     rashid/
       rashidSchedule.ts      # lookup na tabela semanal a partir do dia de Tibia (tibiaDay.ts)
-    miniWorldChanges/
-      parseMiniWorldChanges.ts # deteta N eventos (1 ou mais) no texto colado
     accessBoss/
       progress.ts             # progresso geral e por secção (done/total/percent)
     team/
@@ -174,7 +167,6 @@ src/
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
     huntStorage.ts         # leitura/escrita das hunts guardadas no localStorage
     tibiadromeHistory.ts    # busca o histórico de modificadores (GitHub raw)
-    miniWorldChangesHistory.ts # busca o histórico de mini world changes (GitHub raw)
     accessBossStorage.ts    # leitura/escrita dos itens marcados no localStorage
     teamStorage.ts           # jogadores + registos manuais no localStorage; fetchAutoHistoryFor... busca o robô (GitHub raw); export/import JSON
   hooks/
@@ -185,7 +177,6 @@ src/
     useTibiadromeHistory.ts # busca o histórico de modificadores ao montar
     useRashidClock.ts       # recalcula a localização do Rashid a cada segundo
     useTibiaDayClock.ts     # recalcula o dia de Tibia atual a cada segundo
-    useMiniWorldChangesHistory.ts # busca o histórico de mini world changes ao montar
     useCharacterAccessBoss.ts # itens marcados (Set) de um personagem
     useTeamData.ts           # jogadores + registos de EXP, CRUD completo (não usado na navegação atual)
   constants/
@@ -198,7 +189,6 @@ src/
     timers/                  # TimersPanel (Pot Skills + Food ML) com anel de progresso SVG
     tibiadrome/               # TibiadromeSection — cartão de rotação + submissão de modificadores
     rashid/                   # RashidCard — ícone + cidade/local de hoje + countdown
-    miniWorldChanges/         # MiniWorldChangesSection — cartão do dia + submissão de eventos
     accessBoss/               # AccessBossSection — checklist Úteis/Acessos/Bosses por jogador
     team/                      # (não usado na navegação atual — ver secção "Equipas e navegação em 2 níveis")
   styles/theme.css          # tema visual
@@ -332,40 +322,10 @@ a cidade/local de hoje e um countdown até à próxima mudança.
 Horário fixo por dia da semana em `src/data/rashid/schedule.ts`. O "dia de
 Tibia" só avança no server save, às 9:00 hora de Lisboa (`Europe/Lisbon`,
 ajusta-se sozinho a WEST/WET) — antes disso o dia ainda é o anterior. Essa
-lógica de "que dia é hoje em Tibia" vive em `src/domain/tibiaDay.ts`
-(partilhada com o Mini World Changes Tracker abaixo, para os dois concordarem
-sempre no mesmo dia); `src/domain/rashid/rashidSchedule.ts` só faz o lookup
-na tabela semanal a partir daí. Reutiliza o `formatDuration` do Tibiadrome
-Tracker para o countdown, a atualizar ao segundo (`src/hooks/useRashidClock.ts`).
-
-## Mini World Changes Tracker
-
-Cartão + submissão (`src/components/miniWorldChanges/MiniWorldChangesSection.tsx`),
-mesmo espírito do Tibiadrome mas para as mini world changes: eventos
-aleatórios diários (sem rotação fixa, sem número), com um conjunto variável
-de eventos ativos por dia — pode ser 1, pode ser vários. Lista de referência
-das 28 mini world changes possíveis (nome + localização, todas fornecidas
-diretamente, sem necessidade de pesquisa externa) em
-`src/data/miniWorldChanges/events.ts`.
-
-O cartão mostra o dia de Tibia atual (mesma lógica de troca às 9:00 do
-Rashid Tracker, via `src/domain/tibiaDay.ts` e `src/hooks/useTibiaDayClock.ts`)
-e a lista de eventos detetados para hoje, ou um estado vazio a convidar a
-colares o anúncio. Colas o texto do Towncryer/World Board numa textarea e
-clicas "Submeter"; o parser
-(`src/domain/miniWorldChanges/parseMiniWorldChanges.ts`) procura os nomes
-conhecidos no texto (tolerante a maiúsculas/pontuação/quebras de linha,
-incluindo apóstrofos como em "Spider's Nest") e aceita qualquer quantidade
-encontrada, desde que seja pelo menos 1 — caso contrário mostra um erro.
-
-Persistência igual ao Tibiadrome: o botão "Submeter" só mostra os eventos
-detetados e um comando pronto a copiar
-(`node scripts/save-mini-world-changes.mjs <YYYY-MM-DD> "<evento 1>" [...]`).
-Corres esse comando no terminal — valida os nomes, acrescenta a entrada a
-`data/mini-world-changes/history.json` (nunca sobrescreve dias já
-registados) e faz commit + push automaticamente. O site lê esse JSON via
-`raw.githubusercontent.com` (`src/storage/miniWorldChangesHistory.ts`) para
-mostrar os eventos de hoje e o histórico completo por dia.
+lógica de "que dia é hoje em Tibia" vive em `src/domain/tibiaDay.ts`;
+`src/domain/rashid/rashidSchedule.ts` só faz o lookup na tabela semanal a
+partir daí. Reutiliza o `formatDuration` do Tibiadrome Tracker para o
+countdown, a atualizar ao segundo (`src/hooks/useRashidClock.ts`).
 
 ## Equipas e navegação em 2 níveis (2026-07-13)
 

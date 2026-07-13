@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import type { TeamId } from '../domain/types';
+import type { CustomPlayer } from '../storage/customPlayerStorage';
 
 // Small, original geometric icons (no official Tibia artwork) — pure decoration.
 
@@ -128,4 +129,26 @@ export const PLAYERS: PlayerMeta[] = [
 
 export function playersForTeam(teamId: TeamId): PlayerMeta[] {
   return PLAYERS.filter((p) => p.teamId === teamId);
+}
+
+const CUSTOM_PLAYER_PALETTE = ['#e67e22', '#2980b9', '#16a085', '#c0392b', '#8e44ad', '#27ae60', '#d4af37'];
+
+/**
+ * Turns a manually-added player (via the "+" button) into the same
+ * PlayerMeta shape as the fixed roster, so PlayerPanel/PlayerTabsBar don't
+ * need to know the difference. `sharedHistorySource: 'team'` still applies
+ * — it just resolves to no automatic data since these names aren't in
+ * scripts/scrape-team-experience.mjs's fixed list, so it's fully
+ * manual-XP-only until/unless that script is updated to include them.
+ */
+export function customPlayerToMeta(custom: CustomPlayer, colorIndex: number): PlayerMeta {
+  return {
+    id: custom.id,
+    name: custom.name,
+    tagline: 'Membro da equipa (adicionado manualmente)',
+    accentColor: CUSTOM_PLAYER_PALETTE[colorIndex % CUSTOM_PLAYER_PALETTE.length],
+    Icon: ShieldIcon,
+    teamId: custom.teamId,
+    sharedHistorySource: 'team',
+  };
 }
