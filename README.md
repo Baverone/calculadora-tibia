@@ -8,7 +8,8 @@ manualmente, timers de hunt (Pot Skills / Food ML) sempre visíveis
 independentemente do personagem ativo, e uma aba "Utilitários Tibia" com um
 Tibiadrome Tracker (rotação bissemanal + modificadores ativos), um Rashid
 Tracker (onde está o NPC hoje) e um Mini World Changes Tracker (eventos
-diários aleatórios).
+diários aleatórios), e uma aba "Equipa" para acompanhar EXP/nível de um
+grupo dinâmico de jogadores (não os 3 personagens fixos).
 
 ## Setup do GitHub (necessário para a recolha automática)
 
@@ -162,6 +163,8 @@ src/
       parseMiniWorldChanges.ts # deteta N eventos (1 ou mais) no texto colado
     accessBoss/
       progress.ts             # progresso geral e por secção (done/total/percent)
+    team/
+      calculations.ts          # data-base/médias/dias-p-próximo-nível/previsão por segunda-feira
   storage/
     characterHistory.ts   # leitura/escrita do histórico manual no localStorage
     sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
@@ -169,6 +172,7 @@ src/
     tibiadromeHistory.ts    # busca o histórico de modificadores (GitHub raw)
     miniWorldChangesHistory.ts # busca o histórico de mini world changes (GitHub raw)
     accessBossStorage.ts    # leitura/escrita dos itens marcados no localStorage
+    teamStorage.ts           # jogadores + registos de EXP no localStorage, export/import JSON
   hooks/
     useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
     useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
@@ -179,10 +183,11 @@ src/
     useTibiaDayClock.ts     # recalcula o dia de Tibia atual a cada segundo
     useMiniWorldChangesHistory.ts # busca o histórico de mini world changes ao montar
     useCharacterAccessBoss.ts # itens marcados (Set) de um personagem
+    useTeamData.ts           # jogadores + registos de EXP, CRUD completo
   constants/
     vocations.tsx          # nome, cor e ícone de cada vocação
   components/
-    layout/                # TabsBar (inclui a aba "Utilitários Tibia"), CharacterPanel
+    layout/                # TabsBar (inclui as abas "Utilitários Tibia" e "Equipa"), CharacterPanel
     xp/                     # input de XP, barra de progresso, cartão de nível
     charts/                  # gráfico de progressão, lista de histórico recente
     hunt/                    # formulário de hunt + cartão de hunt guardada
@@ -191,6 +196,7 @@ src/
     rashid/                   # RashidCard — ícone + cidade/local de hoje + countdown
     miniWorldChanges/         # MiniWorldChangesSection — cartão do dia + submissão de eventos
     accessBoss/               # AccessBossSection — checklist Úteis/Acessos/Bosses por personagem
+    team/                      # TeamSection — jogadores, update diário, tabela geral, previsão
   styles/theme.css          # tema visual
 ```
 
@@ -356,6 +362,36 @@ Corres esse comando no terminal — valida os nomes, acrescenta a entrada a
 registados) e faz commit + push automaticamente. O site lê esse JSON via
 `raw.githubusercontent.com` (`src/storage/miniWorldChangesHistory.ts`) para
 mostrar os eventos de hoje e o histórico completo por dia.
+
+## Equipa (tracker de EXP para um grupo dinâmico de jogadores)
+
+Aba própria (`src/components/team/TeamSection.tsx`), completamente separada
+dos 3 personagens fixos — jogadores são adicionados/renomeados/removidos
+livremente, guardados em `localStorage`
+(`src/storage/teamStorage.ts`, `src/hooks/useTeamData.ts`; export/import de
+backup em JSON). Na primeira vez que a app corre num browser novo, a lista
+vem pré-preenchida com 4 jogadores por defeito — só acontece uma vez
+(a chave do `localStorage` fica definida a partir daí, mesmo que esvazies a
+lista) e nunca sobrescreve dados já existentes.
+
+Update diário em massa (uma data + um campo de EXP por jogador, grava tudo
+de uma vez; já havia registo para essa data faz update em vez de duplicar).
+Campo global "Calcular a partir de" define a data-base para as médias — se
+um jogador não tiver registo exatamente nessa data, usa o mais próximo
+posterior e assinala isso na UI. Toda a matemática (dias decorridos, EXP
+ganha, média/dia, progresso para o próximo nível) está em
+`src/domain/team/calculations.ts`, reutilizando `experienceForLevel`/
+`levelForExperience` de `src/domain/experienceTable.ts` (a mesma fórmula do
+resto da app) em vez de duplicar. Tolera médias negativas (perda de EXP por
+morte) e médias zero sem rebentar.
+
+Tabela geral ordenável por qualquer coluna + cartões-resumo. Histórico por
+jogador expansível, com edição e remoção de registos antigos (ganho negativo
+destacado a vermelho). Tabela de previsão com uma linha por cada segunda-feira
+desde hoje até 31 de dezembro (projeta EXP futura à média atual, com EXP
+sempre limitada a não ficar negativa), células de subida de nível destacadas
+a dourado, mais um gráfico de linhas (recharts) da evolução de nível prevista
+por jogador.
 
 ## Validação de inputs
 

@@ -3,8 +3,8 @@
 
 export type CharacterId = 'elite-knight' | 'royal-paladin' | 'exalted-monk';
 
-/** A character tab, or the non-character "Utilitários Tibia" tab (Rashid + Tibiadrome Tracker). */
-export type AppTabId = CharacterId | 'utilities';
+/** A character tab, the non-character "Utilitários Tibia" tab (Rashid + Tibiadrome Tracker), or the team EXP tracker tab. */
+export type AppTabId = CharacterId | 'utilities' | 'team';
 
 export interface ExperienceTableEntry {
   level: number;

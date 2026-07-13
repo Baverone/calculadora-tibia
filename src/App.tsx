@@ -7,6 +7,7 @@ import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
 import { MiniWorldChangesSection } from './components/miniWorldChanges/MiniWorldChangesSection';
+import { TeamSection } from './components/team/TeamSection';
 
 function App() {
   const [activeId, setActiveId] = useState<AppTabId>(VOCATIONS[0].id);
@@ -27,6 +28,11 @@ function App() {
         <RashidCard />
         <TibiadromeSection />
         <MiniWorldChangesSection />
+      </section>
+
+      {/* Kept mounted too, so a draft in the daily-update form survives switching tabs. */}
+      <section className={activeId === 'team' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
+        <TeamSection />
       </section>
 
       <main className="app-main">
