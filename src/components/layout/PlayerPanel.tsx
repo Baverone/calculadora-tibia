@@ -8,6 +8,7 @@ import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { HuntCalculator } from '../hunt/HuntCalculator';
 import { AccessBossSection } from '../accessBoss/AccessBossSection';
+import { SkillTrainingCalculator } from '../skillTraining/SkillTrainingCalculator';
 
 interface PlayerPanelProps {
   player: PlayerMeta;
@@ -66,6 +67,8 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
               accentColor={player.accentColor}
             />
           </div>
+
+          <SkillTrainingCalculator characterId={player.id} accentColor={player.accentColor} />
 
           <AccessBossSection characterId={player.id} accentColor={player.accentColor} />
         </>

@@ -622,6 +622,54 @@ body {
   font-size: 0.9rem;
 }
 
+/* Skill training calculator */
+
+.vocation-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vocation-selector__option {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.vocation-selector__option--active {
+  color: var(--text-parchment);
+  font-weight: bold;
+}
+
+.skill-training-base-hint {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  background: var(--bg-deep);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.skill-training-base-hint strong {
+  color: var(--text-parchment);
+}
+
+.skill-training-dummy-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+
 .level-plan-table-wrapper {
   margin-top: 16px;
   max-height: 320px;
@@ -1462,4 +1510,177 @@ body {
 
 .team-projection-chart {
   margin-top: 16px;
+}
+
+/* Soul Core tracker */
+
+.soul-core-priority {
+  margin-bottom: 18px;
+}
+
+.soul-core-priority label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.soul-core-priority__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.soul-core-priority__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-weight: bold;
+}
+
+.soul-core-priority__rank {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 0.8rem;
+}
+
+.soul-core-priority__arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.soul-core-priority__arrows button {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  border-radius: 3px;
+  font-size: 0.6rem;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.soul-core-priority__arrows button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.soul-core-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.soul-core-column {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.soul-core-column h4 {
+  margin: 0 0 4px;
+}
+
+.soul-core-column__count {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin: 0 0 10px;
+}
+
+.soul-core-column__add {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.soul-core-column__add input {
+  flex: 1;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.soul-core-column__add button {
+  background: var(--gold);
+  border: none;
+  color: #1a1208;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 0 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.soul-core-column__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.soul-core-column__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-deep);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+}
+
+.soul-core-column__list button {
+  background: transparent;
+  border: none;
+  color: var(--error);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.soul-core-assignment {
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.soul-core-assignment label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.soul-core-assignment textarea {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.soul-core-assignment__done {
+  color: var(--text-muted);
 }

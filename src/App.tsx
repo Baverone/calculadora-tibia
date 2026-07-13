@@ -8,6 +8,7 @@ import { PlayerPanel } from './components/layout/PlayerPanel';
 import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
+import { SoulCoreTracker } from './components/soulCore/SoulCoreTracker';
 
 function App() {
   const { customPlayers, addPlayer } = useCustomPlayers();
@@ -55,6 +56,7 @@ function App() {
       <section className={activeTab === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
         <RashidCard />
         <TibiadromeSection />
+        <SoulCoreTracker />
       </section>
 
       {activeTab !== 'utilities' && (
