@@ -65,10 +65,11 @@ export function parseNonNegativeNumber(raw: string, fieldLabel: string): Validat
 }
 
 /** Validates a skill "% into this level" value, as shown in-game (0 up to, but not including, 100). */
-export function parsePercentInLevel(raw: string): ValidationResult<number> {
+/** % still missing to reach the next level (100 = just started this level, 0 = about to level up). */
+export function parsePercentMissing(raw: string): ValidationResult<number> {
   const trimmed = raw.trim();
   if (trimmed === '') {
-    return { ok: false, error: 'Introduz a percentagem atual.' };
+    return { ok: false, error: 'Introduz a percentagem que falta.' };
   }
 
   const normalized = trimmed.replace(',', '.').replace('%', '');
@@ -77,8 +78,8 @@ export function parsePercentInLevel(raw: string): ValidationResult<number> {
   if (!Number.isFinite(value)) {
     return { ok: false, error: 'Percentagem tem de ser um número válido.' };
   }
-  if (value < 0 || value >= 100) {
-    return { ok: false, error: 'Percentagem tem de estar entre 0 e 99.99.' };
+  if (value < 0 || value > 100) {
+    return { ok: false, error: 'Percentagem tem de estar entre 0 e 100.' };
   }
 
   return { ok: true, value };

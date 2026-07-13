@@ -660,6 +660,23 @@ body {
   color: var(--text-parchment);
 }
 
+.skill-training-vocation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.skill-training-vocation__refresh {
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
 .skill-training-dummy-toggle {
   display: flex;
   align-items: center;

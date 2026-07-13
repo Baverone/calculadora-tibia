@@ -1,12 +1,12 @@
 import {
   calculateSkillTraining,
-  EXERCISE_WEAPON_TIERS,
+  LASTING_EXERCISE_CHARGES,
   minSkillLevel,
   SKILL_LABELS,
   type TrainableSkill,
   type Vocation,
 } from '../../domain/skillTraining';
-import { parseNonNegativeInteger, parsePercentInLevel } from '../../domain/validation';
+import { parseNonNegativeInteger, parsePercentMissing } from '../../domain/validation';
 import type { SkillEntryInput } from '../../storage/skillTrainingStorage';
 
 interface SkillTrainingRowProps {
@@ -19,28 +19,7 @@ interface SkillTrainingRowProps {
   accentColor: string;
 }
 
-const chargesFormatter = new Intl.NumberFormat('pt-PT');
-
-/** How many of the biggest-first weapon tiers cover a number of charges, e.g. "1x Exercise + 40 cargas". */
-function breakdownCharges(charges: number): string {
-  if (charges <= 0) return '0 cargas';
-
-  let remaining = charges;
-  const parts: string[] = [];
-
-  for (const tier of [...EXERCISE_WEAPON_TIERS].reverse()) {
-    const count = Math.floor(remaining / tier.charges);
-    if (count > 0) {
-      parts.push(`${count}x ${tier.label}`);
-      remaining -= count * tier.charges;
-    }
-  }
-  if (remaining > 0) {
-    parts.push(`${chargesFormatter.format(Math.ceil(remaining))} carga(s) extra`);
-  }
-
-  return parts.join(' + ');
-}
+const lastingFormatter = new Intl.NumberFormat('pt-PT');
 
 export function SkillTrainingRow({
   skill,
@@ -54,19 +33,29 @@ export function SkillTrainingRow({
   const minLevel = minSkillLevel(skill);
 
   const levelResult = parseNonNegativeInteger(entry.level, 'o nível');
-  const percentResult = parsePercentInLevel(entry.percent);
+  const percentMissingResult = parsePercentMissing(entry.percent);
 
   const levelError =
     entry.level.trim() !== '' && levelResult.ok && levelResult.value < minLevel
       ? `${SKILL_LABELS[skill]} começa no nível ${minLevel}.`
       : null;
 
-  const canCalculate = levelResult.ok && percentResult.ok && !levelError;
+  const canCalculate = levelResult.ok && percentMissingResult.ok && !levelError;
 
   const result =
-    canCalculate && levelResult.ok && percentResult.ok
-      ? calculateSkillTraining(skill, vocation, levelResult.value, percentResult.value, specialDummy, loyaltyBonusPercent)
+    canCalculate && levelResult.ok && percentMissingResult.ok
+      ? calculateSkillTraining(
+          skill,
+          vocation,
+          levelResult.value,
+          100 - percentMissingResult.value,
+          specialDummy,
+          loyaltyBonusPercent
+        )
       : null;
+
+  const lastingNormal = result ? Math.ceil(result.chargesNormal / LASTING_EXERCISE_CHARGES) : 0;
+  const lastingDoubleEvent = result ? Math.ceil(result.chargesDoubleEvent / LASTING_EXERCISE_CHARGES) : 0;
 
   return (
     <div className="saved-hunt-card">
@@ -86,27 +75,29 @@ export function SkillTrainingRow({
           />
         </div>
         <div className="hunt-form__field">
-          <label>% no nível atual</label>
+          <label>% que falta para o próximo nível</label>
           <input
             type="text"
             inputMode="decimal"
-            placeholder="ex: 32.5"
+            placeholder="ex: 67.5"
             value={entry.percent}
             onChange={(e) => onChange({ ...entry, percent: e.target.value })}
           />
         </div>
       </div>
 
-      {(levelError || (entry.level.trim() !== '' && !levelResult.ok) || (entry.percent.trim() !== '' && !percentResult.ok)) && (
+      {(levelError ||
+        (entry.level.trim() !== '' && !levelResult.ok) ||
+        (entry.percent.trim() !== '' && !percentMissingResult.ok)) && (
         <p className="field-error">
-          {levelError ?? (!levelResult.ok ? levelResult.error : '') ?? (!percentResult.ok ? percentResult.error : '')}
+          {levelError ?? (!levelResult.ok ? levelResult.error : '') ?? (!percentMissingResult.ok ? percentMissingResult.error : '')}
         </p>
       )}
 
       {result && loyaltyBonusPercent > 0 && (
         <p className="skill-training-base-hint">
-          Nível base (sem Loyalty): <strong>{result.baseLevel}</strong> ({result.basePercent.toFixed(2)}%) — as varinhas de treino são
-          calculadas a partir daqui, porque a Loyalty só infla o nível mostrado, não acelera o treino real.
+          Nível base (sem Loyalty): <strong>{result.baseLevel}</strong> ({(100 - result.basePercent).toFixed(2)}% em falta) — as
+          varinhas de treino são calculadas a partir daqui, porque a Loyalty só infla o nível mostrado, não acelera o treino real.
         </p>
       )}
 
@@ -121,14 +112,9 @@ export function SkillTrainingRow({
           </thead>
           <tbody>
             <tr>
-              <td>Cargas necessárias</td>
-              <td>{chargesFormatter.format(result.chargesNormal)}</td>
-              <td>{chargesFormatter.format(result.chargesDoubleEvent)}</td>
-            </tr>
-            <tr>
-              <td>Armas de treino</td>
-              <td>{breakdownCharges(result.chargesNormal)}</td>
-              <td>{breakdownCharges(result.chargesDoubleEvent)}</td>
+              <td>Lasting Exercise necessárias</td>
+              <td>{lastingFormatter.format(lastingNormal)}</td>
+              <td>{lastingFormatter.format(lastingDoubleEvent)}</td>
             </tr>
           </tbody>
         </table>

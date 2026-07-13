@@ -68,7 +68,7 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
             />
           </div>
 
-          <SkillTrainingCalculator characterId={player.id} accentColor={player.accentColor} />
+          <SkillTrainingCalculator player={player} />
 
           <AccessBossSection characterId={player.id} accentColor={player.accentColor} />
         </>

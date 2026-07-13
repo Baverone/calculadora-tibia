@@ -1,30 +1,28 @@
 import { LOYALTY_BONUS_OPTIONS, VOCATION_LABELS, VOCATION_SKILLS, type TrainableSkill, type Vocation } from '../../domain/skillTraining';
-import type { CharacterId } from '../../domain/types';
+import type { PlayerMeta } from '../../constants/players';
+import { useCharacterVocation } from '../../hooks/useCharacterVocation';
 import { useSkillTrainingConfig } from '../../hooks/useSkillTrainingConfig';
 import type { SkillEntryInput } from '../../storage/skillTrainingStorage';
 import { SkillTrainingRow } from './SkillTrainingRow';
 
 interface SkillTrainingCalculatorProps {
-  characterId: CharacterId;
-  accentColor: string;
+  player: PlayerMeta;
 }
 
 const VOCATIONS: Vocation[] = ['knight', 'paladin', 'sorcerer', 'druid', 'monk'];
 const KNIGHT_WEAPONS: ('axe' | 'sword' | 'club')[] = ['axe', 'sword', 'club'];
 const EMPTY_ENTRY: SkillEntryInput = { level: '', percent: '' };
 
-/** Which skills should get a row, given the chosen vocation and (for Knight) chosen weapons. */
+/** Which skills should get a row, given the vocation and (for Knight) chosen weapons. */
 function activeSkills(vocation: Vocation, knightWeapons: ('axe' | 'sword' | 'club')[]): TrainableSkill[] {
   if (vocation !== 'knight') return VOCATION_SKILLS[vocation];
   return [...knightWeapons, 'magic', 'shielding'];
 }
 
-export function SkillTrainingCalculator({ characterId, accentColor }: SkillTrainingCalculatorProps) {
-  const { config, updateConfig } = useSkillTrainingConfig(characterId);
-
-  function setVocation(vocation: Vocation) {
-    updateConfig((current) => ({ ...current, vocation }));
-  }
+export function SkillTrainingCalculator({ player }: SkillTrainingCalculatorProps) {
+  const accentColor = player.accentColor;
+  const { vocation, loading, detect, setManualVocation } = useCharacterVocation(player.id, player.name);
+  const { config, updateConfig } = useSkillTrainingConfig(player.id);
 
   function toggleKnightWeapon(weapon: 'axe' | 'sword' | 'club') {
     updateConfig((current) => {
@@ -48,7 +46,7 @@ export function SkillTrainingCalculator({ characterId, accentColor }: SkillTrain
     updateConfig((current) => ({ ...current, skills: { ...current.skills, [skill]: entry } }));
   }
 
-  const skills = config.vocation ? activeSkills(config.vocation, config.knightWeapons) : [];
+  const skills = vocation ? activeSkills(vocation, config.knightWeapons) : [];
 
   return (
     <div className="character-panel__block">
@@ -56,24 +54,37 @@ export function SkillTrainingCalculator({ characterId, accentColor }: SkillTrain
 
       <div className="hunt-form__field" style={{ marginBottom: 14 }}>
         <label>Vocação</label>
-        <div className="vocation-selector">
-          {VOCATIONS.map((vocation) => (
-            <button
-              key={vocation}
-              type="button"
-              className={
-                vocation === config.vocation ? 'vocation-selector__option vocation-selector__option--active' : 'vocation-selector__option'
-              }
-              style={vocation === config.vocation ? { borderColor: accentColor, color: accentColor } : undefined}
-              onClick={() => setVocation(vocation)}
-            >
-              {VOCATION_LABELS[vocation]}
+        {loading && <p className="chart-empty-state">A detetar vocação de {player.name}...</p>}
+
+        {!loading && vocation && (
+          <p className="skill-training-vocation">
+            <span style={{ color: accentColor, fontWeight: 'bold' }}>{VOCATION_LABELS[vocation]}</span>
+            <button type="button" className="skill-training-vocation__refresh" onClick={() => detect()} title="Voltar a detetar">
+              🔄
             </button>
-          ))}
-        </div>
+          </p>
+        )}
+
+        {!loading && !vocation && (
+          <>
+            <p className="field-error">Não foi possível detetar a vocação de {player.name} automaticamente. Escolhe manualmente:</p>
+            <div className="vocation-selector">
+              {VOCATIONS.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  className="vocation-selector__option"
+                  onClick={() => setManualVocation(v)}
+                >
+                  {VOCATION_LABELS[v]}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
-      {config.vocation === 'knight' && (
+      {vocation === 'knight' && (
         <div className="hunt-form__field" style={{ marginBottom: 14 }}>
           <label>Arma(s) a treinar</label>
           <div className="vocation-selector">
@@ -96,7 +107,7 @@ export function SkillTrainingCalculator({ characterId, accentColor }: SkillTrain
         </div>
       )}
 
-      {config.vocation && (
+      {vocation && (
         <>
           <label className="skill-training-dummy-toggle">
             <input type="checkbox" checked={config.specialDummy} onChange={toggleSpecialDummy} />
@@ -126,17 +137,17 @@ export function SkillTrainingCalculator({ characterId, accentColor }: SkillTrain
         </>
       )}
 
-      {config.vocation && skills.length === 0 && (
+      {vocation === 'knight' && skills.length === 0 && (
         <p className="chart-empty-state">Seleciona pelo menos uma arma para o Knight treinar.</p>
       )}
 
-      {config.vocation && skills.length > 0 && (
+      {vocation && skills.length > 0 && (
         <div className="saved-hunts-list">
           {skills.map((skill) => (
             <SkillTrainingRow
               key={skill}
               skill={skill}
-              vocation={config.vocation as Vocation}
+              vocation={vocation}
               entry={config.skills[skill] ?? EMPTY_ENTRY}
               specialDummy={config.specialDummy}
               loyaltyBonusPercent={config.loyaltyBonusPercent}

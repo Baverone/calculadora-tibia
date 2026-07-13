@@ -173,10 +173,5 @@ export function calculateSkillTraining(
   };
 }
 
-/** How many of each purchasable weapon (by charge count) it'd take to cover a number of charges. */
-export const EXERCISE_WEAPON_TIERS: { label: string; charges: number }[] = [
-  { label: 'Training (50 cargas, grátis)', charges: 50 },
-  { label: 'Exercise (500 cargas)', charges: 500 },
-  { label: 'Durable Exercise (1.800 cargas)', charges: 1800 },
-  { label: 'Lasting Exercise (14.400 cargas)', charges: 14400 },
-];
+/** A Lasting Exercise weapon (the largest purchasable tier) has this many charges. */
+export const LASTING_EXERCISE_CHARGES = 14400;

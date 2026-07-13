@@ -1,18 +1,18 @@
 import type { CharacterId } from '../domain/types';
-import type { TrainableSkill, Vocation } from '../domain/skillTraining';
+import type { TrainableSkill } from '../domain/skillTraining';
 
 // Persists the Skill Training Calculator's inputs per character, so the
-// vocation choice and per-skill level/% draft survive reloads and tab
-// switches (this panel is always mounted, never unmounted, like the rest
-// of the app).
+// draft survives reloads and tab switches (this panel is always mounted,
+// never unmounted, like the rest of the app). Vocation is NOT stored here —
+// see useCharacterVocation/vocationLookup — it's auto-detected instead.
 
 export interface SkillEntryInput {
   level: string;
+  /** % still missing to reach the next level (i.e. 100 - % complete). */
   percent: string;
 }
 
 export interface SkillTrainingConfig {
-  vocation: Vocation | null;
   knightWeapons: ('axe' | 'sword' | 'club')[];
   skills: Partial<Record<TrainableSkill, SkillEntryInput>>;
   specialDummy: boolean;
@@ -23,7 +23,6 @@ export interface SkillTrainingConfig {
 const STORAGE_PREFIX = 'tibia-xp-calc:skill-training:';
 
 const DEFAULT_CONFIG: SkillTrainingConfig = {
-  vocation: null,
   knightWeapons: [],
   skills: {},
   specialDummy: false,
