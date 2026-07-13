@@ -1,4 +1,5 @@
 import type { LevelProgress } from '../../domain/types';
+import { getShareExpRange } from '../../domain/shareExperience';
 import { ProgressBar } from './ProgressBar';
 
 interface LevelProgressCardProps {
@@ -9,6 +10,8 @@ interface LevelProgressCardProps {
 const numberFormatter = new Intl.NumberFormat('pt-PT');
 
 export function LevelProgressCard({ progress, accentColor }: LevelProgressCardProps) {
+  const shareRange = getShareExpRange(progress.currentLevel);
+
   return (
     <div className="level-progress-card">
       <div className="level-progress-card__levels">
@@ -33,6 +36,13 @@ export function LevelProgressCard({ progress, accentColor }: LevelProgressCardPr
         <span>
           XP no nível: <strong>{numberFormatter.format(progress.experienceIntoLevel)}</strong> /{' '}
           {numberFormatter.format(progress.experienceAtNextLevel - progress.experienceAtCurrentLevel)}
+        </span>
+      </div>
+
+      <div className="level-progress-card__share" style={{ borderColor: accentColor }}>
+        <span className="level-progress-card__label">Range de Share Exp</span>
+        <span className="level-progress-card__share-value" style={{ color: accentColor }}>
+          {shareRange.min} – {shareRange.max}
         </span>
       </div>
     </div>

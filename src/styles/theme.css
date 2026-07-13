@@ -419,6 +419,22 @@ body {
   color: var(--text-parchment);
 }
 
+.level-progress-card__share {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: var(--bg-panel);
+  border: 1px solid;
+  border-radius: 6px;
+}
+
+.level-progress-card__share-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
 /* Progress bar */
 
 .progress-bar {
