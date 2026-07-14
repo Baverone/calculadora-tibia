@@ -1595,6 +1595,41 @@ body {
   margin-bottom: 20px;
 }
 
+.soul-core-grid__total {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.soul-core-grid__total strong {
+  color: var(--text-parchment);
+}
+
+.soul-core-checker {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border-gold);
+}
+
+.soul-core-checker label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.soul-core-checker textarea {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
 .soul-core-grid__search {
   width: 100%;
   background: var(--bg-deep);

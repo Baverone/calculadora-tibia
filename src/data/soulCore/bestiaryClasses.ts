@@ -11,19 +11,21 @@ export interface BestiaryClass {
 
 export const BESTIARY_CLASSES: BestiaryClass[] = [
   {
+    // Order fully confirmed (Baverone's original screenshot, cross-checked
+    // again later against Bluey The Cat — both match exactly).
     name: "Amphibic",
     creatures: [
-      "Orchid Frog",
+      "Toad",
+      "Green Frog",
+      "Azure Frog",
       "Coral Frog",
       "Crimson Frog",
-      "Green Frog",
-      "Bog Frog",
+      "Orchid Frog",
       "Infernal Frog",
       "Filth Toad",
+      "Bog Frog",
       "Salamander",
       "Makara",
-      "Azure Frog",
-      "Toad",
     ],
   },
   {

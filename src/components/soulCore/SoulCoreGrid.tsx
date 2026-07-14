@@ -3,6 +3,9 @@ import { BESTIARY_CLASSES } from '../../data/soulCore/bestiaryClasses';
 import type { PlayerMeta } from '../../constants/players';
 import type { CharacterId } from '../../domain/types';
 import { SoulCoreClassSection } from './SoulCoreClassSection';
+import { SoulCoreListChecker } from './SoulCoreListChecker';
+
+const TOTAL_CREATURES = BESTIARY_CLASSES.reduce((sum, c) => sum + c.creatures.length, 0);
 
 interface SoulCoreGridProps {
   characterIds: CharacterId[];
@@ -43,6 +46,13 @@ export function SoulCoreGrid({ characterIds, playersById, doneByCharacter, onTog
           );
         })}
       </div>
+
+      <p className="soul-core-grid__total">
+        <span style={{ color: activePlayer.accentColor, fontWeight: 'bold' }}>{activePlayer.name}</span>:{' '}
+        <strong>{doneSet.size}</strong> Soul Core(s) feitas de {TOTAL_CREATURES}
+      </p>
+
+      <SoulCoreListChecker doneSet={doneSet} accentColor={activePlayer.accentColor} />
 
       <input
         type="text"
