@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BESTIARY_CLASSES } from '../../data/soulCore/bestiaryClasses';
 import type { PlayerMeta } from '../../constants/players';
 import type { CharacterId } from '../../domain/types';
+import { SoulCoreClassSection } from './SoulCoreClassSection';
 
 interface SoulCoreGridProps {
   characterIds: CharacterId[];
@@ -60,35 +61,17 @@ export function SoulCoreGrid({ characterIds, playersById, doneByCharacter, onTog
         const doneInClass = bestiaryClass.creatures.filter((c) => doneSet.has(c)).length;
 
         return (
-          <details key={bestiaryClass.name} className="soul-core-grid__class" open={query !== '' || doneInClass > 0}>
-            <summary>
-              {bestiaryClass.name}{' '}
-              <span className="soul-core-grid__class-count">
-                ({doneInClass}/{bestiaryClass.creatures.length})
-              </span>
-            </summary>
-            <div className="soul-core-grid__cards">
-              {creatures.map((creature) => {
-                const done = doneSet.has(creature);
-                return (
-                  <button
-                    key={creature}
-                    type="button"
-                    className={done ? 'soul-core-grid__card soul-core-grid__card--done' : 'soul-core-grid__card'}
-                    style={done ? { borderColor: activePlayer.accentColor } : undefined}
-                    onClick={() => onToggle(activeCharacterId, creature)}
-                  >
-                    {done && (
-                      <span className="soul-core-grid__badge" style={{ background: activePlayer.accentColor }}>
-                        ✓
-                      </span>
-                    )}
-                    {creature}
-                  </button>
-                );
-              })}
-            </div>
-          </details>
+          <SoulCoreClassSection
+            key={bestiaryClass.name}
+            bestiaryClass={bestiaryClass}
+            creatures={creatures}
+            doneSet={doneSet}
+            doneInClass={doneInClass}
+            accentColor={activePlayer.accentColor}
+            forceOpen={query !== '' || doneInClass > 0}
+            paginate={query === ''}
+            onToggle={(creature) => onToggle(activeCharacterId, creature)}
+          />
         );
       })}
     </div>

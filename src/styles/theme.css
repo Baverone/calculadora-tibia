@@ -1629,11 +1629,40 @@ body {
   font-size: 0.82rem;
 }
 
+.soul-core-grid__pager {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 10px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.soul-core-grid__pager button {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  border-radius: 4px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.soul-core-grid__pager button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 .soul-core-grid__cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 8px;
   padding: 4px 0 14px;
+}
+
+/* Fixed 5 columns while paginated, mirroring the in-game Bestiary's 5x3 page layout. */
+.soul-core-grid__cards--paginated {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .soul-core-grid__card {
