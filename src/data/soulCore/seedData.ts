@@ -23,4 +23,7 @@ export const SOUL_CORE_SEED: Partial<Record<CharacterId, string[]>> = {
     'Deepling Spellsinger',
     'Deepling Master Librarian',
   ],
+  // Confirmed 2026-07-14 from in-game screenshots (Aquatic family only so
+  // far, all 3 pages) — more families to be added as they're checked.
+  'exalted-monk': ['Northern Pike (Creature)'],
 };
