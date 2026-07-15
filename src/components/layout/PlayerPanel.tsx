@@ -4,6 +4,7 @@ import type { PlayerMeta } from '../../constants/players';
 import { fetchSharedHistory, fetchTeamPlayerSharedHistory } from '../../storage/sharedHistory';
 import { XpInputForm } from '../xp/XpInputForm';
 import { LevelProgressCard } from '../xp/LevelProgressCard';
+import { XpForecastCard } from '../xp/XpForecastCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { HuntCalculator } from '../hunt/HuntCalculator';
@@ -56,6 +57,15 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
             <h3>Progressão</h3>
             <XpProgressChart history={history} accentColor={player.accentColor} />
             <RecentHistoryList history={history} />
+          </div>
+
+          <div className="character-panel__block">
+            <h3>Previsão dos próximos níveis</h3>
+            <XpForecastCard
+              history={history}
+              currentExperience={currentExperience}
+              accentColor={player.accentColor}
+            />
           </div>
 
           <div className="character-panel__block">
