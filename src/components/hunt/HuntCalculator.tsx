@@ -1,26 +1,37 @@
 import { useState } from 'react';
 import { levelForExperience, MAX_KNOWN_LEVEL } from '../../domain/experienceTable';
 import { parseLevelList, parsePositiveNumber } from '../../domain/validation';
-import type { CharacterId } from '../../domain/types';
-import { useSavedHunts } from '../../hooks/useSavedHunts';
+import type { SavedHunt } from '../../domain/types';
 import { HuntCalculatorForm } from './HuntCalculatorForm';
 import { SavedHuntCard } from './SavedHuntCard';
 
 interface HuntCalculatorProps {
-  characterId: CharacterId;
   idPrefix: string;
   currentExperience: number | null;
   accentColor: string;
+  hunts: SavedHunt[];
+  addHunt: (hunt: Omit<SavedHunt, 'id' | 'createdAt'>) => void;
+  removeHunt: (huntId: string) => void;
 }
 
 /**
  * Lets the user add hunts (name, raw exp/h, manually chosen goal levels).
- * Every hunt added is persisted (see useSavedHunts) and its time-to-goal
- * table is recalculated live against the character's current experience.
+ * Every hunt added is persisted and its time-to-goal table is recalculated
+ * live against the character's current experience.
+ *
+ * The hunt list is owned by PlayerPanel (not fetched here via useSavedHunts)
+ * because XpForecastCard needs the same list: two useSavedHunts instances
+ * would each hold their own useState copy, so a hunt added here would never
+ * show up in the forecast's respawn picker until a reload.
  */
-export function HuntCalculator({ characterId, idPrefix, currentExperience, accentColor }: HuntCalculatorProps) {
-  const { hunts, addHunt, removeHunt } = useSavedHunts(characterId);
-
+export function HuntCalculator({
+  idPrefix,
+  currentExperience,
+  accentColor,
+  hunts,
+  addHunt,
+  removeHunt,
+}: HuntCalculatorProps) {
   const [huntName, setHuntName] = useState('');
   const [rawExpInput, setRawExpInput] = useState('');
   const [goalLevelsInput, setGoalLevelsInput] = useState('');

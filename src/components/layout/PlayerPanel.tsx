@@ -1,4 +1,5 @@
 import { useCharacterState } from '../../hooks/useCharacterState';
+import { useSavedHunts } from '../../hooks/useSavedHunts';
 import { getLevelProgress } from '../../domain/levelProgress';
 import type { PlayerMeta } from '../../constants/players';
 import { fetchSharedHistory, fetchTeamPlayerSharedHistory } from '../../storage/sharedHistory';
@@ -27,6 +28,10 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
     player.id,
     fetchShared
   );
+
+  // Owned here rather than inside HuntCalculator so the forecast's respawn
+  // picker and the hunt list stay in sync off a single source of truth.
+  const { hunts, addHunt, removeHunt } = useSavedHunts(player.id);
 
   const progress = currentExperience !== null ? getLevelProgress(currentExperience) : null;
 
@@ -62,19 +67,23 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
           <div className="character-panel__block">
             <h3>Previsão dos próximos níveis</h3>
             <XpForecastCard
+              characterId={player.id}
               history={history}
               currentExperience={currentExperience}
               accentColor={player.accentColor}
+              hunts={hunts}
             />
           </div>
 
           <div className="character-panel__block">
             <h3>Calculadora de Hunt</h3>
             <HuntCalculator
-              characterId={player.id}
               idPrefix={`hunt-${player.id}`}
               currentExperience={currentExperience}
               accentColor={player.accentColor}
+              hunts={hunts}
+              addHunt={addHunt}
+              removeHunt={removeHunt}
             />
           </div>
 

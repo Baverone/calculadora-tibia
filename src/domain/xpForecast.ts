@@ -1,4 +1,5 @@
 import { experienceForLevel, levelForExperience } from './experienceTable';
+import { STAMINA_BOOST_MULTIPLIER, STAMINA_MULTIPLIER } from './huntCalculator';
 import type { HistoryEntry } from './types';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -56,6 +57,23 @@ export function computeRecentDailyRate(
     firstEntry: first,
     lastEntry: last,
   };
+}
+
+/**
+ * Converts a hunt's raw (unbuffed) exp/h into the XP/day that daily routine
+ * would produce, so a respawn can be compared against the real 7-day pace on
+ * the same axis (dates). Uses the same bonus model as the rest of the hunt
+ * calculator: boosted hours at 225%, the remaining hours at stamina's 150%.
+ */
+export function dailyXpFromHunt(
+  rawExperiencePerHour: number,
+  hoursWithBoostPerDay: number,
+  hoursWithoutBoostPerDay: number
+): number {
+  return (
+    hoursWithBoostPerDay * rawExperiencePerHour * STAMINA_BOOST_MULTIPLIER +
+    hoursWithoutBoostPerDay * rawExperiencePerHour * STAMINA_MULTIPLIER
+  );
 }
 
 export interface LevelForecast {
