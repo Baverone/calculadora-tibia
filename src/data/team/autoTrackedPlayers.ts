@@ -7,12 +7,7 @@ export interface AutoTrackedPlayer {
   slug: string;
 }
 
-export const AUTO_TRACKED_TEAM_PLAYERS: AutoTrackedPlayer[] = [
-  { name: 'Baverone', slug: 'baverone' },
-  { name: 'Bigodes The Legend', slug: 'bigodes-the-legend' },
-  { name: 'Konczul', slug: 'konczul' },
-  { name: 'Sios Trader', slug: 'sios-trader' },
-];
+export const AUTO_TRACKED_TEAM_PLAYERS: AutoTrackedPlayer[] = [{ name: 'Baverone', slug: 'baverone' }];
 
 function normalizeName(name: string): string {
   return name.trim().toLowerCase();
