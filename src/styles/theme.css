@@ -257,6 +257,33 @@ body {
   height: 16px;
 }
 
+.player-tabs-bar__tab-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.player-tabs-bar__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.player-tabs-bar__remove:hover {
+  color: var(--error);
+  background: var(--bg-panel-alt);
+}
+
 .player-tabs-bar__tab--add {
   font-weight: bold;
   color: var(--gold);
