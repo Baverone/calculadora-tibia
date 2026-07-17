@@ -11,7 +11,7 @@ import { RashidCard } from './components/rashid/RashidCard';
 import { SoulCoreTracker } from './components/soulCore/SoulCoreTracker';
 
 function App() {
-  const { customPlayers, addPlayer } = useCustomPlayers();
+  const { customPlayers, addPlayer, removePlayer } = useCustomPlayers();
 
   const allPlayers = useMemo(
     () => [...PLAYERS, ...customPlayers.map((p, i) => customPlayerToMeta(p, i))],
@@ -37,6 +37,14 @@ function App() {
     if (activeTab === 'utilities') return;
     const created = addPlayer(name, activeTab as TeamId);
     setActivePlayerId(created.id);
+  }
+
+  function handleRemovePlayer(playerId: string) {
+    removePlayer(playerId);
+    if (playerId === activePlayerId && activeTab !== 'utilities') {
+      const remaining = playersForTeam(activeTab as TeamId).filter((p) => p.id !== playerId);
+      if (remaining[0]) setActivePlayerId(remaining[0].id);
+    }
   }
 
   const activeTeamPlayers = activeTab !== 'utilities' ? playersForTeam(activeTab as TeamId) : [];
@@ -65,6 +73,7 @@ function App() {
           activePlayerId={activePlayerId}
           onChange={setActivePlayerId}
           onAddPlayer={handleAddPlayer}
+          onRemovePlayer={handleRemovePlayer}
         />
       )}
 

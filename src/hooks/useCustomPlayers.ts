@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { TeamId } from '../domain/types';
-import { addCustomPlayer, getCustomPlayers } from '../storage/customPlayerStorage';
+import { addCustomPlayer, getCustomPlayers, removeCustomPlayer } from '../storage/customPlayerStorage';
 
 export function useCustomPlayers() {
   const [customPlayers, setCustomPlayers] = useState(() => getCustomPlayers());
@@ -11,5 +11,9 @@ export function useCustomPlayers() {
     return updated[updated.length - 1];
   }, []);
 
-  return { customPlayers, addPlayer };
+  const removePlayer = useCallback((id: string) => {
+    setCustomPlayers(removeCustomPlayer(id));
+  }, []);
+
+  return { customPlayers, addPlayer, removePlayer };
 }

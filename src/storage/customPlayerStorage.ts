@@ -35,3 +35,7 @@ export function addCustomPlayer(name: string, teamId: TeamId): CustomPlayer[] {
   const player: CustomPlayer = { id: `custom-${crypto.randomUUID()}`, name: trimmed, teamId };
   return saveCustomPlayers([...getCustomPlayers(), player]);
 }
+
+export function removeCustomPlayer(id: string): CustomPlayer[] {
+  return saveCustomPlayers(getCustomPlayers().filter((p) => p.id !== id));
+}
