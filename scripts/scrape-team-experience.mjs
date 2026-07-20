@@ -12,7 +12,11 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { runScraper } from './lib/guildstatsHistory.mjs';
 
-const TEAM_PLAYERS = [{ id: 'baverone', nick: 'Baverone' }];
+const TEAM_PLAYERS = [
+  { id: 'baverone', nick: 'Baverone' },
+  { id: 'dalla-shot', nick: 'Dalla Shot' },
+  { id: 'fire-wu', nick: 'Fire Wu' },
+];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, '..', 'data', 'team-history');
