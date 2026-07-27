@@ -29,3 +29,57 @@ export function computeExperienceGains(history: HistoryEntry[]): ExperienceGain[
 
   return gains;
 }
+
+export interface DailyExperienceGain {
+  /** Local midnight (ms) of the calendar day this gain is attributed to. */
+  dayTimestamp: number;
+  /** Cumulative XP at the end of this day (its last reading). */
+  experience: number;
+  /** XP gained versus the previous calendar day that has a reading. */
+  experienceGained: number;
+}
+
+function localDayKey(timestamp: number): string {
+  const d = new Date(timestamp);
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+function localMidnight(timestamp: number): number {
+  const d = new Date(timestamp);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+}
+
+/**
+ * Collapses the history to one cumulative-XP value per calendar day (the last
+ * reading of each day) and returns the day-over-day XP gained. This is the
+ * "XP feita por dia" series: for the daily guildstats scrape each entry is
+ * already one day, but this also correctly de-duplicates days where a manual
+ * entry and the automated scrape both exist. The first day has no previous
+ * day to compare against, so it is omitted (same convention as
+ * computeExperienceGains). Gains can be negative (XP lost to deaths).
+ */
+export function computeDailyGains(history: HistoryEntry[]): DailyExperienceGain[] {
+  const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
+
+  // Ascending order means the last write for a given day wins — that day's
+  // final cumulative XP reading.
+  const byDay = new Map<string, { dayTimestamp: number; experience: number }>();
+  for (const entry of sorted) {
+    byDay.set(localDayKey(entry.timestamp), {
+      dayTimestamp: localMidnight(entry.timestamp),
+      experience: entry.experience,
+    });
+  }
+
+  const days = [...byDay.values()].sort((a, b) => a.dayTimestamp - b.dayTimestamp);
+  const gains: DailyExperienceGain[] = [];
+  for (let i = 1; i < days.length; i++) {
+    gains.push({
+      dayTimestamp: days[i].dayTimestamp,
+      experience: days[i].experience,
+      experienceGained: days[i].experience - days[i - 1].experience,
+    });
+  }
+
+  return gains;
+}
