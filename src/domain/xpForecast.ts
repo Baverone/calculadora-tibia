@@ -117,3 +117,45 @@ export function forecastNextLevels(
 
   return forecasts;
 }
+
+/** Look-back windows (in days) used by the per-Monday level forecast. */
+export const WEEKLY_FORECAST_WINDOWS = [7, 15, 30] as const;
+
+/**
+ * Every Monday from the next one (or today, if today is already a Monday)
+ * through Dec 31 of the current year — the horizon of the weekly level
+ * forecast. Uses local calendar days so "Monday" matches the user's week.
+ */
+export function upcomingMondayDates(from: Date = new Date()): Date[] {
+  const start = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  const daysUntilMonday = (8 - start.getDay()) % 7; // 0 when `start` is already a Monday
+  const yearEnd = new Date(from.getFullYear(), 11, 31);
+
+  const cursor = new Date(start);
+  cursor.setDate(cursor.getDate() + daysUntilMonday);
+
+  const mondays: Date[] = [];
+  while (cursor.getTime() <= yearEnd.getTime()) {
+    mondays.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 7);
+  }
+  return mondays;
+}
+
+/**
+ * Projects the level (and the underlying XP) reached on `target` if
+ * `averageDailyXp` holds from `from`. Returns null for a flat/negative rate —
+ * there's no meaningful upward forecast then. XP is floored at 0 so a stale
+ * negative rate can't underflow.
+ */
+export function projectedLevelAt(
+  currentExperience: number,
+  averageDailyXp: number,
+  target: Date,
+  from: Date = new Date()
+): { level: number; experience: number } | null {
+  if (!Number.isFinite(averageDailyXp) || averageDailyXp <= 0) return null;
+  const days = (target.getTime() - from.getTime()) / MS_PER_DAY;
+  const experience = Math.max(0, currentExperience + averageDailyXp * days);
+  return { level: levelForExperience(experience), experience };
+}

@@ -3,6 +3,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   Rectangle,
@@ -22,11 +23,10 @@ interface XpProgressChartProps {
   accentColor: string;
 }
 
-type ChartMode = 'level' | 'experience' | 'daily';
+type ChartMode = 'combined' | 'daily';
 
 const MODES: { id: ChartMode; label: string }[] = [
-  { id: 'level', label: 'Nível' },
-  { id: 'experience', label: 'XP total' },
+  { id: 'combined', label: 'Nível & XP' },
   { id: 'daily', label: 'XP por dia' },
 ];
 
@@ -36,10 +36,20 @@ const numberFormatter = new Intl.NumberFormat('pt-PT');
 const signedNumberFormatter = new Intl.NumberFormat('pt-PT', { signDisplay: 'exceptZero' });
 
 const GAIN_NEGATIVE = '#e74c3c';
+const XP_LINE_COLOR = '#d4af37';
 const tooltipStyle = { backgroundColor: '#241a12', border: '1px solid #5a4630', color: '#f0e0b8' } as const;
 
+/** Compact XP for the right-hand axis in Tibia's own notation (kk = milhão, kkk = mil milhões). */
+function formatXpTick(value: number): string {
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000_000) return `${(value / 1_000_000_000).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} kkk`;
+  if (abs >= 1_000_000) return `${Math.round(value / 1_000_000)} kk`;
+  if (abs >= 1_000) return `${Math.round(value / 1_000)} k`;
+  return numberFormatter.format(value);
+}
+
 export function XpProgressChart({ history, accentColor }: XpProgressChartProps) {
-  const [mode, setMode] = useState<ChartMode>('level');
+  const [mode, setMode] = useState<ChartMode>('combined');
 
   const toggle = (
     <div className="chart-mode-toggle" role="tablist" aria-label="Tipo de gráfico">
@@ -89,7 +99,7 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
           Regista leituras em dias diferentes para veres a XP feita por dia.
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={220}>
+        <ResponsiveContainer width="100%" height={240}>
           {mode === 'daily' ? (
             <BarChart data={dailyData} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#4a3a2a" />
@@ -117,7 +127,7 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
               />
             </BarChart>
           ) : (
-            <LineChart data={lineData} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
+            <LineChart data={lineData} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#4a3a2a" />
               <XAxis
                 dataKey="timestamp"
@@ -126,23 +136,47 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
                 fontSize={11}
               />
               <YAxis
-                tickFormatter={(v) => numberFormatter.format(v)}
-                stroke="#c9a86a"
+                yAxisId="level"
+                orientation="left"
+                stroke={accentColor}
                 fontSize={11}
-                width={mode === 'level' ? 44 : 70}
+                width={44}
                 allowDecimals={false}
-                domain={mode === 'level' ? [(min: number) => min - 1, (max: number) => max + 1] : ['auto', 'auto']}
+                domain={[(min: number) => min - 1, (max: number) => max + 1]}
+              />
+              <YAxis
+                yAxisId="xp"
+                orientation="right"
+                stroke={XP_LINE_COLOR}
+                fontSize={11}
+                width={54}
+                tickFormatter={formatXpTick}
               />
               <Tooltip
                 contentStyle={tooltipStyle}
                 labelFormatter={(ts) => dateTimeFormatter.format(ts as number)}
-                formatter={(value) =>
-                  mode === 'level'
-                    ? [numberFormatter.format(Number(value)), 'Nível']
-                    : [numberFormatter.format(Number(value)), 'XP']
-                }
+                formatter={(value, name) => [numberFormatter.format(Number(value)), name]}
               />
-              <Line type="monotone" dataKey={mode} stroke={accentColor} strokeWidth={2} dot={{ r: 3 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Line
+                yAxisId="level"
+                type="monotone"
+                dataKey="level"
+                name="Nível"
+                stroke={accentColor}
+                strokeWidth={2}
+                dot={{ r: 2 }}
+              />
+              <Line
+                yAxisId="xp"
+                type="monotone"
+                dataKey="experience"
+                name="XP"
+                stroke={XP_LINE_COLOR}
+                strokeWidth={2}
+                strokeDasharray="5 3"
+                dot={{ r: 2 }}
+              />
             </LineChart>
           )}
         </ResponsiveContainer>

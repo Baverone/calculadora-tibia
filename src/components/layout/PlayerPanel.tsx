@@ -6,6 +6,7 @@ import { fetchSharedHistory, fetchTeamPlayerSharedHistory } from '../../storage/
 import { XpInputForm } from '../xp/XpInputForm';
 import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpForecastCard } from '../xp/XpForecastCard';
+import { WeeklyLevelForecastCard } from '../xp/WeeklyLevelForecastCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { HuntCalculator } from '../hunt/HuntCalculator';
@@ -72,6 +73,15 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
               currentExperience={currentExperience}
               accentColor={player.accentColor}
               hunts={hunts}
+            />
+          </div>
+
+          <div className="character-panel__block">
+            <h3>Projeção de nível por semana</h3>
+            <WeeklyLevelForecastCard
+              history={history}
+              currentExperience={currentExperience}
+              accentColor={player.accentColor}
             />
           </div>
 
