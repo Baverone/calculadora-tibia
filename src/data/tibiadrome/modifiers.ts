@@ -11,9 +11,10 @@ const CROSS_REFERENCED_NOTE =
   'confirmado por pesquisa cruzada (TibiaWiki + fontes comunitárias), mas não verificado contra o texto exato do anúncio in-game';
 
 // Reference list of the 9 Tibiadrome rotation modifiers. "Exploding
-// Corpses" and "The Floor is Lava" descriptions were given verbatim by the
-// user (ground truth); the rest were researched and cross-referenced across
-// independent sources — see `confidence` for those.
+// Corpses", "The Floor is Lava", "Tanked Up" and "That Escalated Quickly"
+// descriptions are confirmed against the in-game announcement text (ground
+// truth); the rest were researched and cross-referenced across independent
+// sources — see `confidence` for those.
 export const TIBIADROME_MODIFIERS: TibiadromeModifier[] = [
   {
     name: 'Somersault',
@@ -34,8 +35,7 @@ export const TIBIADROME_MODIFIERS: TibiadromeModifier[] = [
   {
     name: 'That Escalated Quickly',
     description:
-      'Monsters that drop below 25% HP increase their power as if they were 5 wave levels higher.',
-    confidence: CROSS_REFERENCED_NOTE,
+      'If monsters drop below a certain health threshold they escalate and all their stats except health increase.',
   },
   {
     name: 'The Floor is Lava',
@@ -51,8 +51,7 @@ export const TIBIADROME_MODIFIERS: TibiadromeModifier[] = [
   {
     name: 'Tanked Up',
     description:
-      'Every 15 seconds 100 random fields will be marked. After 3 seconds all players standing on them become superdrunk for 10 seconds; while superdrunk, damage taken is increased by 10%.',
-    confidence: CROSS_REFERENCED_NOTE,
+      'Every few seconds fighters that do not move away from marked tiles in time will be superdrunk for several seconds.',
   },
   {
     name: 'Sown Sorrow',
