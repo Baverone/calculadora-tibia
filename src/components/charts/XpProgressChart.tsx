@@ -3,9 +3,9 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  ComposedChart,
   Legend,
   Line,
-  LineChart,
   Rectangle,
   ReferenceLine,
   ResponsiveContainer,
@@ -15,8 +15,7 @@ import {
 } from 'recharts';
 import type { RectangleProps } from 'recharts';
 import type { HistoryEntry } from '../../domain/types';
-import { levelForExperience } from '../../domain/experienceTable';
-import { computeDailyGains } from '../../domain/historyStats';
+import { computeDailyGains, computeDailyXpTrend } from '../../domain/historyStats';
 
 interface XpProgressChartProps {
   history: HistoryEntry[];
@@ -30,13 +29,14 @@ const MODES: { id: ChartMode; label: string }[] = [
   { id: 'daily', label: 'XP por dia' },
 ];
 
-const dateTimeFormatter = new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 const dateFormatter = new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit' });
 const numberFormatter = new Intl.NumberFormat('pt-PT');
 const signedNumberFormatter = new Intl.NumberFormat('pt-PT', { signDisplay: 'exceptZero' });
 
 const GAIN_NEGATIVE = '#e74c3c';
-const XP_LINE_COLOR = '#d4af37';
+const DAILY_BAR_COLOR = '#7a6a4a';
+const AVG7_COLOR = '#d4af37';
+const BLEND_COLOR = '#6fa8c9';
 const tooltipStyle = { backgroundColor: '#241a12', border: '1px solid #5a4630', color: '#f0e0b8' } as const;
 
 /** Compact XP for the right-hand axis in Tibia's own notation (kk = milhão, kkk = mil milhões). */
@@ -83,23 +83,18 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
     );
   }
 
-  const lineData = history.map((entry) => ({
-    timestamp: entry.timestamp,
-    experience: entry.experience,
-    level: levelForExperience(entry.experience),
-  }));
-
   const dailyData = computeDailyGains(history);
+  const trendData = computeDailyXpTrend(history);
 
   return (
     <div className="xp-progress-chart">
       {toggle}
-      {mode === 'daily' && dailyData.length === 0 ? (
+      {trendData.length === 0 ? (
         <div className="chart-empty-state">
-          Regista leituras em dias diferentes para veres a XP feita por dia.
+          Regista leituras em dias diferentes para veres este gráfico.
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height={260}>
           {mode === 'daily' ? (
             <BarChart data={dailyData} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#4a3a2a" />
@@ -127,11 +122,11 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
               />
             </BarChart>
           ) : (
-            <LineChart data={lineData} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
+            <ComposedChart data={trendData} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#4a3a2a" />
               <XAxis
-                dataKey="timestamp"
-                tickFormatter={(ts) => dateTimeFormatter.format(ts)}
+                dataKey="dayTimestamp"
+                tickFormatter={(ts) => dateFormatter.format(ts)}
                 stroke="#c9a86a"
                 fontSize={11}
               />
@@ -147,17 +142,52 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
               <YAxis
                 yAxisId="xp"
                 orientation="right"
-                stroke={XP_LINE_COLOR}
+                stroke="#c9a86a"
                 fontSize={11}
                 width={54}
                 tickFormatter={formatXpTick}
               />
               <Tooltip
                 contentStyle={tooltipStyle}
-                labelFormatter={(ts) => dateTimeFormatter.format(ts as number)}
-                formatter={(value, name) => [numberFormatter.format(Number(value)), name]}
+                labelFormatter={(ts) => dateFormatter.format(ts as number)}
+                formatter={(value, name) =>
+                  value == null ? ['—', name] : [numberFormatter.format(Math.round(Number(value))), name]
+                }
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
+              <ReferenceLine yAxisId="xp" y={0} stroke="#5a4630" />
+              <Bar
+                yAxisId="xp"
+                dataKey="dailyXp"
+                name="XP/dia"
+                isAnimationActive={false}
+                shape={(props: RectangleProps & { payload?: { dailyXp: number } }) => {
+                  const gained = props.payload?.dailyXp ?? 0;
+                  return (
+                    <Rectangle {...props} radius={[2, 2, 0, 0]} fill={gained >= 0 ? DAILY_BAR_COLOR : GAIN_NEGATIVE} fillOpacity={0.4} />
+                  );
+                }}
+              />
+              <Line
+                yAxisId="xp"
+                type="monotone"
+                dataKey="avg7"
+                name="Média 7d"
+                stroke={AVG7_COLOR}
+                strokeWidth={2.5}
+                dot={false}
+                connectNulls
+              />
+              <Line
+                yAxisId="xp"
+                type="monotone"
+                dataKey="avgBlend"
+                name="Média 7/15/30"
+                stroke={BLEND_COLOR}
+                strokeWidth={2.5}
+                dot={false}
+                connectNulls
+              />
               <Line
                 yAxisId="level"
                 type="monotone"
@@ -165,19 +195,9 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
                 name="Nível"
                 stroke={accentColor}
                 strokeWidth={2}
-                dot={{ r: 2 }}
+                dot={false}
               />
-              <Line
-                yAxisId="xp"
-                type="monotone"
-                dataKey="experience"
-                name="XP"
-                stroke={XP_LINE_COLOR}
-                strokeWidth={2}
-                strokeDasharray="5 3"
-                dot={{ r: 2 }}
-              />
-            </LineChart>
+            </ComposedChart>
           )}
         </ResponsiveContainer>
       )}
