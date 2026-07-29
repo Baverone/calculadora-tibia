@@ -716,6 +716,16 @@ body {
   color: var(--text-parchment);
 }
 
+.skill-training-cheapest {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  color: var(--text-parchment);
+  font-size: 0.85rem;
+}
+
 .skill-training-vocation {
   display: flex;
   align-items: center;

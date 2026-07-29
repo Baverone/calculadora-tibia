@@ -131,12 +131,18 @@ export interface SkillTrainingResult {
   /** The real (non-inflated) skill level/%, derived from the displayed level/% and the Loyalty bonus. */
   baseLevel: number;
   basePercent: number;
-  /** Points (hits or mana) still needed to reach the next level, with no Double Skill Event. */
+  // --- Reaching the next IN-GAME level (the displayed, Loyalty-inflated one): displayedCurrentLevel + 1 ---
+  /** Points (hits or mana) still needed to reach the next in-game level, with no Double Skill Event. */
   pointsRemaining: number;
   /** Exercise/Training weapon charges needed under normal conditions. */
   chargesNormal: number;
   /** Exercise/Training weapon charges needed with an active Double Skill Event (2x point gain). */
   chargesDoubleEvent: number;
+  // --- Reaching the next REAL/base level (baseLevel + 1): a smaller milestone, unaffected by Loyalty ---
+  /** Points still needed to reach the next base level, with no Double Skill Event. */
+  pointsRemainingBase: number;
+  chargesNormalBase: number;
+  chargesDoubleEventBase: number;
 }
 
 const SPECIAL_DUMMY_EFFICIENCY = 1.1;
@@ -164,12 +170,21 @@ export function calculateSkillTraining(
 
   const perCharge = SKILL_CONFIG[skill].pointsPerCharge * (useSpecialDummy ? SPECIAL_DUMMY_EFFICIENCY : 1);
 
+  // Points to reach the next WHOLE base level (baseLevel + 1) — the real
+  // training milestone. With no Loyalty this equals pointsRemaining; with
+  // Loyalty it's smaller, because the in-game level is inflated ahead of the
+  // real one.
+  const pointsRemainingBase = Math.max(0, totalPointsAtLevel(skill, vocation, baseLevel + 1) - basePointsAtCurrent);
+
   return {
     baseLevel,
     basePercent,
     pointsRemaining,
     chargesNormal: Math.ceil(pointsRemaining / perCharge),
     chargesDoubleEvent: Math.ceil(pointsRemaining / perCharge / 2),
+    pointsRemainingBase,
+    chargesNormalBase: Math.ceil(pointsRemainingBase / perCharge),
+    chargesDoubleEventBase: Math.ceil(pointsRemainingBase / perCharge / 2),
   };
 }
 

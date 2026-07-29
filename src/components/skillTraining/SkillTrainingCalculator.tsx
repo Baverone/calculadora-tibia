@@ -1,4 +1,15 @@
-import { LOYALTY_BONUS_OPTIONS, VOCATION_LABELS, VOCATION_SKILLS, type TrainableSkill, type Vocation } from '../../domain/skillTraining';
+import {
+  calculateSkillTraining,
+  LASTING_EXERCISE_CHARGES,
+  LOYALTY_BONUS_OPTIONS,
+  minSkillLevel,
+  SKILL_LABELS,
+  VOCATION_LABELS,
+  VOCATION_SKILLS,
+  type TrainableSkill,
+  type Vocation,
+} from '../../domain/skillTraining';
+import { parseNonNegativeInteger, parsePercentMissing } from '../../domain/validation';
 import type { PlayerMeta } from '../../constants/players';
 import { useCharacterVocation } from '../../hooks/useCharacterVocation';
 import { useSkillTrainingConfig } from '../../hooks/useSkillTrainingConfig';
@@ -47,6 +58,29 @@ export function SkillTrainingCalculator({ player }: SkillTrainingCalculatorProps
   }
 
   const skills = vocation ? activeSkills(vocation, config.knightWeapons) : [];
+
+  // Cheapest skill to gain its next REAL (base) level — the quick win the user
+  // should train first. Only skills with valid input count; needs ≥2 to compare.
+  const cheapestBase = vocation
+    ? skills
+        .map((skill) => {
+          const entry = config.skills[skill] ?? EMPTY_ENTRY;
+          const level = parseNonNegativeInteger(entry.level, 'o nível');
+          const percent = parsePercentMissing(entry.percent);
+          if (!level.ok || !percent.ok || level.value < minSkillLevel(skill)) return null;
+          const result = calculateSkillTraining(
+            skill,
+            vocation,
+            level.value,
+            100 - percent.value,
+            config.specialDummy,
+            config.loyaltyBonusPercent
+          );
+          return { skill, wands: Math.ceil(result.chargesNormalBase / LASTING_EXERCISE_CHARGES) };
+        })
+        .filter((row): row is { skill: TrainableSkill; wands: number } => row !== null)
+        .sort((a, b) => a.wands - b.wands)
+    : [];
 
   return (
     <div className="character-panel__block">
@@ -156,6 +190,18 @@ export function SkillTrainingCalculator({ player }: SkillTrainingCalculatorProps
             />
           ))}
         </div>
+      )}
+
+      {cheapestBase.length >= 2 && (
+        <p className="skill-training-cheapest">
+          💡 Mais barato de subir primeiro (o nível base, sem Loyalty):{' '}
+          <strong style={{ color: accentColor }}>{SKILL_LABELS[cheapestBase[0].skill]}</strong> —{' '}
+          {cheapestBase[0].wands} Lasting Exercise ({cheapestBase
+            .slice(1)
+            .map((row) => `${SKILL_LABELS[row.skill]}: ${row.wands}`)
+            .join(', ')}
+          ).
+        </p>
       )}
     </div>
   );

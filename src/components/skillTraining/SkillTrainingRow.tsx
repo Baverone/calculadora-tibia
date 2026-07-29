@@ -56,6 +56,12 @@ export function SkillTrainingRow({
 
   const lastingNormal = result ? Math.ceil(result.chargesNormal / LASTING_EXERCISE_CHARGES) : 0;
   const lastingDoubleEvent = result ? Math.ceil(result.chargesDoubleEvent / LASTING_EXERCISE_CHARGES) : 0;
+  const lastingNormalBase = result ? Math.ceil(result.chargesNormalBase / LASTING_EXERCISE_CHARGES) : 0;
+  const lastingDoubleEventBase = result ? Math.ceil(result.chargesDoubleEventBase / LASTING_EXERCISE_CHARGES) : 0;
+
+  const hasLoyalty = loyaltyBonusPercent > 0;
+  const displayedLevel = levelResult.ok ? levelResult.value : 0;
+  const displayedMissing = percentMissingResult.ok ? percentMissingResult.value : 0;
 
   return (
     <div className="saved-hunt-card">
@@ -94,10 +100,12 @@ export function SkillTrainingRow({
         </p>
       )}
 
-      {result && loyaltyBonusPercent > 0 && (
+      {result && hasLoyalty && (
         <p className="skill-training-base-hint">
-          Nível base (sem Loyalty): <strong>{result.baseLevel}</strong> ({(100 - result.basePercent).toFixed(2)}% em falta) — as
-          varinhas de treino são calculadas a partir daqui, porque a Loyalty só infla o nível mostrado, não acelera o treino real.
+          <strong>No jogo (com Loyalty):</strong> nível {displayedLevel}, faltam {displayedMissing}% para {displayedLevel + 1}.
+          <br />
+          <strong>Nível base real (sem Loyalty):</strong> {result.baseLevel}, faltam {(100 - result.basePercent).toFixed(2)}% para{' '}
+          {result.baseLevel + 1} — é a partir daqui que o treino conta; a Loyalty só infla o número mostrado, não acelera o treino real.
         </p>
       )}
 
@@ -105,16 +113,29 @@ export function SkillTrainingRow({
         <table className="hunt-scenario-table" style={{ marginTop: 12 }}>
           <thead>
             <tr>
-              <th></th>
+              <th>Lasting Exercise necessárias</th>
               <th>Sem evento</th>
               <th>Com Double Skill Event</th>
             </tr>
           </thead>
           <tbody>
+            {hasLoyalty && (
+              <tr>
+                <td>
+                  No jogo, com Loyalty ({displayedLevel}→{displayedLevel + 1})
+                </td>
+                <td>{lastingFormatter.format(lastingNormal)}</td>
+                <td>{lastingFormatter.format(lastingDoubleEvent)}</td>
+              </tr>
+            )}
             <tr>
-              <td>Lasting Exercise necessárias</td>
-              <td>{lastingFormatter.format(lastingNormal)}</td>
-              <td>{lastingFormatter.format(lastingDoubleEvent)}</td>
+              <td>
+                {hasLoyalty
+                  ? `Nível base, sem Loyalty (${result.baseLevel}→${result.baseLevel + 1})`
+                  : `Nível ${displayedLevel}→${displayedLevel + 1}`}
+              </td>
+              <td>{lastingFormatter.format(hasLoyalty ? lastingNormalBase : lastingNormal)}</td>
+              <td>{lastingFormatter.format(hasLoyalty ? lastingDoubleEventBase : lastingDoubleEvent)}</td>
             </tr>
           </tbody>
         </table>
