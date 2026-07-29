@@ -24,10 +24,11 @@ const VOCATIONS: Vocation[] = ['knight', 'paladin', 'sorcerer', 'druid', 'monk']
 const KNIGHT_WEAPONS: ('axe' | 'sword' | 'club')[] = ['axe', 'sword', 'club'];
 const EMPTY_ENTRY: SkillEntryInput = { level: '', percent: '' };
 
-/** Which skills should get a row, given the vocation and (for Knight) chosen weapons. */
+/** Which skills should get a row, given the vocation and (for Knight) chosen weapons.
+ * Knights only train weapon + Magic Level here — Shielding is intentionally left out. */
 function activeSkills(vocation: Vocation, knightWeapons: ('axe' | 'sword' | 'club')[]): TrainableSkill[] {
   if (vocation !== 'knight') return VOCATION_SKILLS[vocation];
-  return [...knightWeapons, 'magic', 'shielding'];
+  return [...knightWeapons, 'magic'];
 }
 
 export function SkillTrainingCalculator({ player }: SkillTrainingCalculatorProps) {
