@@ -5,10 +5,7 @@ const POT_SKILLS_COLOR = '#3498db';
 const FOOD_ML_COLOR = '#e67e22';
 const PLASMAS_COLOR = '#9b59b6';
 
-const PLASMAS_ALERTS = [
-  { atSeconds: 60, message: 'Falta 1 minuto para o Plasma' },
-  { atSeconds: 15, message: 'Falta 15 segundos para o Plasma' },
-];
+const PLASMAS_ALERTS = [{ atSeconds: 30, message: 'Faltam 30 segundos para o Plasma acabar' }];
 
 export function TimersPanel() {
   const potSkillsRef = useRef<TimerCardHandle>(null);
