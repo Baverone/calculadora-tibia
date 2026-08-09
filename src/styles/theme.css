@@ -666,6 +666,16 @@ body {
   background: var(--bg-deep);
 }
 
+.hunt-scenario-table tr.is-highlighted td {
+  background: var(--bg-panel-alt);
+  border-color: var(--gold);
+}
+
+.hunt-scenario-table td.is-highlighted-cell {
+  color: var(--gold);
+  font-weight: bold;
+}
+
 .saved-hunt-card__subsection {
   margin-top: 18px;
   padding-top: 16px;

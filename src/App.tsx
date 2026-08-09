@@ -10,6 +10,7 @@ import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
 import { SoulCoreTracker } from './components/soulCore/SoulCoreTracker';
 import { StaminaCalculator } from './components/stamina/StaminaCalculator';
+import { ArrowsCalculator } from './components/arrows/ArrowsCalculator';
 
 function App() {
   const { customPlayers, addPlayer, removePlayer } = useCustomPlayers();
@@ -67,6 +68,7 @@ function App() {
         <TibiadromeSection />
         <StaminaCalculator />
         <SoulCoreTracker />
+        <ArrowsCalculator />
       </section>
 
       {activeTab !== 'utilities' && (
