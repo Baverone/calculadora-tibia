@@ -116,6 +116,15 @@ export const PLAYERS: PlayerMeta[] = [
     teamId: 'solo',
     sharedHistorySource: 'main',
   },
+  {
+    id: 'skryptek',
+    name: 'Skryptek',
+    tagline: 'Jogador Solo',
+    accentColor: '#16a085',
+    Icon: ShieldIcon,
+    teamId: 'solo',
+    sharedHistorySource: 'team',
+  },
 ];
 
 export function playersForTeam(teamId: TeamId): PlayerMeta[] {
