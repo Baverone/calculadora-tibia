@@ -308,6 +308,10 @@ body {
   display: none;
 }
 
+.app-utilities__pane--hidden {
+  display: none;
+}
+
 /* Character panel */
 
 .character-panel--hidden {
