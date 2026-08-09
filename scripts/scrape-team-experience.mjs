@@ -16,6 +16,7 @@ const TEAM_PLAYERS = [
   { id: 'baverone', nick: 'Baverone' },
   { id: 'dalla-shot', nick: 'Dalla Shot' },
   { id: 'fire-wu', nick: 'Fire Wu' },
+  { id: 'skryptek', nick: 'Skryptek' },
 ];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
