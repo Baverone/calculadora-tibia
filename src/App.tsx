@@ -28,7 +28,7 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<AppTabId>(TEAMS[0].id);
   const [activePlayerId, setActivePlayerId] = useState<string>(() => playersForTeam(TEAMS[0].id)[0].id);
-  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>('rashid');
+  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>('stamina');
 
   function handleTabChange(tab: AppTabId) {
     setActiveTab(tab);
@@ -62,6 +62,10 @@ function App() {
 
       <TimersPanel />
 
+      <RashidCard />
+
+      <TibiadromeSection />
+
       <TabsBar activeId={activeTab} onChange={handleTabChange} />
 
       {activeTab === 'utilities' && (
@@ -71,20 +75,14 @@ function App() {
       {/* Kept mounted (like the player panels below) so a draft in the
           modifiers textarea never gets lost when switching tabs. */}
       <section className={activeTab === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
-        <div className={activeUtilityTab === 'rashid' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
-          <RashidCard />
-        </div>
-        <div className={activeUtilityTab === 'tibiadrome' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
-          <TibiadromeSection />
-        </div>
         <div className={activeUtilityTab === 'stamina' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
           <StaminaCalculator />
         </div>
-        <div className={activeUtilityTab === 'soulcore' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
-          <SoulCoreTracker />
-        </div>
         <div className={activeUtilityTab === 'arrows' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
           <ArrowsCalculator />
+        </div>
+        <div className={activeUtilityTab === 'soulcore' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
+          <SoulCoreTracker />
         </div>
       </section>
 

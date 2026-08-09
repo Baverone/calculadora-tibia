@@ -2,7 +2,7 @@
 // from a total used over a hunt) plus a fixed reference table of totals for
 // a few common arrow rates.
 
-export const ARROW_RATES = [26, 27, 28] as const;
+export const ARROW_RATES = [25, 26, 27, 28] as const;
 export type ArrowRate = (typeof ARROW_RATES)[number];
 
 export const MAX_TABLE_MINUTES = 30;

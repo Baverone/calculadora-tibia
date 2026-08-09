@@ -1,13 +1,11 @@
-export type UtilityTabId = 'rashid' | 'tibiadrome' | 'stamina' | 'soulcore' | 'arrows';
+export type UtilityTabId = 'stamina' | 'arrows' | 'soulcore';
 
 const UTILITY_TAB_ACCENT = '#c9a227';
 
 const UTILITY_TABS: { id: UtilityTabId; label: string }[] = [
-  { id: 'rashid', label: 'Rashid' },
-  { id: 'tibiadrome', label: 'Tibiadrome' },
   { id: 'stamina', label: 'Stamina' },
-  { id: 'soulcore', label: 'Soul Core' },
   { id: 'arrows', label: 'Flechas' },
+  { id: 'soulcore', label: 'Soul Core' },
 ];
 
 interface UtilityTabsBarProps {
