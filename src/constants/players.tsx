@@ -109,7 +109,7 @@ export const PLAYERS: PlayerMeta[] = [
   },
   {
     id: 'elite-knight',
-    name: 'Serip Seomis',
+    name: 'Dant Ivan',
     tagline: 'Elite Knight — Força bruta',
     accentColor: '#c0392b',
     Icon: SwordIcon,

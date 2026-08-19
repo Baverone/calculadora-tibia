@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 import { runScraper } from './lib/guildstatsHistory.mjs';
 
 const CHARACTERS = [
-  { id: 'elite-knight', nick: 'Serip Seomis' },
+  { id: 'elite-knight', nick: 'Dant Ivan' },
   { id: 'royal-paladin', nick: 'Baverone' },
   { id: 'exalted-monk', nick: 'Bluey The Cat' },
 ];

@@ -335,7 +335,7 @@ A navegação de personagens foi reestruturada: já não há uma aba por
 Cat", "Solo"), e dentro de cada uma há uma barra secundária de abas
 (`src/components/layout/PlayerTabsBar.tsx`) com os jogadores dessa equipa
 (`PLAYERS`, cada um com `teamId`). Cada jogador — os 3 personagens originais
-(Serip Seomis/Elite Knight, Baverone/Royal Paladin, Bluey The Cat/Exalted
+(Dant Ivan/Elite Knight, Baverone/Royal Paladin, Bluey The Cat/Exalted
 Monk) e os 3 novos (Bigodes The Legend, Konczul, Sios Trader) — tem um
 painel completo (`src/components/layout/PlayerPanel.tsx`, antigo
 `CharacterPanel.tsx` generalizado): XP tracking, calculadora de hunt,
