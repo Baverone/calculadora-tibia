@@ -65,9 +65,21 @@ async function fetchAndParse(nick) {
   const encodedNick = encodeURIComponent(nick).replace(/%20/g, '+');
   const url = `https://guildstats.eu/include/character/tab.php?nick=${encodedNick}&tab=experience`;
 
-  const response = await fetch(url, { headers: REQUEST_HEADERS });
+  let response;
+  try {
+    response = await fetch(url, { headers: REQUEST_HEADERS });
+  } catch (networkError) {
+    // DNS/connection blips are transient — worth a retry / not a real bug.
+    networkError.transient = true;
+    throw networkError;
+  }
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+    const httpError = new Error(`HTTP ${response.status}`);
+    // 403 (guildstats blocking a CI IP), 429 and 5xx are transient upstream
+    // conditions, not a bug in this scraper — flagged so the job can skip
+    // instead of failing red. A 404 (bad nick) etc. stays non-transient.
+    httpError.transient = response.status === 403 || response.status === 429 || response.status >= 500;
+    throw httpError;
   }
 
   const $ = cheerio.load(await response.text());
@@ -128,7 +140,9 @@ export async function fetchExperienceRows(nick, { attempts = 3, retryDelayMs = 4
       if (attempt < attempts) await sleep(retryDelayMs * attempt);
     }
   }
-  throw new Error(`falhou após ${attempts} tentativas para "${nick}": ${lastError.message}`);
+  const wrapped = new Error(`falhou após ${attempts} tentativas para "${nick}": ${lastError.message}`);
+  wrapped.transient = lastError.transient === true;
+  throw wrapped;
 }
 
 function historyPath(dataDir, id) {
@@ -194,8 +208,11 @@ async function syncPlayer({ id, nick, dataDir }) {
 }
 
 /**
- * Runs the scrape for a list of players. A failure for one player never
- * blocks the others; the process only fails when every player failed.
+ * Runs the scrape for a list of players. One player failing never blocks the
+ * others. The job only exits non-zero for an actionable failure (a bad nick,
+ * or a guildstats layout change that breaks parsing); transient upstream 403s
+ * (guildstats throttling the CI IP) are logged and skipped so they don't turn
+ * the workflow red — the self-healing backfill recovers on a later run.
  */
 export async function runScraper({ players, dataDir }) {
   if (!isAfterLisbonServerSave() && process.env.FORCE_SCRAPE !== 'true') {
@@ -206,6 +223,7 @@ export async function runScraper({ players, dataDir }) {
   let addedTotal = 0;
   let successCount = 0;
   let failureCount = 0;
+  let nonTransientFailure = false;
 
   for (let i = 0; i < players.length; i++) {
     const player = players[i];
@@ -214,6 +232,7 @@ export async function runScraper({ players, dataDir }) {
       successCount++;
     } catch (error) {
       failureCount++;
+      if (!error.transient) nonTransientFailure = true;
       console.error(`[${player.id}] falhou: ${error.message}`);
     }
     // Space requests out so guildstats is less likely to 403 the next one.
@@ -222,7 +241,17 @@ export async function runScraper({ players, dataDir }) {
 
   console.log(`\nResumo: ${successCount} jogador(es) ok, ${failureCount} falha(s), ${addedTotal} dia(s) novo(s) guardado(s).`);
 
-  if (failureCount > 0 && successCount === 0) {
+  // Fail the job only for a real, actionable problem — a bad nick, or a
+  // guildstats layout change that breaks parsing (a non-transient failure). A
+  // transient 403 (guildstats blocking the runner's IP) isn't the scraper's
+  // fault and the backfill recovers it later, so we skip rather than turn the
+  // workflow red over something we can't fix here.
+  if (nonTransientFailure) {
     process.exitCode = 1;
+  } else if (failureCount > 0 && successCount === 0) {
+    console.warn(
+      'Todos os pedidos falharam por causas transitórias (ex.: 403 do guildstats a bloquear o IP do runner) — ' +
+        'a saltar esta execução; o próximo run recupera os dias em falta.'
+    );
   }
 }
