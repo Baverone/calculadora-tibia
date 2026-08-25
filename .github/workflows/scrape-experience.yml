@@ -1,16 +1,17 @@
 name: Scrape Tibia Experience
 
-# Hourly trigger from 09:00 to 23:00 UTC (covers Lisbon's 09:00 in both
-# winter/summer DST, then keeps checking every hour through the evening so
-# fresh guildstats.eu data gets picked up sooner instead of waiting for the
-# next fixed slot). The script checks the real Europe/Lisbon time and only
-# proceeds once it's past 09:00 there (no upper bound), and skips per
-# character/player if today's date is already recorded — so repeated
-# triggers the same day are cheap no-ops once data is in. This repo is
-# public, so Actions minutes are unlimited; each run only takes ~20-30s.
+# Runs twice a day, at 00:00 and 12:00 UTC. The 12:00 run (13:00 Lisbon in
+# summer, 12:00 in winter) is the effective one — comfortably after the 09:00
+# Lisbon server save, when guildstats.eu publishes the previous day's XP
+# (~10:50 UTC). The 00:00 run (01:00 Lisbon) is before that save, so the
+# script's Europe/Lisbon time gate (isAfterLisbonServerSave, hour >= 9) cleanly
+# skips it — a no-op success kept as a light redundancy slot. guildstats serves
+# ~30 days and the scraper appends every date it doesn't already have, so a
+# single missed run is backfilled by the next one. Public repo (unlimited
+# Actions minutes); each real run takes ~20-30s.
 on:
   schedule:
-    - cron: '0 9-23 * * *'
+    - cron: '0 0,12 * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -24,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 

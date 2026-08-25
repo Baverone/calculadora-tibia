@@ -75,12 +75,21 @@ export async function fetchExperienceRows(nick) {
   const parsed = [];
   rows.each((_, element) => {
     const cells = $(element).find('td');
-    const date = cells.eq(0).find('span.hidden.md\\:inline').first().text().trim();
+    // The date and experience cells each hold two spans: the full value for
+    // desktop and a short mobile abbreviation ("08-23", "26.5B"). Take the
+    // first span (the full value) — calling .text() on the whole cell glues
+    // the abbreviation on, which broke the date regex and turned experience
+    // into NaN when guildstats redesigned the page (2026-08). Using
+    // `.find('span')` instead of a `.md\:inline` class selector also keeps
+    // this robust across cheerio versions (newer css-select rejects the
+    // escaped `:` in that class name).
+    const date = cells.eq(0).find('span').first().text().trim() || cells.eq(0).text().trim();
     // The level cell appends a "(+N)" level-up badge on days the character
-    // leveled up (e.g. "1150            (+1)") — parseInt reads the leading
-    // number and ignores that trailing text, where Number() would return NaN.
+    // leveled up (e.g. "1150 (+1)") — parseInt reads the leading number and
+    // ignores that trailing text, where Number() would return NaN.
     const level = parseInt(cells.eq(3).text().trim(), 10);
-    const experience = Number(cells.eq(4).text().trim().replace(/,/g, ''));
+    const experienceText = cells.eq(4).find('span').first().text().trim() || cells.eq(4).text().trim();
+    const experience = Number(experienceText.replace(/,/g, ''));
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(level) || !Number.isFinite(experience)) return;
     parsed.push({ date, level, experience });
