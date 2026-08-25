@@ -45,31 +45,35 @@ export function isAfterLisbonServerSave() {
   return hour >= 9;
 }
 
-/**
- * Every experience row guildstats.eu exposes for this character (it serves
- * ~30 days, newest first), not just the latest one.
- *
- * Reading the whole table is what makes the scraper self-healing: any day
- * missed while the workflow was failing/paused gets backfilled on the next
- * successful run, as long as it's still inside guildstats' window. Reading
- * only the first row (the old behaviour) meant a missed day was lost
- * forever, since nothing ever looked back at it again.
- */
-export async function fetchExperienceRows(nick) {
+const REQUEST_HEADERS = {
+  // guildstats.eu intermittently answers datacenter/CI IPs (like GitHub
+  // Actions runners) with 403 for a plain bot User-Agent — a browser-like UA
+  // plus these headers get through far more reliably. Combined with the
+  // retries in fetchExperienceRows, a run rarely loses a player to a 403.
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.9',
+  Referer: 'https://guildstats.eu/',
+};
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchAndParse(nick) {
   const encodedNick = encodeURIComponent(nick).replace(/%20/g, '+');
   const url = `https://guildstats.eu/include/character/tab.php?nick=${encodedNick}&tab=experience`;
 
-  const response = await fetch(url, {
-    headers: { 'User-Agent': 'CalculadoraTibia-XP-Tracker/1.0 (personal use, 1 request/character/day)' },
-  });
+  const response = await fetch(url, { headers: REQUEST_HEADERS });
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status} fetching experience tab for "${nick}"`);
+    throw new Error(`HTTP ${response.status}`);
   }
 
   const $ = cheerio.load(await response.text());
   const rows = $('table tbody tr');
   if (rows.length === 0) {
-    throw new Error(`No experience history rows found for "${nick}" (page layout may have changed)`);
+    throw new Error('nenhuma linha de histórico (o layout pode ter mudado)');
   }
 
   const parsed = [];
@@ -96,10 +100,35 @@ export async function fetchExperienceRows(nick) {
   });
 
   if (parsed.length === 0) {
-    throw new Error(`Could not parse any experience row for "${nick}" (page layout may have changed)`);
+    throw new Error('nenhuma linha parseável (o layout pode ter mudado)');
   }
 
   return parsed;
+}
+
+/**
+ * Every experience row guildstats.eu exposes for this character (it serves
+ * ~30 days, newest first), not just the latest one.
+ *
+ * Reading the whole table is what makes the scraper self-healing: any day
+ * missed while the workflow was failing/paused gets backfilled on the next
+ * successful run, as long as it's still inside guildstats' window. Reading
+ * only the first row (the old behaviour) meant a missed day was lost forever.
+ *
+ * Retries a few times with a growing delay, because guildstats hands out
+ * intermittent 403s to CI IPs — a later attempt almost always gets through.
+ */
+export async function fetchExperienceRows(nick, { attempts = 3, retryDelayMs = 4000 } = {}) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await fetchAndParse(nick);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await sleep(retryDelayMs * attempt);
+    }
+  }
+  throw new Error(`falhou após ${attempts} tentativas para "${nick}": ${lastError.message}`);
 }
 
 function historyPath(dataDir, id) {
@@ -178,7 +207,8 @@ export async function runScraper({ players, dataDir }) {
   let successCount = 0;
   let failureCount = 0;
 
-  for (const player of players) {
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
     try {
       addedTotal += await syncPlayer({ ...player, dataDir });
       successCount++;
@@ -186,6 +216,8 @@ export async function runScraper({ players, dataDir }) {
       failureCount++;
       console.error(`[${player.id}] falhou: ${error.message}`);
     }
+    // Space requests out so guildstats is less likely to 403 the next one.
+    if (i < players.length - 1) await sleep(2000);
   }
 
   console.log(`\nResumo: ${successCount} jogador(es) ok, ${failureCount} falha(s), ${addedTotal} dia(s) novo(s) guardado(s).`);
