@@ -190,3 +190,62 @@ export function calculateSkillTraining(
 
 /** A Lasting Exercise weapon (the largest purchasable tier) has this many charges. */
 export const LASTING_EXERCISE_CHARGES = 14400;
+
+export interface SkillTargetResult {
+  /** Nível-alvo, tal como aparece no jogo (já inflacionado pela Loyalty, se houver). */
+  targetLevel: number;
+  /** Pontos (hits, ou mana no Magic Level) que faltam até lá. */
+  pointsRemaining: number;
+  chargesNormal: number;
+  chargesDoubleEvent: number;
+  lastingNormal: number;
+  lastingDoubleEvent: number;
+}
+
+/**
+ * Quantas Lasting Exercise faltam para chegar a um nível-alvo, em vez de só
+ * ao nível seguinte.
+ *
+ * O alvo é interpretado como o nível que se quer ver NO JOGO — o mesmo que se
+ * escreve no campo "nível atual". Por isso a conversão de Loyalty é a mesma
+ * que `calculateSkillTraining` faz para o nível seguinte, só que aplicada a um
+ * nível arbitrário: converte-se o total mostrado no alvo para pontos reais
+ * (a dividir pelo multiplicador) e subtrai-se o que já se tem em pontos reais.
+ *
+ * Devolve null quando o alvo não está à frente do nível atual — não há nada
+ * para calcular, e mostrar zero varinhas seria enganador.
+ */
+export function calculateTrainingToTarget(
+  skill: TrainableSkill,
+  vocation: Vocation,
+  displayedCurrentLevel: number,
+  displayedCurrentPercent: number,
+  targetLevel: number,
+  useSpecialDummy: boolean,
+  loyaltyBonusPercent: number
+): SkillTargetResult | null {
+  if (targetLevel <= displayedCurrentLevel) return null;
+
+  const loyaltyMultiplier = 1 + loyaltyBonusPercent / 100;
+
+  const pointsForNextDisplayedLevel = pointsForNextLevel(skill, vocation, displayedCurrentLevel);
+  const displayedPointsAtCurrent =
+    totalPointsAtLevel(skill, vocation, displayedCurrentLevel) + (displayedCurrentPercent / 100) * pointsForNextDisplayedLevel;
+  const displayedPointsAtTarget = totalPointsAtLevel(skill, vocation, targetLevel);
+
+  const pointsRemaining = Math.max(0, (displayedPointsAtTarget - displayedPointsAtCurrent) / loyaltyMultiplier);
+
+  const perCharge = SKILL_CONFIG[skill].pointsPerCharge * (useSpecialDummy ? SPECIAL_DUMMY_EFFICIENCY : 1);
+  const chargesNormal = Math.ceil(pointsRemaining / perCharge);
+  const chargesDoubleEvent = Math.ceil(pointsRemaining / perCharge / 2);
+
+  return {
+    targetLevel,
+    pointsRemaining,
+    chargesNormal,
+    chargesDoubleEvent,
+    lastingNormal: Math.ceil(chargesNormal / LASTING_EXERCISE_CHARGES),
+    lastingDoubleEvent: Math.ceil(chargesDoubleEvent / LASTING_EXERCISE_CHARGES),
+  };
+}
+

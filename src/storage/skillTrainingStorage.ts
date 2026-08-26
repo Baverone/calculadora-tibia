@@ -10,6 +10,9 @@ export interface SkillEntryInput {
   level: string;
   /** % still missing to reach the next level (i.e. 100 - % complete). */
   percent: string;
+  /** Optional goal the user is training towards. Older saved drafts don't
+   *  have it, so every read has to tolerate it being undefined. */
+  target?: string;
 }
 
 export interface SkillTrainingConfig {

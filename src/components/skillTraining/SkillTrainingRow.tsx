@@ -1,5 +1,6 @@
 import {
   calculateSkillTraining,
+  calculateTrainingToTarget,
   LASTING_EXERCISE_CHARGES,
   minSkillLevel,
   SKILL_LABELS,
@@ -8,6 +9,7 @@ import {
 } from '../../domain/skillTraining';
 import { parseNonNegativeInteger, parsePercentMissing } from '../../domain/validation';
 import type { SkillEntryInput } from '../../storage/skillTrainingStorage';
+import '../../styles/skillTraining.css';
 
 interface SkillTrainingRowProps {
   skill: TrainableSkill;
@@ -20,6 +22,7 @@ interface SkillTrainingRowProps {
 }
 
 const lastingFormatter = new Intl.NumberFormat('pt-PT');
+const pointsFormatter = new Intl.NumberFormat('pt-PT', { maximumFractionDigits: 0 });
 
 export function SkillTrainingRow({
   skill,
@@ -59,6 +62,23 @@ export function SkillTrainingRow({
   const lastingNormalBase = result ? Math.ceil(result.chargesNormalBase / LASTING_EXERCISE_CHARGES) : 0;
   const lastingDoubleEventBase = result ? Math.ceil(result.chargesDoubleEventBase / LASTING_EXERCISE_CHARGES) : 0;
 
+  const targetResult = parseNonNegativeInteger(entry.target ?? '', 'o nível objetivo');
+  const targetTyped = (entry.target ?? '').trim() !== '';
+  const targetTooLow = targetTyped && targetResult.ok && levelResult.ok && targetResult.value <= levelResult.value;
+
+  const toTarget =
+    canCalculate && levelResult.ok && percentMissingResult.ok && targetTyped && targetResult.ok && !targetTooLow
+      ? calculateTrainingToTarget(
+          skill,
+          vocation,
+          levelResult.value,
+          100 - percentMissingResult.value,
+          targetResult.value,
+          specialDummy,
+          loyaltyBonusPercent
+        )
+      : null;
+
   const hasLoyalty = loyaltyBonusPercent > 0;
   const displayedLevel = levelResult.ok ? levelResult.value : 0;
   const displayedMissing = percentMissingResult.ok ? percentMissingResult.value : 0;
@@ -90,6 +110,16 @@ export function SkillTrainingRow({
             onChange={(e) => onChange({ ...entry, percent: e.target.value })}
           />
         </div>
+        <div className="hunt-form__field">
+          <label>Nível objetivo (opcional)</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder={levelResult.ok ? `ex: ${levelResult.value + 10}` : 'ex: 100'}
+            value={entry.target ?? ''}
+            onChange={(e) => onChange({ ...entry, target: e.target.value })}
+          />
+        </div>
       </div>
 
       {(levelError ||
@@ -107,6 +137,25 @@ export function SkillTrainingRow({
           <strong>Nível base real (sem Loyalty):</strong> {result.baseLevel}, faltam {(100 - result.basePercent).toFixed(2)}% para{' '}
           {result.baseLevel + 1} — é a partir daqui que o treino conta; a Loyalty só infla o número mostrado, não acelera o treino real.
         </p>
+      )}
+
+      {targetTooLow && <p className="field-error">O objetivo tem de ser maior do que o nível atual.</p>}
+      {targetTyped && !targetResult.ok && <p className="field-error">{!targetResult.ok ? targetResult.error : ''}</p>}
+
+      {toTarget && (
+        <div className="skill-training-target">
+          <span className="skill-training-target__label">
+            Até ao nível {toTarget.targetLevel}
+          </span>
+          <span className="skill-training-target__value" style={{ color: accentColor }}>
+            {lastingFormatter.format(toTarget.lastingNormal)} Lasting Exercise
+          </span>
+          <span className="skill-training-target__detail">
+            {lastingFormatter.format(toTarget.lastingDoubleEvent)} com Double Skill Event ·{' '}
+            {pointsFormatter.format(Math.ceil(toTarget.pointsRemaining))}{' '}
+            {skill === 'magic' ? 'de mana' : 'hits'} · {lastingFormatter.format(toTarget.chargesNormal)} cargas
+          </span>
+        </div>
       )}
 
       {result && (
