@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-26T10:02:48Z",
-  "referenceTime": "12:00",
+  "generatedAt": "2026-08-26T11:34:51Z",
+  "referenceTime": "13:32",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,19 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "12:00",
-          "end": "13:30",
-          "minutes": 90
-        },
-        {
           "start": "15:00",
           "end": "19:10",
           "minutes": 250
         },
         {
           "start": "23:50",
-          "end": "12:00",
-          "minutes": 730
+          "end": "13:32",
+          "minutes": 822
         }
       ]
     },
@@ -28,9 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "13:10",
-          "end": "12:00",
-          "minutes": 1370
+          "start": "13:32",
+          "end": "14:30",
+          "minutes": 58
+        },
+        {
+          "start": "17:30",
+          "end": "13:32",
+          "minutes": 1202
         }
       ]
     },
@@ -43,25 +43,20 @@
           "minutes": 120
         },
         {
-          "start": "22:00",
-          "end": "22:30",
-          "minutes": 30
+          "start": "23:30",
+          "end": "07:00",
+          "minutes": 450
         },
         {
-          "start": "23:30",
-          "end": "12:00",
-          "minutes": 750
+          "start": "10:00",
+          "end": "13:32",
+          "minutes": 212
         }
       ]
     },
     {
       "name": "Feru Way (Hell Hub)",
       "free": [
-        {
-          "start": "12:30",
-          "end": "13:00",
-          "minutes": 30
-        },
         {
           "start": "19:00",
           "end": "20:05",
@@ -99,8 +94,8 @@
         },
         {
           "start": "11:00",
-          "end": "12:00",
-          "minutes": 60
+          "end": "13:32",
+          "minutes": 152
         }
       ]
     },
@@ -124,8 +119,8 @@
         },
         {
           "start": "10:00",
-          "end": "12:00",
-          "minutes": 120
+          "end": "13:32",
+          "minutes": 212
         }
       ]
     },
@@ -133,25 +128,25 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "12:00",
+          "start": "13:32",
           "end": "14:40",
-          "minutes": 160
+          "minutes": 68
         },
         {
           "start": "02:00",
           "end": "06:30",
           "minutes": 270
+        },
+        {
+          "start": "13:00",
+          "end": "13:32",
+          "minutes": 32
         }
       ]
     },
     {
       "name": "Stag Catacombs -1",
       "free": [
-        {
-          "start": "13:15",
-          "end": "14:30",
-          "minutes": 75
-        },
         {
           "start": "15:30",
           "end": "16:00",
@@ -169,24 +164,19 @@
         },
         {
           "start": "00:15",
-          "end": "06:30",
-          "minutes": 375
-        },
-        {
-          "start": "07:30",
           "end": "08:00",
-          "minutes": 30
+          "minutes": 465
         },
         {
           "start": "09:30",
-          "end": "12:00",
-          "minutes": 150
+          "end": "13:32",
+          "minutes": 242
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) está praticamente vazio: livre desde as 13:10 até amanhã ao meio-dia.",
-    "Feru DT Seal -1 (Shulgrax) tem 4h10 seguidas das 15:00 às 19:10 — a melhor janela de tarde."
+    "Feru DT Seal -2 (Shulgrax) está livre a partir das 17:30 e não tem mais nada marcado — 20h seguidas.",
+    "Feru DT Seal -1 (Shulgrax) tem 4h10 das 15:00 às 19:10, a melhor janela de tarde."
   ]
 }
