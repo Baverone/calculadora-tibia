@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-26T14:59:35Z",
-  "referenceTime": "16:57",
+  "generatedAt": "2026-08-26T16:07:11Z",
+  "referenceTime": "18:05",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,14 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "16:57",
+          "start": "18:05",
           "end": "19:10",
-          "minutes": 133
+          "minutes": 65
         },
         {
           "start": "23:50",
-          "end": "16:57",
-          "minutes": 1027
+          "end": "18:05",
+          "minutes": 1095
         }
       ]
     },
@@ -23,14 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "16:57",
+          "start": "18:05",
           "end": "10:10",
-          "minutes": 1033
+          "minutes": 965
         },
         {
           "start": "13:10",
-          "end": "16:57",
-          "minutes": 227
+          "end": "18:05",
+          "minutes": 295
         }
       ]
     },
@@ -38,14 +38,19 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
+          "start": "19:30",
+          "end": "22:01",
+          "minutes": 151
+        },
+        {
           "start": "23:30",
           "end": "07:00",
           "minutes": 450
         },
         {
           "start": "10:00",
-          "end": "16:57",
-          "minutes": 417
+          "end": "18:05",
+          "minutes": 485
         }
       ]
     },
@@ -76,6 +81,11 @@
           "start": "13:30",
           "end": "14:00",
           "minutes": 30
+        },
+        {
+          "start": "17:00",
+          "end": "18:05",
+          "minutes": 65
         }
       ]
     },
@@ -103,11 +113,6 @@
       "name": "Roshamuul West",
       "free": [
         {
-          "start": "17:30",
-          "end": "18:00",
-          "minutes": 30
-        },
-        {
           "start": "00:15",
           "end": "02:30",
           "minutes": 135
@@ -119,8 +124,13 @@
         },
         {
           "start": "12:00",
-          "end": "16:57",
-          "minutes": 297
+          "end": "14:00",
+          "minutes": 120
+        },
+        {
+          "start": "17:00",
+          "end": "18:05",
+          "minutes": 65
         }
       ]
     },
@@ -136,6 +146,11 @@
           "start": "13:00",
           "end": "15:00",
           "minutes": 120
+        },
+        {
+          "start": "17:00",
+          "end": "18:05",
+          "minutes": 65
         }
       ]
     },
@@ -169,14 +184,14 @@
         },
         {
           "start": "15:00",
-          "end": "16:57",
-          "minutes": 117
+          "end": "17:00",
+          "minutes": 120
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) está livre desde agora até às 10:10 de amanhã — 17h seguidas, sem ninguém marcado.",
-    "Feru DT Seal -1 (Shulgrax) tem 2h13 já a contar, até às 19:10."
+    "Feru DT Seal -2 (Shulgrax) continua vazio: livre desde agora até às 10:10 de amanhã, 16h seguidas.",
+    "Feru Infernatil Seal (Mazoran) abre às 19:30 e dá 2h31 até às 22:01."
   ]
 }
