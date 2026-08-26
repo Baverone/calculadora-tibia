@@ -50,8 +50,14 @@ function SpotRow({ spot, showLisbon }: { spot: HuntSpotStatus; showLisbon: boole
   );
 }
 
+const OUTCOME_TEXT: Record<string, string> = {
+  updated: '✓ Dados novos',
+  unchanged: 'Sem novidades — é o summary mais recente que existe',
+  failed: '✗ Não consegui chegar aos dados',
+};
+
 export function CelestaHuntsPanel() {
-  const { data, status, reload } = useCelestaHunts();
+  const { data, status, refreshing, outcome, reload } = useCelestaHunts();
   const [showLisbon, setShowLisbon] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
@@ -64,8 +70,8 @@ export function CelestaHuntsPanel() {
     <div className="hunts-panel">
       <div className="hunts-panel__header">
         <h3>Spots livres — Celesta</h3>
-        <button className="hunts-panel__reload" onClick={reload} type="button">
-          Atualizar
+        <button className="hunts-panel__reload" onClick={reload} type="button" disabled={refreshing}>
+          {refreshing ? 'A verificar…' : 'Atualizar'}
         </button>
       </div>
 
@@ -84,6 +90,11 @@ export function CelestaHuntsPanel() {
             <span className={isStale(data, now) ? 'hunts-panel__age hunts-panel__age--stale' : 'hunts-panel__age'}>
               Summary das {data.referenceTime} ({formatAge(data, now)})
             </span>
+            {outcome && (
+              <span className={outcome === 'updated' ? 'hunts-panel__outcome hunts-panel__outcome--ok' : 'hunts-panel__outcome'}>
+                {OUTCOME_TEXT[outcome]}
+              </span>
+            )}
             <label className="hunts-panel__toggle">
               <input type="checkbox" checked={showLisbon} onChange={(e) => setShowLisbon(e.target.checked)} />
               mostrar hora de Lisboa

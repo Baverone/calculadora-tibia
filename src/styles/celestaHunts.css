@@ -188,3 +188,17 @@
   font-size: 0.78rem;
   color: var(--text-muted);
 }
+
+.hunts-panel__reload:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.hunts-panel__outcome {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.hunts-panel__outcome--ok {
+  color: var(--gold);
+}
