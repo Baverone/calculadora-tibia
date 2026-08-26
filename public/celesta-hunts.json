@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-26T18:39:07Z",
-  "referenceTime": "19:12",
+  "generatedAt": "2026-08-26T19:10:47Z",
+  "referenceTime": "21:08",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "23:50",
-          "end": "19:12",
-          "minutes": 1162
+          "start": "00:15",
+          "end": "17:30",
+          "minutes": 1035
+        },
+        {
+          "start": "20:30",
+          "end": "21:08",
+          "minutes": 38
         }
       ]
     },
@@ -18,19 +23,19 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "20:30",
-          "end": "21:30",
-          "minutes": 60
-        },
-        {
-          "start": "22:30",
+          "start": "23:20",
           "end": "10:10",
-          "minutes": 700
+          "minutes": 650
         },
         {
           "start": "13:10",
-          "end": "19:12",
-          "minutes": 362
+          "end": "14:30",
+          "minutes": 80
+        },
+        {
+          "start": "17:30",
+          "end": "21:08",
+          "minutes": 218
         }
       ]
     },
@@ -38,9 +43,9 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "19:30",
-          "end": "22:01",
-          "minutes": 151
+          "start": "21:10",
+          "end": "22:30",
+          "minutes": 80
         },
         {
           "start": "23:30",
@@ -49,8 +54,13 @@
         },
         {
           "start": "10:00",
-          "end": "19:12",
-          "minutes": 552
+          "end": "11:30",
+          "minutes": 90
+        },
+        {
+          "start": "13:30",
+          "end": "21:08",
+          "minutes": 458
         }
       ]
     },
@@ -76,11 +86,6 @@
           "start": "13:30",
           "end": "14:00",
           "minutes": 30
-        },
-        {
-          "start": "17:00",
-          "end": "19:12",
-          "minutes": 132
         }
       ]
     },
@@ -104,8 +109,8 @@
         },
         {
           "start": "18:00",
-          "end": "19:12",
-          "minutes": 72
+          "end": "19:00",
+          "minutes": 60
         }
       ]
     },
@@ -136,6 +141,11 @@
           "start": "17:00",
           "end": "18:00",
           "minutes": 60
+        },
+        {
+          "start": "20:30",
+          "end": "21:08",
+          "minutes": 38
         }
       ]
     },
@@ -151,22 +161,12 @@
           "start": "13:00",
           "end": "15:00",
           "minutes": 120
-        },
-        {
-          "start": "17:00",
-          "end": "19:12",
-          "minutes": 132
         }
       ]
     },
     {
       "name": "Stag Catacombs -1",
       "free": [
-        {
-          "start": "20:15",
-          "end": "21:00",
-          "minutes": 45
-        },
         {
           "start": "22:30",
           "end": "23:15",
@@ -184,19 +184,19 @@
         },
         {
           "start": "12:00",
-          "end": "13:00",
-          "minutes": 60
+          "end": "12:30",
+          "minutes": 30
         },
         {
-          "start": "15:00",
+          "start": "14:30",
           "end": "17:00",
-          "minutes": 120
+          "minutes": 150
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal abre às 19:30 com 2h31 até às 22:01 — a melhor janela da próxima hora.",
-    "Feru DT Seal -2 volta a ficar livre às 22:30 e fica sem reservas até às 10:10 de amanhã."
+    "Feru DT Seal -1 fica livre à meia-noite e quinze e não tem nada marcado até às 17:30 de amanhã.",
+    "Para já, o Infernatil Seal abre às 21:10 com 1h20 até às 22:30."
   ]
 }
