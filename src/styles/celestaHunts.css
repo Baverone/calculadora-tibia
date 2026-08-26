@@ -1,0 +1,190 @@
+/* Spots livres de hunt no Celesta — segue o mesmo vocabulário visual
+   dos cartões do Tibiadrome (var(--bg-panel), borda dourada, cantos 10px). */
+
+.hunts-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.hunts-panel__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.hunts-panel__header h3 {
+  margin: 0;
+  color: var(--gold);
+}
+
+.hunts-panel__reload {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  color: var(--text-parchment);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.hunts-panel__reload:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.hunts-panel__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.hunts-panel__age {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+}
+
+.hunts-panel__age--stale {
+  color: var(--error);
+}
+
+.hunts-panel__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.hunts-panel__banner {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--error);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-parchment);
+  font-size: 0.85rem;
+  margin: 0 0 14px;
+}
+
+.hunts-panel__note {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.hunts-panel__note code {
+  color: var(--text-parchment);
+}
+
+.hunts-panel__label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hunts-panel__highlights {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.hunts-panel__highlights ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.hunts-panel__spots {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hunts-spot {
+  border-top: 1px dashed var(--border-gold);
+  padding-top: 12px;
+}
+
+.hunts-spot:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.hunts-spot__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.hunts-spot__name {
+  color: var(--text-parchment);
+  font-weight: bold;
+}
+
+.hunts-spot__badge {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.hunts-spot__badge--free {
+  color: var(--gold);
+}
+
+.hunts-spot__badge--packed {
+  color: var(--error);
+}
+
+.hunts-spot__windows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hunts-spot__window {
+  display: inline-flex;
+  flex-direction: column;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: var(--text-parchment);
+}
+
+.hunts-spot__window-alt {
+  font-size: 0.72rem;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
+.hunts-spot__none {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--error);
+}
+
+.hunts-panel__footnote {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-gold);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

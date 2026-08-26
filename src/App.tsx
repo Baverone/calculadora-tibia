@@ -12,6 +12,7 @@ import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
 import { SoulCoreTracker } from './components/soulCore/SoulCoreTracker';
 import { StaminaCalculator } from './components/stamina/StaminaCalculator';
+import { CelestaHuntsPanel } from './components/hunt/CelestaHuntsPanel';
 import { ArrowsCalculator } from './components/arrows/ArrowsCalculator';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<AppTabId>(TEAMS[0].id);
   const [activePlayerId, setActivePlayerId] = useState<string>(() => playersForTeam(TEAMS[0].id)[0].id);
-  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>('stamina');
+  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>('hunts');
 
   function handleTabChange(tab: AppTabId) {
     setActiveTab(tab);
@@ -75,6 +76,9 @@ function App() {
       {/* Kept mounted (like the player panels below) so a draft in the
           modifiers textarea never gets lost when switching tabs. */}
       <section className={activeTab === 'utilities' ? 'app-utilities' : 'app-utilities app-utilities--hidden'}>
+        <div className={activeUtilityTab === 'hunts' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
+          <CelestaHuntsPanel />
+        </div>
         <div className={activeUtilityTab === 'stamina' ? 'app-utilities__pane' : 'app-utilities__pane app-utilities__pane--hidden'}>
           <StaminaCalculator />
         </div>
