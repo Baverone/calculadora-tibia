@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-27T14:24:26Z",
-  "referenceTime": "16:22",
+  "generatedAt": "2026-08-27T15:12:17Z",
+  "referenceTime": "17:10",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -14,8 +14,8 @@
         },
         {
           "start": "23:45",
-          "end": "16:22",
-          "minutes": 997
+          "end": "17:10",
+          "minutes": 1045
         }
       ]
     },
@@ -29,8 +29,8 @@
         },
         {
           "start": "01:00",
-          "end": "16:22",
-          "minutes": 922
+          "end": "17:10",
+          "minutes": 970
         }
       ]
     },
@@ -38,14 +38,14 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "16:22",
+          "start": "17:10",
           "end": "22:30",
-          "minutes": 368
+          "minutes": 320
         },
         {
           "start": "23:30",
-          "end": "16:22",
-          "minutes": 1012
+          "end": "17:10",
+          "minutes": 1060
         }
       ]
     },
@@ -69,8 +69,8 @@
         },
         {
           "start": "15:00",
-          "end": "16:22",
-          "minutes": 82
+          "end": "17:10",
+          "minutes": 130
         }
       ]
     },
@@ -99,14 +99,19 @@
         },
         {
           "start": "15:12",
-          "end": "16:22",
-          "minutes": 70
+          "end": "17:10",
+          "minutes": 118
         }
       ]
     },
     {
       "name": "Roshamuul West",
       "free": [
+        {
+          "start": "17:10",
+          "end": "18:00",
+          "minutes": 50
+        },
         {
           "start": "23:45",
           "end": "02:30",
@@ -148,11 +153,6 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "16:22",
-          "end": "17:00",
-          "minutes": 38
-        },
-        {
           "start": "23:01",
           "end": "07:30",
           "minutes": 509
@@ -169,14 +169,14 @@
         },
         {
           "start": "15:50",
-          "end": "16:22",
-          "minutes": 32
+          "end": "17:10",
+          "minutes": 80
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal está livre agora mesmo e só entra alguém às 22:30 — 6h08 seguidas.",
-    "Feru DT Seal -2 abre às 20:00 com 3h até às 23:00."
+    "Feru Infernatil Seal continua livre e só entra alguém às 22:30 — 5h20 seguidas a partir de agora.",
+    "Feru DT Seal -1 abre às 18:30 com 2h15 até às 20:45."
   ]
 }
