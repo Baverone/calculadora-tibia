@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-27T17:09:21Z",
-  "referenceTime": "19:07",
+  "generatedAt": "2026-08-27T18:10:23Z",
+  "referenceTime": "20:08",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "19:07",
+          "start": "20:08",
           "end": "20:45",
-          "minutes": 98
+          "minutes": 37
         },
         {
           "start": "23:45",
@@ -19,8 +19,8 @@
         },
         {
           "start": "08:30",
-          "end": "19:07",
-          "minutes": 637
+          "end": "20:08",
+          "minutes": 698
         }
       ]
     },
@@ -28,14 +28,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "20:00",
-          "end": "23:00",
-          "minutes": 180
-        },
-        {
           "start": "01:00",
-          "end": "19:07",
-          "minutes": 1087
+          "end": "20:08",
+          "minutes": 1148
         }
       ]
     },
@@ -43,14 +38,14 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "19:07",
+          "start": "21:10",
           "end": "22:30",
-          "minutes": 203
+          "minutes": 80
         },
         {
           "start": "23:30",
-          "end": "19:07",
-          "minutes": 1177
+          "end": "20:08",
+          "minutes": 1238
         }
       ]
     },
@@ -59,23 +54,13 @@
       "free": [
         {
           "start": "21:05",
-          "end": "22:00",
-          "minutes": 55
-        },
-        {
-          "start": "01:00",
           "end": "06:30",
-          "minutes": 330
+          "minutes": 565
         },
         {
           "start": "09:30",
           "end": "10:30",
           "minutes": 60
-        },
-        {
-          "start": "18:00",
-          "end": "19:07",
-          "minutes": 67
         }
       ]
     },
@@ -84,8 +69,13 @@
       "free": [
         {
           "start": "21:00",
+          "end": "21:30",
+          "minutes": 30
+        },
+        {
+          "start": "22:30",
           "end": "23:00",
-          "minutes": 120
+          "minutes": 30
         },
         {
           "start": "01:00",
@@ -114,8 +104,8 @@
         },
         {
           "start": "04:00",
-          "end": "09:15",
-          "minutes": 315
+          "end": "06:00",
+          "minutes": 120
         },
         {
           "start": "11:00",
@@ -169,14 +159,14 @@
         },
         {
           "start": "15:50",
-          "end": "19:07",
-          "minutes": 197
+          "end": "17:00",
+          "minutes": 70
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal livre agora — 3h23 até às 22:30, e depois a noite toda a partir das 23:30.",
-    "Feru DT Seal -2 abre às 20:00 com 3h até às 23:00."
+    "Feru Way abre às 21:05 e fica livre até às 06:30 — 9h25 seguidas, a maior janela da noite.",
+    "Feru Infernatil Seal volta a estar livre às 23:30 e não tem mais nada marcado."
   ]
 }
