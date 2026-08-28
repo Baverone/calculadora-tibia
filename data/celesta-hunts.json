@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T13:12:56Z",
-  "referenceTime": "15:11",
+  "generatedAt": "2026-08-28T14:11:25Z",
+  "referenceTime": "16:09",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -19,8 +19,8 @@
         },
         {
           "start": "07:30",
-          "end": "15:11",
-          "minutes": 461
+          "end": "16:09",
+          "minutes": 519
         }
       ]
     },
@@ -29,8 +29,8 @@
       "free": [
         {
           "start": "17:30",
-          "end": "15:11",
-          "minutes": 1301
+          "end": "16:09",
+          "minutes": 1359
         }
       ]
     },
@@ -38,19 +38,14 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "16:45",
-          "end": "19:30",
-          "minutes": 165
-        },
-        {
           "start": "21:30",
           "end": "22:15",
           "minutes": 45
         },
         {
           "start": "23:15",
-          "end": "15:11",
-          "minutes": 956
+          "end": "16:09",
+          "minutes": 1014
         }
       ]
     },
@@ -69,8 +64,8 @@
         },
         {
           "start": "12:30",
-          "end": "15:11",
-          "minutes": 161
+          "end": "16:09",
+          "minutes": 219
         }
       ]
     },
@@ -89,19 +84,14 @@
         },
         {
           "start": "14:40",
-          "end": "15:11",
-          "minutes": 31
+          "end": "16:09",
+          "minutes": 89
         }
       ]
     },
     {
       "name": "Roshamuul West",
       "free": [
-        {
-          "start": "15:11",
-          "end": "16:00",
-          "minutes": 49
-        },
         {
           "start": "00:00",
           "end": "02:30",
@@ -114,8 +104,8 @@
         },
         {
           "start": "09:30",
-          "end": "15:11",
-          "minutes": 341
+          "end": "16:09",
+          "minutes": 399
         }
       ]
     },
@@ -139,8 +129,8 @@
         },
         {
           "start": "14:00",
-          "end": "15:11",
-          "minutes": 71
+          "end": "16:09",
+          "minutes": 129
         }
       ]
     },
@@ -148,25 +138,20 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "15:25",
-          "end": "15:55",
-          "minutes": 30
-        },
-        {
           "start": "23:06",
           "end": "07:30",
           "minutes": 504
         },
         {
           "start": "08:30",
-          "end": "15:11",
-          "minutes": 401
+          "end": "16:09",
+          "minutes": 459
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (21h41).",
-    "Roshamuul West livre agora ate as 16:00; Feru Infernatil das 16:45 as 19:30."
+    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (22h39).",
+    "Feru DT Seal -1 livre das 16:20 as 17:30 (1h10)."
   ]
 }
