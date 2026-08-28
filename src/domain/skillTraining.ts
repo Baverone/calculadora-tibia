@@ -192,8 +192,10 @@ export function calculateSkillTraining(
 export const LASTING_EXERCISE_CHARGES = 14400;
 
 export interface SkillTargetResult {
-  /** Nível-alvo, tal como aparece no jogo (já inflacionado pela Loyalty, se houver). */
+  /** Nível-alvo, em nível BASE (skill real, sem a inflação da Loyalty). */
   targetLevel: number;
+  /** Nível base atual, calculado a partir do nível/% do jogo. */
+  baseLevel: number;
   /** Pontos (hits, ou mana no Magic Level) que faltam até lá. */
   pointsRemaining: number;
   chargesNormal: number;
@@ -206,14 +208,16 @@ export interface SkillTargetResult {
  * Quantas Lasting Exercise faltam para chegar a um nível-alvo, em vez de só
  * ao nível seguinte.
  *
- * O alvo é interpretado como o nível que se quer ver NO JOGO — o mesmo que se
- * escreve no campo "nível atual". Por isso a conversão de Loyalty é a mesma
- * que `calculateSkillTraining` faz para o nível seguinte, só que aplicada a um
- * nível arbitrário: converte-se o total mostrado no alvo para pontos reais
- * (a dividir pelo multiplicador) e subtrai-se o que já se tem em pontos reais.
+ * O alvo é um nível BASE — o skill real, sem a inflação da Loyalty. É assim
+ * que se pensa num objetivo de treino ("quero ter magic 100 a sério"), e é
+ * também o único número que não muda quando a Loyalty da conta sobe.
  *
- * Devolve null quando o alvo não está à frente do nível atual — não há nada
- * para calcular, e mostrar zero varinhas seria enganador.
+ * Por isso só o lado ESQUERDO da subtração leva conversão: o nível atual vem
+ * do jogo e está inflacionado, portanto divide-se pelo multiplicador para o
+ * trazer para pontos reais; o alvo já é base e entra tal como está.
+ *
+ * Devolve null quando o alvo não está à frente do nível base atual — não há
+ * nada para calcular, e mostrar zero varinhas seria enganador.
  */
 export function calculateTrainingToTarget(
   skill: TrainableSkill,
@@ -224,16 +228,19 @@ export function calculateTrainingToTarget(
   useSpecialDummy: boolean,
   loyaltyBonusPercent: number
 ): SkillTargetResult | null {
-  if (targetLevel <= displayedCurrentLevel) return null;
-
   const loyaltyMultiplier = 1 + loyaltyBonusPercent / 100;
 
   const pointsForNextDisplayedLevel = pointsForNextLevel(skill, vocation, displayedCurrentLevel);
   const displayedPointsAtCurrent =
     totalPointsAtLevel(skill, vocation, displayedCurrentLevel) + (displayedCurrentPercent / 100) * pointsForNextDisplayedLevel;
-  const displayedPointsAtTarget = totalPointsAtLevel(skill, vocation, targetLevel);
 
-  const pointsRemaining = Math.max(0, (displayedPointsAtTarget - displayedPointsAtCurrent) / loyaltyMultiplier);
+  const basePointsAtCurrent = displayedPointsAtCurrent / loyaltyMultiplier;
+  const { level: baseLevel } = levelPercentFromPoints(skill, vocation, basePointsAtCurrent);
+
+  if (targetLevel <= baseLevel) return null;
+
+  const basePointsAtTarget = totalPointsAtLevel(skill, vocation, targetLevel);
+  const pointsRemaining = Math.max(0, basePointsAtTarget - basePointsAtCurrent);
 
   const perCharge = SKILL_CONFIG[skill].pointsPerCharge * (useSpecialDummy ? SPECIAL_DUMMY_EFFICIENCY : 1);
   const chargesNormal = Math.ceil(pointsRemaining / perCharge);
@@ -241,6 +248,7 @@ export function calculateTrainingToTarget(
 
   return {
     targetLevel,
+    baseLevel,
     pointsRemaining,
     chargesNormal,
     chargesDoubleEvent,

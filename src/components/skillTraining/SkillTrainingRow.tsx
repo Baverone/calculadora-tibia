@@ -64,7 +64,10 @@ export function SkillTrainingRow({
 
   const targetResult = parseNonNegativeInteger(entry.target ?? '', 'o nível objetivo');
   const targetTyped = (entry.target ?? '').trim() !== '';
-  const targetTooLow = targetTyped && targetResult.ok && levelResult.ok && targetResult.value <= levelResult.value;
+
+  // O objetivo é comparado com o nível BASE, não com o que aparece no jogo:
+  // com Loyalty, o número do jogo vai à frente do skill real.
+  const targetTooLow = targetTyped && targetResult.ok && result !== null && targetResult.value <= result.baseLevel;
 
   const toTarget =
     canCalculate && levelResult.ok && percentMissingResult.ok && targetTyped && targetResult.ok && !targetTooLow
@@ -111,11 +114,11 @@ export function SkillTrainingRow({
           />
         </div>
         <div className="hunt-form__field">
-          <label>Nível objetivo (opcional)</label>
+          <label>Nível objetivo — base, sem Loyalty (opcional)</label>
           <input
             type="text"
             inputMode="numeric"
-            placeholder={levelResult.ok ? `ex: ${levelResult.value + 10}` : 'ex: 100'}
+            placeholder={result ? `ex: ${result.baseLevel + 10}` : 'ex: 100'}
             value={entry.target ?? ''}
             onChange={(e) => onChange({ ...entry, target: e.target.value })}
           />
@@ -139,13 +142,18 @@ export function SkillTrainingRow({
         </p>
       )}
 
-      {targetTooLow && <p className="field-error">O objetivo tem de ser maior do que o nível atual.</p>}
+      {targetTooLow && result && (
+        <p className="field-error">
+          O objetivo tem de ser maior do que o nível base atual ({result.baseLevel})
+          {hasLoyalty ? ` — no jogo vês ${displayedLevel}, mas o skill real é ${result.baseLevel}.` : '.'}
+        </p>
+      )}
       {targetTyped && !targetResult.ok && <p className="field-error">{!targetResult.ok ? targetResult.error : ''}</p>}
 
       {toTarget && (
         <div className="skill-training-target">
           <span className="skill-training-target__label">
-            Até ao nível {toTarget.targetLevel}
+            Do nível base {toTarget.baseLevel} até ao {toTarget.targetLevel}
           </span>
           <span className="skill-training-target__value" style={{ color: accentColor }}>
             {lastingFormatter.format(toTarget.lastingNormal)} Lasting Exercise
