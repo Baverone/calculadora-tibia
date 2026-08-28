@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T11:17:44Z",
-  "referenceTime": "13:16",
+  "generatedAt": "2026-08-28T12:24:00Z",
+  "referenceTime": "14:22",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -19,8 +19,8 @@
         },
         {
           "start": "07:30",
-          "end": "13:16",
-          "minutes": 346
+          "end": "14:22",
+          "minutes": 412
         }
       ]
     },
@@ -28,14 +28,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "13:16",
-          "end": "14:30",
-          "minutes": 74
-        },
-        {
           "start": "17:30",
-          "end": "13:16",
-          "minutes": 1186
+          "end": "14:22",
+          "minutes": 1252
         }
       ]
     },
@@ -59,8 +54,8 @@
         },
         {
           "start": "23:15",
-          "end": "13:16",
-          "minutes": 841
+          "end": "14:22",
+          "minutes": 907
         }
       ]
     },
@@ -79,8 +74,8 @@
         },
         {
           "start": "12:30",
-          "end": "13:16",
-          "minutes": 46
+          "end": "14:22",
+          "minutes": 112
         }
       ]
     },
@@ -103,6 +98,11 @@
       "name": "Roshamuul West",
       "free": [
         {
+          "start": "15:00",
+          "end": "16:00",
+          "minutes": 60
+        },
+        {
           "start": "00:00",
           "end": "02:30",
           "minutes": 150
@@ -114,8 +114,8 @@
         },
         {
           "start": "09:30",
-          "end": "13:16",
-          "minutes": 226
+          "end": "14:22",
+          "minutes": 292
         }
       ]
     },
@@ -123,9 +123,9 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "13:16",
+          "start": "14:22",
           "end": "15:00",
-          "minutes": 104
+          "minutes": 38
         },
         {
           "start": "17:30",
@@ -148,8 +148,8 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "14:20",
-          "end": "14:50",
+          "start": "15:25",
+          "end": "15:55",
           "minutes": 30
         },
         {
@@ -159,14 +159,14 @@
         },
         {
           "start": "08:30",
-          "end": "13:16",
-          "minutes": 286
+          "end": "14:22",
+          "minutes": 352
         }
       ]
     }
   ],
   "highlights": [
-    "Norcferatu East livre agora ate as 15:00 (1h44).",
-    "Feru DT Seal -2 livre agora ate as 14:30 e depois das 17:30 em diante (19h46)."
+    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (20h52).",
+    "Roshamuul West livre das 15:00 as 16:00; Norcferatu East livre agora ate as 15:00."
   ]
 }
