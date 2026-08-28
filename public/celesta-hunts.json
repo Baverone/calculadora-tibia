@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T08:12:05Z",
-  "referenceTime": "10:09",
+  "generatedAt": "2026-08-28T08:23:50Z",
+  "referenceTime": "10:21",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -19,8 +19,8 @@
         },
         {
           "start": "07:30",
-          "end": "10:09",
-          "minutes": 159
+          "end": "10:21",
+          "minutes": 171
         }
       ]
     },
@@ -29,8 +29,8 @@
       "free": [
         {
           "start": "13:10",
-          "end": "10:09",
-          "minutes": 1259
+          "end": "10:21",
+          "minutes": 1271
         }
       ]
     },
@@ -49,8 +49,8 @@
         },
         {
           "start": "23:15",
-          "end": "10:09",
-          "minutes": 654
+          "end": "10:21",
+          "minutes": 666
         }
       ]
     },
@@ -64,14 +64,19 @@
         },
         {
           "start": "00:57",
-          "end": "10:09",
-          "minutes": 552
+          "end": "10:21",
+          "minutes": 564
         }
       ]
     },
     {
       "name": "Roshamuul Upper (Depot)",
       "free": [
+        {
+          "start": "11:30",
+          "end": "12:12",
+          "minutes": 42
+        },
         {
           "start": "15:12",
           "end": "16:00",
@@ -93,9 +98,9 @@
       "name": "Roshamuul West",
       "free": [
         {
-          "start": "10:09",
+          "start": "10:21",
           "end": "11:40",
-          "minutes": 91
+          "minutes": 79
         },
         {
           "start": "00:00",
@@ -104,8 +109,8 @@
         },
         {
           "start": "06:30",
-          "end": "10:09",
-          "minutes": 219
+          "end": "10:21",
+          "minutes": 231
         }
       ]
     },
@@ -129,8 +134,8 @@
         },
         {
           "start": "09:30",
-          "end": "10:09",
-          "minutes": 39
+          "end": "10:21",
+          "minutes": 51
         }
       ]
     },
@@ -149,14 +154,15 @@
         },
         {
           "start": "21:05",
-          "end": "10:09",
-          "minutes": 784
+          "end": "10:21",
+          "minutes": 796
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -1 abre às 10:30 e tem 7h seguidas até às 17:30 — a melhor janela do dia.",
-    "Feru DT Seal -2 fica livre às 13:10 e não tem mais nada marcado até amanhã de manhã."
+    "Feru DT Seal -2 livre desde as 13:10 e sem nada marcado ate amanha de manha (21h11).",
+    "Feru DT Seal -1 com 7 horas seguidas das 10:30 as 17:30.",
+    "Stag Catacombs -1 livre agora das 10:30 as 14:50."
   ]
 }
