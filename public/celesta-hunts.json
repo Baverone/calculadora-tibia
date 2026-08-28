@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T21:11:48Z",
-  "referenceTime": "23:09",
+  "generatedAt": "2026-08-28T22:09:12Z",
+  "referenceTime": "00:07",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -13,14 +13,14 @@
           "minutes": 540
         },
         {
-          "start": "11:30",
+          "start": "13:01",
           "end": "15:00",
-          "minutes": 210
+          "minutes": 119
         },
         {
-          "start": "17:10",
-          "end": "23:09",
-          "minutes": 359
+          "start": "19:00",
+          "end": "00:07",
+          "minutes": 307
         }
       ]
     },
@@ -28,14 +28,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "23:09",
+          "start": "00:07",
           "end": "10:10",
-          "minutes": 661
+          "minutes": 603
         },
         {
           "start": "13:10",
-          "end": "23:09",
-          "minutes": 599
+          "end": "21:00",
+          "minutes": 470
         }
       ]
     },
@@ -49,8 +49,8 @@
         },
         {
           "start": "08:00",
-          "end": "23:09",
-          "minutes": 909
+          "end": "00:07",
+          "minutes": 967
         }
       ]
     },
@@ -76,6 +76,11 @@
           "start": "17:00",
           "end": "19:50",
           "minutes": 170
+        },
+        {
+          "start": "22:50",
+          "end": "00:07",
+          "minutes": 77
         }
       ]
     },
@@ -109,8 +114,13 @@
         },
         {
           "start": "09:30",
+          "end": "10:00",
+          "minutes": 30
+        },
+        {
+          "start": "11:00",
           "end": "12:00",
-          "minutes": 150
+          "minutes": 60
         },
         {
           "start": "14:30",
@@ -143,9 +153,9 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "23:09",
+          "start": "00:07",
           "end": "07:30",
-          "minutes": 501
+          "minutes": 443
         },
         {
           "start": "08:30",
@@ -159,14 +169,14 @@
         },
         {
           "start": "21:00",
-          "end": "23:09",
-          "minutes": 129
+          "end": "00:07",
+          "minutes": 187
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 livre AGORA e sem nada marcado ate amanha as 10:10 (11h01).",
-    "Stag Catacombs -1 livre AGORA ate amanha as 07:30 (8h21)."
+    "Feru DT Seal -2 livre AGORA ate as 10:10 (10h03).",
+    "Stag Catacombs -1 livre AGORA ate as 07:30 (7h23); Feru DT Seal -1 abre a 01:30 com 9h."
   ]
 }
