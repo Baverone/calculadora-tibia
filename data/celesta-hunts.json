@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T14:11:25Z",
-  "referenceTime": "16:09",
+  "generatedAt": "2026-08-28T15:11:53Z",
+  "referenceTime": "17:09",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,19 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "16:20",
-          "end": "17:30",
-          "minutes": 70
-        },
-        {
           "start": "23:31",
           "end": "05:30",
           "minutes": 359
         },
         {
           "start": "07:30",
-          "end": "16:09",
-          "minutes": 519
+          "end": "17:09",
+          "minutes": 579
         }
       ]
     },
@@ -28,9 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "17:30",
-          "end": "16:09",
-          "minutes": 1359
+          "start": "17:09",
+          "end": "10:10",
+          "minutes": 1021
+        },
+        {
+          "start": "13:10",
+          "end": "17:09",
+          "minutes": 239
         }
       ]
     },
@@ -44,8 +44,13 @@
         },
         {
           "start": "23:15",
-          "end": "16:09",
-          "minutes": 1014
+          "end": "06:30",
+          "minutes": 435
+        },
+        {
+          "start": "08:00",
+          "end": "17:09",
+          "minutes": 549
         }
       ]
     },
@@ -64,8 +69,8 @@
         },
         {
           "start": "12:30",
-          "end": "16:09",
-          "minutes": 219
+          "end": "17:09",
+          "minutes": 279
         }
       ]
     },
@@ -84,8 +89,8 @@
         },
         {
           "start": "14:40",
-          "end": "16:09",
-          "minutes": 89
+          "end": "17:09",
+          "minutes": 149
         }
       ]
     },
@@ -104,8 +109,8 @@
         },
         {
           "start": "09:30",
-          "end": "16:09",
-          "minutes": 399
+          "end": "17:00",
+          "minutes": 450
         }
       ]
     },
@@ -129,8 +134,8 @@
         },
         {
           "start": "14:00",
-          "end": "16:09",
-          "minutes": 129
+          "end": "17:09",
+          "minutes": 189
         }
       ]
     },
@@ -144,14 +149,14 @@
         },
         {
           "start": "08:30",
-          "end": "16:09",
-          "minutes": 459
+          "end": "17:09",
+          "minutes": 519
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (22h39).",
-    "Feru DT Seal -1 livre das 16:20 as 17:30 (1h10)."
+    "Feru DT Seal -2 livre AGORA e sem nada marcado ate amanha as 10:10 (17h01).",
+    "Feru DT Seal -1 livre das 23:31 as 05:30 (5h59)."
   ]
 }
