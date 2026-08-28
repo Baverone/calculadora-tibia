@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-28T12:24:00Z",
-  "referenceTime": "14:22",
+  "generatedAt": "2026-08-28T13:12:56Z",
+  "referenceTime": "15:11",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -19,8 +19,8 @@
         },
         {
           "start": "07:30",
-          "end": "14:22",
-          "minutes": 412
+          "end": "15:11",
+          "minutes": 461
         }
       ]
     },
@@ -29,19 +29,14 @@
       "free": [
         {
           "start": "17:30",
-          "end": "14:22",
-          "minutes": 1252
+          "end": "15:11",
+          "minutes": 1301
         }
       ]
     },
     {
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
-        {
-          "start": "14:31",
-          "end": "15:15",
-          "minutes": 44
-        },
         {
           "start": "16:45",
           "end": "19:30",
@@ -54,8 +49,8 @@
         },
         {
           "start": "23:15",
-          "end": "14:22",
-          "minutes": 907
+          "end": "15:11",
+          "minutes": 956
         }
       ]
     },
@@ -74,8 +69,8 @@
         },
         {
           "start": "12:30",
-          "end": "14:22",
-          "minutes": 112
+          "end": "15:11",
+          "minutes": 161
         }
       ]
     },
@@ -91,6 +86,11 @@
           "start": "08:00",
           "end": "08:50",
           "minutes": 50
+        },
+        {
+          "start": "14:40",
+          "end": "15:11",
+          "minutes": 31
         }
       ]
     },
@@ -98,9 +98,9 @@
       "name": "Roshamuul West",
       "free": [
         {
-          "start": "15:00",
+          "start": "15:11",
           "end": "16:00",
-          "minutes": 60
+          "minutes": 49
         },
         {
           "start": "00:00",
@@ -114,19 +114,14 @@
         },
         {
           "start": "09:30",
-          "end": "14:22",
-          "minutes": 292
+          "end": "15:11",
+          "minutes": 341
         }
       ]
     },
     {
       "name": "Norcferatu East",
       "free": [
-        {
-          "start": "14:22",
-          "end": "15:00",
-          "minutes": 38
-        },
         {
           "start": "17:30",
           "end": "18:00",
@@ -141,6 +136,11 @@
           "start": "09:30",
           "end": "11:00",
           "minutes": 90
+        },
+        {
+          "start": "14:00",
+          "end": "15:11",
+          "minutes": 71
         }
       ]
     },
@@ -159,14 +159,14 @@
         },
         {
           "start": "08:30",
-          "end": "14:22",
-          "minutes": 352
+          "end": "15:11",
+          "minutes": 401
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (20h52).",
-    "Roshamuul West livre das 15:00 as 16:00; Norcferatu East livre agora ate as 15:00."
+    "Feru DT Seal -2 livre a partir das 17:30 e sem mais nada marcado (21h41).",
+    "Roshamuul West livre agora ate as 16:00; Feru Infernatil das 16:45 as 19:30."
   ]
 }
