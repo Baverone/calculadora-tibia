@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-29T10:09:27Z",
-  "referenceTime": "12:07",
+  "generatedAt": "2026-08-29T11:12:17Z",
+  "referenceTime": "13:10",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -9,8 +9,8 @@
       "free": [
         {
           "start": "19:00",
-          "end": "12:07",
-          "minutes": 1027
+          "end": "13:10",
+          "minutes": 1090
         }
       ]
     },
@@ -24,8 +24,8 @@
         },
         {
           "start": "00:00",
-          "end": "12:07",
-          "minutes": 727
+          "end": "13:10",
+          "minutes": 790
         }
       ]
     },
@@ -34,8 +34,13 @@
       "free": [
         {
           "start": "14:00",
-          "end": "12:07",
-          "minutes": 1327
+          "end": "22:00",
+          "minutes": 480
+        },
+        {
+          "start": "23:00",
+          "end": "13:10",
+          "minutes": 850
         }
       ]
     },
@@ -49,8 +54,8 @@
         },
         {
           "start": "02:00",
-          "end": "12:07",
-          "minutes": 607
+          "end": "13:10",
+          "minutes": 670
         }
       ]
     },
@@ -67,11 +72,6 @@
     {
       "name": "Roshamuul West",
       "free": [
-        {
-          "start": "00:30",
-          "end": "02:30",
-          "minutes": 120
-        },
         {
           "start": "04:00",
           "end": "05:00",
@@ -93,9 +93,9 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "12:07",
+          "start": "13:10",
           "end": "16:01",
-          "minutes": 234
+          "minutes": 171
         },
         {
           "start": "17:00",
@@ -129,14 +129,14 @@
         },
         {
           "start": "08:30",
-          "end": "12:07",
-          "minutes": 217
+          "end": "13:10",
+          "minutes": 280
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal livre das 14:00 em diante — 22h07 sem mais nada marcado.",
-    "Norcferatu East livre AGORA ate as 16:01 (3h54)."
+    "Feru DT Seal -2 livre AGORA ate as 21:00 (7h50).",
+    "Feru Infernatil livre das 14:00 as 22:00 (8h00)."
   ]
 }
