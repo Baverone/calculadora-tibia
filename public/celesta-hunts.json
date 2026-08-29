@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-29T12:10:53Z",
-  "referenceTime": "14:09",
+  "generatedAt": "2026-08-29T13:11:35Z",
+  "referenceTime": "15:09",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,14 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "14:09",
-          "end": "15:00",
-          "minutes": 51
-        },
-        {
           "start": "19:00",
-          "end": "14:09",
-          "minutes": 1149
+          "end": "15:09",
+          "minutes": 1209
         }
       ]
     },
@@ -23,14 +18,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "14:09",
+          "start": "17:00",
           "end": "21:00",
-          "minutes": 411
+          "minutes": 240
         },
         {
           "start": "00:00",
-          "end": "14:09",
-          "minutes": 849
+          "end": "15:09",
+          "minutes": 909
         }
       ]
     },
@@ -38,14 +33,14 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "14:09",
-          "end": "22:00",
-          "minutes": 471
+          "start": "15:09",
+          "end": "19:00",
+          "minutes": 231
         },
         {
           "start": "23:00",
-          "end": "14:09",
-          "minutes": 909
+          "end": "15:09",
+          "minutes": 969
         }
       ]
     },
@@ -54,8 +49,8 @@
       "free": [
         {
           "start": "02:00",
-          "end": "14:09",
-          "minutes": 729
+          "end": "15:09",
+          "minutes": 789
         }
       ]
     },
@@ -63,9 +58,9 @@
       "name": "Roshamuul Upper (Depot)",
       "free": [
         {
-          "start": "01:30",
+          "start": "01:50",
           "end": "07:00",
-          "minutes": 330
+          "minutes": 310
         },
         {
           "start": "09:00",
@@ -94,8 +89,8 @@
         },
         {
           "start": "13:15",
-          "end": "14:09",
-          "minutes": 54
+          "end": "15:09",
+          "minutes": 114
         }
       ]
     },
@@ -103,9 +98,9 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "14:09",
+          "start": "15:09",
           "end": "16:01",
-          "minutes": 112
+          "minutes": 52
         },
         {
           "start": "17:00",
@@ -139,14 +134,19 @@
         },
         {
           "start": "08:30",
-          "end": "14:09",
-          "minutes": 339
+          "end": "11:00",
+          "minutes": 150
+        },
+        {
+          "start": "14:00",
+          "end": "15:09",
+          "minutes": 69
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil livre AGORA ate as 22:00 (7h51).",
-    "Feru DT Seal -2 livre AGORA ate as 21:00 (6h51)."
+    "Feru Infernatil livre AGORA ate as 19:00 (3h51).",
+    "Feru DT Seal -1 livre das 19:00 em diante — 20h09 sem nada marcado."
   ]
 }
