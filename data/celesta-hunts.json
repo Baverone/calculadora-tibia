@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-30T08:08:42Z",
-  "referenceTime": "10:07",
+  "generatedAt": "2026-08-30T09:07:53Z",
+  "referenceTime": "11:06",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,19 +8,19 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "12:00",
+          "start": "11:06",
           "end": "12:30",
-          "minutes": 30
+          "minutes": 84
         },
         {
           "start": "14:00",
-          "end": "16:30",
-          "minutes": 150
+          "end": "15:01",
+          "minutes": 61
         },
         {
           "start": "18:00",
-          "end": "10:07",
-          "minutes": 967
+          "end": "11:06",
+          "minutes": 1026
         }
       ]
     },
@@ -34,8 +34,8 @@
         },
         {
           "start": "18:00",
-          "end": "10:07",
-          "minutes": 967
+          "end": "11:06",
+          "minutes": 1026
         }
       ]
     },
@@ -49,8 +49,8 @@
         },
         {
           "start": "20:00",
-          "end": "10:07",
-          "minutes": 847
+          "end": "11:06",
+          "minutes": 906
         }
       ]
     },
@@ -58,14 +58,9 @@
       "name": "Feru Way (Hell Hub)",
       "free": [
         {
-          "start": "13:00",
-          "end": "16:00",
-          "minutes": 180
-        },
-        {
           "start": "22:00",
-          "end": "10:07",
-          "minutes": 727
+          "end": "11:06",
+          "minutes": 786
         }
       ]
     },
@@ -89,8 +84,8 @@
         },
         {
           "start": "09:00",
-          "end": "10:07",
-          "minutes": 67
+          "end": "11:00",
+          "minutes": 120
         }
       ]
     },
@@ -99,19 +94,14 @@
       "free": [
         {
           "start": "01:00",
-          "end": "10:07",
-          "minutes": 547
+          "end": "11:00",
+          "minutes": 600
         }
       ]
     },
     {
       "name": "Stag Catacombs -1",
       "free": [
-        {
-          "start": "10:07",
-          "end": "11:00",
-          "minutes": 53
-        },
         {
           "start": "14:00",
           "end": "14:50",
@@ -129,13 +119,13 @@
         },
         {
           "start": "07:30",
-          "end": "10:07",
-          "minutes": 157
+          "end": "11:06",
+          "minutes": 216
         }
       ]
     }
   ],
   "highlights": [
-    "Stag Catacombs -1"
+    "Feru DT Seal -1 (Shulgrax)"
   ]
 }
