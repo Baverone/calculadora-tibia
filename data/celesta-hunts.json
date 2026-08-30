@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-30T13:09:58Z",
-  "referenceTime": "15:08",
+  "generatedAt": "2026-08-30T14:10:20Z",
+  "referenceTime": "16:08",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -9,8 +9,8 @@
       "free": [
         {
           "start": "21:45",
-          "end": "15:08",
-          "minutes": 1043
+          "end": "16:08",
+          "minutes": 1103
         }
       ]
     },
@@ -19,8 +19,8 @@
       "free": [
         {
           "start": "18:00",
-          "end": "15:08",
-          "minutes": 1268
+          "end": "16:08",
+          "minutes": 1328
         }
       ]
     },
@@ -28,9 +28,9 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "15:59",
+          "start": "17:55",
           "end": "20:30",
-          "minutes": 271
+          "minutes": 155
         },
         {
           "start": "21:30",
@@ -44,8 +44,8 @@
         },
         {
           "start": "09:30",
-          "end": "15:08",
-          "minutes": 338
+          "end": "16:08",
+          "minutes": 398
         }
       ]
     },
@@ -53,9 +53,14 @@
       "name": "Feru Way (Hell Hub)",
       "free": [
         {
-          "start": "22:00",
-          "end": "15:08",
-          "minutes": 1028
+          "start": "01:00",
+          "end": "11:00",
+          "minutes": 600
+        },
+        {
+          "start": "14:00",
+          "end": "16:08",
+          "minutes": 128
         }
       ]
     },
@@ -79,8 +84,8 @@
         },
         {
           "start": "14:00",
-          "end": "15:08",
-          "minutes": 68
+          "end": "16:08",
+          "minutes": 128
         }
       ]
     },
@@ -103,14 +108,14 @@
           "minutes": 150
         },
         {
-          "start": "22:30",
+          "start": "21:30",
           "end": "06:30",
-          "minutes": 480
+          "minutes": 540
         },
         {
           "start": "07:30",
-          "end": "15:08",
-          "minutes": 458
+          "end": "15:45",
+          "minutes": 495
         }
       ]
     }
