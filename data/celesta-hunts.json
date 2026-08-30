@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-30T09:07:53Z",
-  "referenceTime": "11:06",
+  "generatedAt": "2026-08-30T10:09:36Z",
+  "referenceTime": "12:08",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,19 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "11:06",
-          "end": "12:30",
-          "minutes": 84
-        },
-        {
           "start": "14:00",
           "end": "15:01",
           "minutes": 61
         },
         {
           "start": "18:00",
-          "end": "11:06",
-          "minutes": 1026
+          "end": "12:08",
+          "minutes": 1088
         }
       ]
     },
@@ -28,14 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "12:00",
+          "start": "12:08",
           "end": "15:00",
-          "minutes": 180
+          "minutes": 172
         },
         {
           "start": "18:00",
-          "end": "11:06",
-          "minutes": 1026
+          "end": "12:08",
+          "minutes": 1088
         }
       ]
     },
@@ -49,8 +44,8 @@
         },
         {
           "start": "20:00",
-          "end": "11:06",
-          "minutes": 906
+          "end": "12:08",
+          "minutes": 968
         }
       ]
     },
@@ -59,8 +54,8 @@
       "free": [
         {
           "start": "22:00",
-          "end": "11:06",
-          "minutes": 786
+          "end": "12:08",
+          "minutes": 848
         }
       ]
     },
@@ -119,13 +114,13 @@
         },
         {
           "start": "07:30",
-          "end": "11:06",
-          "minutes": 216
+          "end": "12:08",
+          "minutes": 278
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -1 (Shulgrax)"
+    "Feru DT Seal -2 (Shulgrax)"
   ]
 }
