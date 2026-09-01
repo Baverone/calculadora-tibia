@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCelestaHunts } from '../../hooks/useCelestaHunts';
+import { loadSelectedSpots, saveSelectedSpots } from '../../storage/spotFilter';
 import {
   formatAge,
   formatLength,
@@ -60,19 +61,56 @@ export function CelestaHuntsPanel() {
   const { data, status, refreshing, outcome, reload } = useCelestaHunts();
   const [showLisbon, setShowLisbon] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const [selected, setSelected] = useState<string[] | null>(() => loadSelectedSpots());
+  const [choosing, setChoosing] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(id);
   }, []);
 
+  const allSpotNames = useMemo(() => data?.spots.map((spot) => spot.name) ?? [], [data]);
+
+  // Sem escolha feita, mostra-se tudo — é o estado de quem abre a app pela
+  // primeira vez, e ver spots a menos sem perceber porquê era pior do que ver
+  // spots a mais.
+  const visibleSpots = useMemo(() => {
+    if (!data) return [];
+    if (selected === null) return data.spots;
+    return data.spots.filter((spot) => selected.includes(spot.name));
+  }, [data, selected]);
+
+  function toggleSpot(name: string) {
+    const base = selected ?? allSpotNames;
+    const next = base.includes(name) ? base.filter((n) => n !== name) : [...base, name];
+    setSelected(next);
+    saveSelectedSpots(next);
+  }
+
+  function showAllSpots() {
+    setSelected(null);
+    saveSelectedSpots(null);
+  }
+
   return (
     <div className="hunts-panel">
       <div className="hunts-panel__header">
         <h3>Spots livres — Celesta</h3>
-        <button className="hunts-panel__reload" onClick={reload} type="button" disabled={refreshing}>
-          {refreshing ? 'A verificar…' : 'Atualizar'}
-        </button>
+        <div className="hunts-panel__actions">
+          {status === 'ready' && (
+            <button
+              className="hunts-panel__choose"
+              onClick={() => setChoosing((open) => !open)}
+              type="button"
+              aria-expanded={choosing}
+            >
+              {choosing ? 'Fechar' : 'Escolher spots'}
+            </button>
+          )}
+          <button className="hunts-panel__reload" onClick={reload} type="button" disabled={refreshing}>
+            {refreshing ? 'A verificar…' : 'Atualizar'}
+          </button>
+        </div>
       </div>
 
       {status === 'loading' && <p className="hunts-panel__note">A carregar…</p>}
@@ -118,10 +156,33 @@ export function CelestaHuntsPanel() {
             </div>
           )}
 
+          {choosing && (
+            <fieldset className="hunts-panel__chooser">
+              <legend>Spots a mostrar</legend>
+              {allSpotNames.map((name) => (
+                <label key={name} className="hunts-panel__chooser-item">
+                  <input
+                    type="checkbox"
+                    checked={selected === null || selected.includes(name)}
+                    onChange={() => toggleSpot(name)}
+                  />
+                  {name}
+                </label>
+              ))}
+              <button type="button" className="hunts-panel__chooser-reset" onClick={showAllSpots}>
+                Mostrar todos
+              </button>
+            </fieldset>
+          )}
+
           <div className="hunts-panel__spots">
-            {data.spots.map((spot) => (
-              <SpotRow key={spot.name} spot={spot} showLisbon={showLisbon} />
-            ))}
+            {visibleSpots.length === 0 ? (
+              <p className="hunts-panel__note">
+                Escondeste todos os spots. Carrega em "Escolher spots" para voltar a mostrar algum.
+              </p>
+            ) : (
+              visibleSpots.map((spot) => <SpotRow key={spot.name} spot={spot} showLisbon={showLisbon} />)
+            )}
           </div>
 
           <p className="hunts-panel__footnote">

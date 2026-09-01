@@ -1,17 +1,31 @@
+# Rede de seguranca da recolha de XP -- ja nao e a fonte principal.
+#
+# A recolha a serio corre no PC (scripts/scrape-xp-local.ps1), porque o
+# guildstats.eu responde 403 a todos os IPs dos runners do GitHub. Entre 21 e
+# 31 de agosto de 2026 este workflow correu todos os dias, ficou verde todos
+# os dias e nao recolheu um unico dia: as 3 tentativas levavam 403 e o script
+# tratava isso como falha transitoria e saia com codigo 0. Dez dias de XP
+# perdidos sem um unico sinal.
+#
+# O que este workflow faz agora sao duas coisas separadas:
+#
+#  1. Tenta a recolha na mesma (continue-on-error) -- se o guildstats algum
+#     dia deixar de bloquear os runners, volta a funcionar sozinho, e enquanto
+#     bloquear nao custa nada e nao pinta nada de vermelho.
+#  2. Verifica se os dados estao atrasados (check-history-freshness.mjs) e
+#     falha a VERMELHO se estiverem. Esse e o unico alarme que interessa: nao
+#     "o pedido correu mal?", mas "ha quantos dias e que nao entra XP nova?".
+#     Apanha tanto o guildstats a mudar como o PC desligado ou a tarefa
+#     agendada apagada.
 name: Scrape Tibia Experience
 
-# Runs twice a day, at 00:00 and 12:00 UTC. The 12:00 run (13:00 Lisbon in
-# summer, 12:00 in winter) is the effective one — comfortably after the 09:00
-# Lisbon server save, when guildstats.eu publishes the previous day's XP
-# (~10:50 UTC). The 00:00 run (01:00 Lisbon) is before that save, so the
-# script's Europe/Lisbon time gate (isAfterLisbonServerSave, hour >= 9) cleanly
-# skips it — a no-op success kept as a light redundancy slot. guildstats serves
-# ~30 days and the scraper appends every date it doesn't already have, so a
-# single missed run is backfilled by the next one. Public repo (unlimited
-# Actions minutes); each real run takes ~20-30s.
 on:
+  # Uma vez por dia, as 12:00 UTC (13:00 em Lisboa no verao). O guildstats
+  # publica o dia anterior por volta das 10:50 UTC. O cron do GitHub costuma
+  # atrasar-se horas, o que aqui nao faz diferenca: o scraper so acrescenta
+  # dias que faltam e a verificacao de frescura tem 3 dias de folga.
   schedule:
-    - cron: '0 0,12 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -29,25 +43,29 @@ jobs:
 
       - run: npm ci
 
-      - name: Run scraper (3 personagens)
+      # continue-on-error: espera-se que isto falhe com 403 enquanto o
+      # guildstats bloquear os runners. Nao e isto que decide a cor do job --
+      # e a verificacao de frescura, no fim.
+      - name: Tentar recolha
+        continue-on-error: true
         run: node scripts/scrape-experience.mjs
         env:
-          # workflow_dispatch (manual runs) always scrape, ignoring the time-of-day check.
           FORCE_SCRAPE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
 
-      - name: Run scraper (jogadores da Equipa)
-        run: node scripts/scrape-team-experience.mjs
-        env:
-          FORCE_SCRAPE: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
-
-      - name: Commit updated history
+      - name: Commit do que tiver sido recolhido
         run: |
           git config user.name "tibia-xp-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/scraped-history data/team-history
+          git add data/scraped-history
           if git diff --cached --quiet; then
-            echo "Sem alterações a commitar."
+            echo "Sem alteracoes a commitar."
           else
             git commit -m "chore: atualizar histórico de XP ($(date -u +%Y-%m-%d))"
+            git pull --rebase
             git push
           fi
+
+      # O verdadeiro alarme. Vermelho aqui = ha 3+ dias que nao entra XP nova,
+      # venha ela da Action ou do PC.
+      - name: Histórico está a ficar para trás?
+        run: node scripts/check-history-freshness.mjs

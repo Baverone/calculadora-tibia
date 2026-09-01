@@ -1,39 +1,41 @@
 import { experienceForLevel, levelForExperience } from './experienceTable';
-import { STAMINA_BOOST_MULTIPLIER, STAMINA_MULTIPLIER } from './huntCalculator';
 import type { HistoryEntry } from './types';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-/** Default window (in days) used to estimate the recent XP rate. */
-export const FORECAST_WINDOW_DAYS = 7;
+/** Horizontes oferecidos por omissão. Qualquer número serve — estes são só os atalhos. */
+export const FORECAST_HORIZONS = [7, 30, 60, 90] as const;
 
-export interface RecentXpRate {
-  /** Average XP gained per day across the window. Can be negative (net XP loss from deaths). */
+export const DEFAULT_HORIZON_DAYS = 7;
+
+export interface XpRate {
+  /** XP média por dia na janela. Pode ser negativa (mortes a comer mais do que se ganha). */
   averageDailyXp: number;
-  /** Net XP gained across the window (last reading − first reading in the window). */
+  /** XP líquida ganha na janela (última leitura − primeira leitura da janela). */
   totalXpGained: number;
-  /** Actual span, in days, between the first and last reading used. */
+  /** Janela pedida, em dias. */
+  windowDays: number;
+  /** Dias realmente cobertos entre a primeira e a última leitura usadas. */
   daysCovered: number;
-  /** How many history readings fell inside the window. */
+  /** Quantas leituras caíram dentro da janela. */
   readingsUsed: number;
   firstEntry: HistoryEntry;
   lastEntry: HistoryEntry;
 }
 
 /**
- * Average daily XP over the last `windowDays` days, derived from the stored
- * history (daily scrapes + manual entries) instead of a hand-typed exp/h.
+ * XP média por dia nos últimos `windowDays` dias de histórico.
  *
- * The window is anchored to the most recent reading (not "now"), so a couple
- * of stale days without a scrape don't shrink the estimate. Returns null when
- * there aren't at least two readings spanning a positive amount of time in the
- * window — there's nothing to extrapolate from in that case.
+ * A janela é ancorada à leitura mais recente e não a "agora", para que um ou
+ * dois dias sem recolha não encolham a estimativa — o denominador é o tempo
+ * entre leituras reais, não o calendário.
+ *
+ * Devolve null quando não há pelo menos duas leituras a cobrir tempo positivo
+ * dentro da janela: aí não há nada de que extrapolar, e inventar um número era
+ * pior do que dizer que não se sabe.
  */
-export function computeRecentDailyRate(
-  history: HistoryEntry[],
-  windowDays: number = FORECAST_WINDOW_DAYS
-): RecentXpRate | null {
-  if (history.length < 2) return null;
+export function computeRateOverWindow(history: HistoryEntry[], windowDays: number): XpRate | null {
+  if (history.length < 2 || !Number.isFinite(windowDays) || windowDays <= 0) return null;
 
   const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
   const last = sorted[sorted.length - 1];
@@ -52,6 +54,7 @@ export function computeRecentDailyRate(
   return {
     averageDailyXp: totalXpGained / daysCovered,
     totalXpGained,
+    windowDays,
     daysCovered,
     readingsUsed: inWindow.length,
     firstEntry: first,
@@ -59,42 +62,64 @@ export function computeRecentDailyRate(
   };
 }
 
+export interface HorizonProjection {
+  /** Dias projetados para a frente — igual à janela usada para trás. */
+  days: number;
+  date: Date;
+  experience: number;
+  level: number;
+  /** Níveis ganhos entre agora e essa data. Pode ser 0. */
+  levelsGained: number;
+}
+
 /**
- * Converts a hunt's raw (unbuffed) exp/h into the XP/day that daily routine
- * would produce, so a respawn can be compared against the real 7-day pace on
- * the same axis (dates). Uses the same bonus model as the rest of the hunt
- * calculator: boosted hours at 225%, the remaining hours at stamina's 150%.
+ * Onde estarás daqui a `days` dias, ao ritmo médio dos MESMOS `days` dias
+ * para trás — a janela é simétrica de propósito.
+ *
+ * Uma previsão a 60 dias feita com a média dos últimos 7 herda o que quer que
+ * tenha acontecido nessa semana (férias, um boost, uma semana parado) e
+ * multiplica-o por oito. Olhar para trás exatamente o mesmo tanto que se olha
+ * para a frente é o que faz uma previsão longa ser lenta a mudar de ideias,
+ * como deve ser, e uma previsão curta reagir depressa.
+ *
+ * A XP tem chão em 0 para que um ritmo negativo não a faça mergulhar abaixo do
+ * nível 1.
  */
-export function dailyXpFromHunt(
-  rawExperiencePerHour: number,
-  hoursWithBoostPerDay: number,
-  hoursWithoutBoostPerDay: number
-): number {
-  return (
-    hoursWithBoostPerDay * rawExperiencePerHour * STAMINA_BOOST_MULTIPLIER +
-    hoursWithoutBoostPerDay * rawExperiencePerHour * STAMINA_MULTIPLIER
-  );
+export function projectAtHorizon(
+  currentExperience: number,
+  rate: XpRate,
+  from: Date = new Date()
+): HorizonProjection {
+  const days = rate.windowDays;
+  const experience = Math.max(0, currentExperience + rate.averageDailyXp * days);
+  const level = levelForExperience(experience);
+
+  return {
+    days,
+    date: new Date(from.getTime() + days * MS_PER_DAY),
+    experience,
+    level,
+    levelsGained: level - levelForExperience(currentExperience),
+  };
 }
 
 export interface LevelForecast {
   level: number;
-  /** XP still missing to reach this level, from the current experience. */
+  /** XP que ainda falta para lá chegar, a partir da XP atual. */
   experienceNeeded: number;
-  /** Cumulative days from `from` to reach this level at the given daily rate. */
   daysToReach: number;
   estimatedDate: Date;
 }
 
 /**
- * Projects the estimated date to reach each of the next `count` levels,
- * assuming the given average daily XP keeps up. Requires a positive rate —
- * returns an empty list otherwise (no meaningful projection from a flat or
- * negative trend).
+ * Data estimada para cada um dos próximos `count` níveis, ao ritmo dado.
+ * Lista vazia para um ritmo nulo ou negativo — não há projeção para cima a
+ * partir de uma tendência plana.
  */
 export function forecastNextLevels(
   currentExperience: number,
   averageDailyXp: number,
-  count: number = 10,
+  count: number = 5,
   from: Date = new Date()
 ): LevelForecast[] {
   if (!Number.isFinite(averageDailyXp) || averageDailyXp <= 0) return [];
@@ -116,46 +141,4 @@ export function forecastNextLevels(
   }
 
   return forecasts;
-}
-
-/** Look-back windows (in days) used by the per-Monday level forecast. */
-export const WEEKLY_FORECAST_WINDOWS = [7, 15, 30] as const;
-
-/**
- * Every Monday from the next one (or today, if today is already a Monday)
- * through Dec 31 of the current year — the horizon of the weekly level
- * forecast. Uses local calendar days so "Monday" matches the user's week.
- */
-export function upcomingMondayDates(from: Date = new Date()): Date[] {
-  const start = new Date(from.getFullYear(), from.getMonth(), from.getDate());
-  const daysUntilMonday = (8 - start.getDay()) % 7; // 0 when `start` is already a Monday
-  const yearEnd = new Date(from.getFullYear(), 11, 31);
-
-  const cursor = new Date(start);
-  cursor.setDate(cursor.getDate() + daysUntilMonday);
-
-  const mondays: Date[] = [];
-  while (cursor.getTime() <= yearEnd.getTime()) {
-    mondays.push(new Date(cursor));
-    cursor.setDate(cursor.getDate() + 7);
-  }
-  return mondays;
-}
-
-/**
- * Projects the level (and the underlying XP) reached on `target` if
- * `averageDailyXp` holds from `from`. Returns null for a flat/negative rate —
- * there's no meaningful upward forecast then. XP is floored at 0 so a stale
- * negative rate can't underflow.
- */
-export function projectedLevelAt(
-  currentExperience: number,
-  averageDailyXp: number,
-  target: Date,
-  from: Date = new Date()
-): { level: number; experience: number } | null {
-  if (!Number.isFinite(averageDailyXp) || averageDailyXp <= 0) return null;
-  const days = (target.getTime() - from.getTime()) / MS_PER_DAY;
-  const experience = Math.max(0, currentExperience + averageDailyXp * days);
-  return { level: levelForExperience(experience), experience };
 }

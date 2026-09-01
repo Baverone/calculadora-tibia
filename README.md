@@ -1,40 +1,26 @@
 # Calculadora de Experiência do Tibia
 
-Aplicação web para acompanhar o progresso de XP de 6 personagens agrupados
-em 3 equipas ("Equipa Baverone", "Equipa Bluey The Cat" e "Solo" — navegação
-em 2 níveis: aba grande da equipa + aba secundária por jogador), com
-histórico persistente, recolha diária automática de XP via guildstats.eu,
-gráfico de progressão, uma calculadora de hunt com hunts guardadas e
-objetivos de nível definidos manualmente, uma checklist de Quests & Bosses,
-timers de hunt (Pot Skills / Food ML) sempre visíveis independentemente do
-jogador ativo, e uma aba "Utilitários Tibia" com um Tibiadrome Tracker
-(rotação bissemanal + modificadores ativos) e um Rashid Tracker (onde está
-o NPC hoje).
+Aplicação web para acompanhar o progresso de XP de dois personagens —
+**Baverone** (Royal Paladin) e **Bluey The Cat** (Exalted Monk) — com
+recolha diária automática do guildstats.eu, gráfico de progressão com
+período à escolha, previsão de níveis com janela simétrica, timers de hunt
+sempre visíveis, calculadora de varinhas de treino, e uma aba de utilitários
+com os spots livres do Celesta, a stamina e as flechas.
 
-## Setup do GitHub (necessário para a recolha automática)
+> **Setembro de 2026 — grande limpeza.** A app tinha 6 personagens em 3
+> equipas, uma calculadora de hunt, uma checklist de Quests & Bosses, um
+> tracker de Soul Cores, um registo de modificadores do Tibiadrome, input
+> manual de XP e uma aba "Equipa" inteira já desligada da navegação mas ainda
+> no repositório. Saíram todos: 1139 linhas de código que nada importava, mais
+> as funcionalidades que existiam e não se usavam. O que ficou é o que se usa
+> mesmo. Ver o histórico do git se alguma delas fizer falta.
 
-O input manual de XP funciona sem isto. Mas para ativares a recolha
-automática diária:
+## Ligação ao GitHub
 
-1. Cria um repositório **público** vazio no GitHub (sem README/licença —
-   já temos ficheiros aqui), ex: `calculadora-tibia`.
-2. Neste diretório:
-   ```bash
-   git remote add origin https://github.com/<o-teu-utilizador>/calculadora-tibia.git
-   git add -A
-   git commit -m "Initial commit"
-   git branch -M main
-   git push -u origin main
-   ```
-   (Se o Git pedir para autenticares, o Git Credential Manager do Windows
-   deve abrir o browser automaticamente para login.)
-3. Edita [`src/config.ts`](src/config.ts) e substitui `GITHUB_REPO` por
-   `"<o-teu-utilizador>/calculadora-tibia"`, depois faz commit + push dessa
-   alteração.
-4. No GitHub, vai a **Actions** → confirma que o workflow "Scrape Tibia
-   Experience" aparece. Podes testá-lo já sem esperar pelas 10h: clica em
-   **Run workflow** (usa `workflow_dispatch`, ignora a verificação de hora).
-5. A partir daí, corre sozinho todos os dias — não precisas de fazer mais nada.
+O repositório é público e serve de base de dados só-leitura: a app lê
+`data/scraped-history/<personagem>.json` diretamente do
+`raw.githubusercontent.com`. O par utilizador/repositório está em
+[`src/config.ts`](src/config.ts) (`GITHUB_REPO`).
 
 ## Como correr o projeto
 
@@ -66,41 +52,84 @@ npm run lint       # linter (oxlint)
 
 ## Recolha automática diária de XP
 
-Um workflow do GitHub Actions
-([`.github/workflows/scrape-experience.yml`](.github/workflows/scrape-experience.yml))
-corre todos os dias por volta das 10:00 (hora de Lisboa) e executa
-[`scripts/scrape-experience.mjs`](scripts/scrape-experience.mjs):
+**A recolha corre no PC, não no GitHub Actions.**
+
+O guildstats.eu responde `403` a todos os IPs dos runners do GitHub. Entre
+21 e 31 de agosto de 2026 o workflow correu todos os dias, ficou **verde**
+todos os dias e não recolheu um único dia: as 3 tentativas levavam 403, o
+script tratava isso como falha transitória e saía com código 0. Dez dias de
+XP perdidos sem um único sinal. Do IP de casa o guildstats responde
+normalmente — daí a mudança.
+
+### O que corre onde
+
+| Onde | O quê | Quando |
+| --- | --- | --- |
+| PC (Agendador de Tarefas) | [`scripts/scrape-xp-local.ps1`](scripts/scrape-xp-local.ps1) | de hora a hora |
+| PC (Agendador de Tarefas) | [`scripts/push-hunts.ps1`](scripts/push-hunts.ps1) | de 5 em 5 minutos |
+| GitHub Actions | [`scrape-experience.yml`](.github/workflows/scrape-experience.yml) | 1×/dia, como alarme |
+
+`scrape-xp-local.ps1` corre os dois scrapers e faz **commit sem push** —
+quem faz push é o `push-hunts.ps1`, que já corre de 5 em 5 minutos e já
+verifica se há commits por enviar. Um único script a fazer push significa
+zero corridas entre os dois.
+
+Correr de hora a hora não custa nada: o scraper só acrescenta datas que
+ainda não tem, por isso quase todas as corridas não fazem rigorosamente
+nada. É de propósito — o guildstats só publica o dia anterior por volta das
+10:50 UTC, e assim não interessa a que horas o PC está ligado.
+
+### Como funciona a recolha
 
 1. Para cada personagem, pede a página de histórico de experiência do
    guildstats.eu (`include/character/tab.php?nick=...&tab=experience` — o
    endpoint interno que a própria página usa; é HTML estático, não precisa
    de JavaScript/browser para ler).
-2. Extrai a linha mais recente (data, nível, XP total) e compara o nível
-   reportado com o calculado pela nossa fórmula, como validação cruzada
-   (avisa no log se não bater certo).
-3. Só adiciona a entrada se essa data ainda não estiver guardada em
-   `data/scraped-history/<personagem>.json` — nunca apaga ou sobrescreve
-   histórico existente.
-4. Cada personagem é tratado de forma independente: se um falhar (site em
-   baixo, mudança de layout), os outros continuam normalmente, e tenta-se
-   de novo no dia seguinte.
-5. Faz commit + push das alterações de volta ao repositório.
+2. Lê a **tabela toda** (o guildstats serve ~30 dias), não só a linha mais
+   recente. É isto que torna a recolha auto-reparável: qualquer dia perdido
+   enquanto isto esteve parado é recuperado sozinho na corrida seguinte.
+3. Só acrescenta datas que ainda não estão em
+   `data/scraped-history/<personagem>.json` — nunca apaga nem sobrescreve.
+4. Cada personagem é independente: se um falhar, os outros continuam.
+5. Compara o nível reportado pelo guildstats com o calculado pela fórmula,
+   como validação cruzada (avisa no log se não bater certo).
 
-Como o cron do GitHub Actions corre em UTC e não ajusta sozinho para o
-horário de verão, há dois triggers (09:00 e 10:00 UTC, cobrindo inverno e
-verão) — o próprio script confirma a hora real em Lisboa antes de agir, por
-isso é seguro mesmo que ambos disparem na mesma semana de mudança de hora.
+### O alarme
+
+[`scripts/check-history-freshness.mjs`](scripts/check-history-freshness.mjs)
+é o que impede isto de voltar a acontecer. A pergunta que interessa não é
+"o pedido correu bem?" mas **"há quantos dias é que não entra XP nova?"** —
+e é essa que ele mede, com 3 dias de folga (o guildstats publica o dia
+anterior, e um dia perdido recupera-se sozinho).
+
+Corre no fim do workflow diário e faz o job ficar **vermelho** quando o
+histórico está mesmo a ficar para trás — venha isso do guildstats mudar
+outra vez, do PC desligado ou da tarefa agendada apagada. O vermelho é o
+único sinal que chega ao mail.
+
+Para o correr à mão:
+
+```bash
+node scripts/check-history-freshness.mjs
+```
+
+O workflow continua a tentar a recolha (com `continue-on-error`), para
+voltar a funcionar sozinho se o guildstats algum dia deixar de bloquear os
+runners.
+
+### Como a app lê isto
 
 A app (`src/storage/sharedHistory.ts`) busca este JSON diretamente do
 GitHub (`raw.githubusercontent.com`) ao carregar, e junta-o com o histórico
 manual do `localStorage` — entradas automáticas aparecem marcadas "AUTO" na
 lista de histórico recente. **Isto só funciona depois de definires
 `GITHUB_REPO` em [`src/config.ts`](src/config.ts)** com o teu
-`utilizador/repositório` — ver instruções de setup mais abaixo.
+`utilizador/repositório`.
 
-O input manual de XP continua a funcionar exatamente como antes e não é
-afetado por isto — serve para corrigir valores ou registar XP fora do
-horário do robô.
+Já não há input manual de XP. Enquanto a recolha esteve parada em silêncio,
+escrever o valor à mão era a única forma de a app mostrar algo atual;
+resolvida a recolha, passava a ser só mais um sítio de onde podiam sair
+números diferentes. A fonte é uma só, e se estiver atrasada a app diz.
 
 ## Fonte de verdade da experiência
 
@@ -113,160 +142,62 @@ exp(level) = round((50/3) * (level^3 - 6*level^2 + 17*level - 12))
 
 É usada diretamente (em vez de uma tabela estática) para que qualquer nível —
 incluindo acima de 3500 — funcione automaticamente. O ficheiro
-`src/data/tibia_experience_table.json` continua a existir como dataset de
-referência oficial (níveis 1–3500), gerado por
-[`scripts/generate-experience-table.mjs`](scripts/generate-experience-table.mjs);
-volta a correr esse script se algum dia precisares de regenerar o ficheiro.
+A tabela estática de níveis 1–3500 que existia como dataset de referência
+foi apagada: pesava 216 KB, viajava em cada clone e nada no código a
+importava — a fórmula acima cobre qualquer nível, incluindo acima de 3500.
 
 ## Estrutura do projeto
 
 ```
 data/
-  scraped-history/        # <personagem>.json — histórico recolhido pelo robô (commitado pelo Actions)
-  team-history/            # <jogador-slug>.json — histórico dos jogadores da Equipa auto-rastreados (commitado pelo Actions)
-  tibiadrome/
-    modifiers-history.json # modificadores por rotação — commitado por scripts/save-modifier-rotation.mjs
+  scraped-history/        # <personagem>.json — histórico recolhido pelo robô
+  celesta-hunts.json      # janelas livres dos spots, escritas a partir do Discord
 scripts/
-  generate-experience-table.mjs  # gera src/data/tibia_experience_table.json
-  scrape-experience.mjs           # robô de recolha diária dos 3 personagens (corre no GitHub Actions)
-  scrape-team-experience.mjs      # robô de recolha diária dos jogadores da Equipa (corre no GitHub Actions)
-  save-modifier-rotation.mjs      # regista os 2 modificadores de uma rotação (corres tu, localmente)
+  lib/
+    guildstatsHistory.mjs # scraping + merge de histórico
+    trackedPlayers.mjs    # quem é rastreado e para que pasta
+  scrape-experience.mjs   # recolha diária (corre no PC)
+  scrape-xp-local.ps1     # corre o scraper + commit (tarefa agendada, de hora a hora)
+  check-history-freshness.mjs  # alarme: falha se o histórico tiver 3+ dias de atraso
+  push-hunts.ps1          # publica as janelas de hunt (tarefa agendada, 5 em 5 min)
 .github/workflows/
-  scrape-experience.yml    # agenda + executa o scraper, faz commit dos dados
+  scrape-experience.yml   # rede de segurança: tenta a recolha e corre o alarme
 src/
-  config.ts               # GITHUB_REPO — preencher após criares o repositório
-  data/
-    tibia_experience_table.json  # dataset de referência de XP
-    tibiadrome/
-      modifiers.ts          # os 9 modificadores possíveis, nomes/descrições oficiais
-      rotationAnchor.ts      # âncora de uma vez só: número + início da rotação
-    rashid/
-      schedule.ts            # cidade/local do Rashid por dia da semana
-    team/
-      autoTrackedPlayers.ts    # jogadores da Equipa cobertos pelo robô diário (mesma lista do script)
-  domain/                # lógica pura, sem React — o "motor" da app
-    types.ts             # tipos partilhados (CharacterId, HistoryEntry, AppTabId, ...)
-    tibiaDay.ts            # dia de Tibia atual (recua 1 dia antes das 9h em Lisboa) — usado pelo Rashid
-    experienceTable.ts    # exp(level) e level(exp), fórmula oficial
-    levelProgress.ts      # nível atual/próximo, % de progresso
-    historyStats.ts       # XP ganha entre leituras consecutivas
-    huntCalculator.ts     # cenários de bónus (stamina 150%, stamina+boost 225%)
-    validation.ts         # validação de inputs (inteiros, positivos, listas de nível)
-    timers/alerts.ts       # beep (Web Audio) + anúncio por voz (SpeechSynthesis) ao terminar um timer
-    tibiadrome/
-      rotation.ts           # cálculo da rotação atual (número/início/fim) a partir da âncora
-      parseModifiers.ts      # deteta os 2 modificadores no texto colado
-    rashid/
-      rashidSchedule.ts      # lookup na tabela semanal a partir do dia de Tibia (tibiaDay.ts)
-    accessBoss/
-      progress.ts             # progresso geral e por secção (done/total/percent)
-    team/
-      calculations.ts          # data-base/médias/dias-p-próximo-nível/previsão por segunda-feira
-  storage/
-    characterHistory.ts   # leitura/escrita do histórico manual no localStorage
-    sharedHistory.ts       # busca o histórico recolhido pelo robô (GitHub raw)
-    huntStorage.ts         # leitura/escrita das hunts guardadas no localStorage
-    tibiadromeHistory.ts    # busca o histórico de modificadores (GitHub raw)
-    accessBossStorage.ts    # leitura/escrita dos itens marcados no localStorage
-    teamStorage.ts           # jogadores + registos manuais no localStorage; fetchAutoHistoryFor... busca o robô (GitHub raw); export/import JSON
-  hooks/
-    useCharacterState.ts  # estado (input + histórico manual+partilhado) de um personagem
-    useSavedHunts.ts       # estado (lista de hunts guardadas) de um personagem
-    useCountdownTimer.ts   # timer regressivo com pausa/reset e loop automático ao terminar
-    useRotationClock.ts     # recalcula a rotação atual a cada segundo
-    useTibiadromeHistory.ts # busca o histórico de modificadores ao montar
-    useRashidClock.ts       # recalcula a localização do Rashid a cada segundo
-    useTibiaDayClock.ts     # recalcula o dia de Tibia atual a cada segundo
-    useCharacterAccessBoss.ts # itens marcados (Set) de um personagem
-    useTeamData.ts           # jogadores + registos de EXP, CRUD completo (não usado na navegação atual)
-  constants/
-    players.tsx             # TEAMS (3 equipas) + PLAYERS (6 jogadores, cada um com teamId)
-  components/
-    layout/                # TabsBar (equipas) + PlayerTabsBar (jogadores da equipa ativa) + PlayerPanel
-    xp/                     # input de XP, barra de progresso, cartão de nível
-    charts/                  # gráfico de progressão, lista de histórico recente
-    hunt/                    # formulário de hunt + cartão de hunt guardada
-    timers/                  # TimersPanel (Pot Skills + Food ML) com anel de progresso SVG
-    tibiadrome/               # TibiadromeSection — cartão de rotação + submissão de modificadores
-    rashid/                   # RashidCard — ícone + cidade/local de hoje + countdown
-    accessBoss/               # AccessBossSection — checklist Úteis/Acessos/Bosses por jogador
-    team/                      # (não usado na navegação atual — ver secção "Equipas e navegação em 2 níveis")
-  styles/theme.css          # tema visual
+  config.ts               # GITHUB_REPO
+  constants/players.tsx   # os dois bonecos — manter igual a scripts/lib/trackedPlayers.mjs
+  components/             # UI por área (xp, charts, hunt, timers, skillTraining, ...)
+  domain/                 # cálculos puros, sem React
+  hooks/                  # estado com ciclo de vida (relógios, fetch)
+  storage/                # localStorage e fetch do histórico partilhado
+  styles/                 # tema próprio, sem framework CSS
 ```
-
-Todos os painéis de jogador ficam sempre montados (só a sub-aba ativa é
-mostrada via CSS), para que o input em curso nunca se perca ao trocar de
-sub-aba.
 
 ## Onde adicionar novas funcionalidades
 
 - **Nova lógica de cálculo** (ex: tempo até um nível X, taxa média de XP/h):
   adiciona uma função pura em `src/domain/`. Não depende de React, por isso é
   fácil de testar e reutilizar.
-- **Comparação entre personagens**: reutiliza `useCharacterState` para cada
-  personagem (já usado em `CharacterPanel`) e cria um componente novo que
-  itera sobre os 3 estados — não precisa de tocar no domínio.
+- **Comparação entre os dois bonecos**: reutiliza `useCharacterState` para
+  cada um (já usado em `PlayerPanel`) e cria um componente novo que itera
+  sobre `PLAYERS` — não precisa de tocar no domínio.
 - **Gráfico de curva de XP por nível**: `domain/experienceTable.ts` já expõe
   `experienceForLevel`; um novo componente em `components/charts/` pode gerar
   os pontos diretamente a partir daí.
-- **Novas vocações/servidores**: estende `src/constants/vocations.tsx`.
+- **Novo boneco**: acrescenta-o em `src/constants/players.tsx` **e** em
+  `scripts/lib/trackedPlayers.mjs`. Se só o meteres num dos dois, a app pede
+  um ficheiro que o robô nunca escreve.
 - **Persistência diferente** (ex: backend, IndexedDB): só os ficheiros em
   `src/storage/` precisam de mudar — o resto da app não sabe onde os dados
   são guardados.
 
-## Calculadora de hunt
-
-Cada hunt guardada (nome, Raw Experience/h, objetivos de nível escolhidos
-manualmente) é persistida por personagem (`src/storage/huntStorage.ts`) e
-recalculada em tempo real a partir da XP atual do personagem — por isso os
-tempos estimados ficam sempre corretos, mesmo que voltes à app dias depois
-com a XP atualizada. São mostrados dois cenários (só os que importam na
-prática): **Stamina (150%)** e **Stamina + Boost (225%)**, um por cada
-objetivo de nível que adicionares. Se o objetivo já tiver sido alcançado,
-mostra "Atingido" em vez de um tempo.
-
-Cada hunt guardada tem ainda duas ferramentas adicionais
-(`src/components/hunt/LevelPlanSection.tsx` e `DailySimulationSection.tsx`,
-lógica em `src/domain/levelPlan.ts` e `src/domain/dailySimulation.ts`):
-
-- **Planeamento nível a nível**: escolhes um nível objetivo e vês uma tabela
-  com uma linha por nível, XP e tempo necessários (Stamina 150% e Stamina +
-  Boost 225% lado a lado), e o tempo acumulado até esse nível. Limitado a 500
-  níveis de diferença para não gerar tabelas gigantes.
-- **Previsão por data**: indicas quantas horas/dia fazes hunt com e sem
-  Boost e escolhes uma data futura. Mostra uma tabela de checkpoints (data,
-  nível estimado, XP acumulada) desde hoje até essa data — diária se forem
-  até 30 dias, semanal até 210 dias, e a partir daí um checkpoint no dia 1 de
-  cada mês, para a tabela nunca ficar gigante. A data final escolhida
-  aparece sempre como última linha (destacada a dourado), seja qual for a
-  granularidade.
-
-## Quests & Bosses
-
-Checklist por personagem (`src/components/accessBoss/`, dentro do painel de
-cada personagem — ao contrário dos trackers globais, isto é progresso
-individual, faz sentido ficar por personagem), com os itens "Úteis" /
-"Acessos" / "Bosses" dados pelo utilizador (já confirmados contra a
-TibiaWiki/guias — `src/data/accessBoss/accessBossList.ts`, não inventar nem
-alterar sem confirmar primeiro). Barra de progresso geral + contagem por
-secção. Sub-itens (`tag: 'sub'`, ex. os capítulos de "Grimvale" ou os ranks
-de "Rathleton") aparecem indentados e ligados ao "parent" em vez de surgirem
-como quests independentes.
-
-Persistido por personagem em `localStorage`
-(`src/storage/accessBossStorage.ts`, `src/hooks/useCharacterAccessBoss.ts`)
-— mesmo padrão de `huntStorage.ts`, porque isto é progresso pessoal que o
-utilizador marca interativamente, ao contrário dos dados partilhados dos
-trackers na aba "Utilitários Tibia".
-
 ## Timers de hunt
 
 Painel global (`src/components/timers/TimersPanel.tsx`), visível por cima
-das abas dos personagens independentemente de qual está ativa — não é
-específico de um personagem. Dois timers regressivos independentes:
-**Pot Skills** (10 min) e **Food ML** (1 hora), cada um com anel de
-progresso SVG, botão Iniciar/Pausar e Reiniciar, mais um botão "Iniciar
-ambos" no topo do painel para arrancar os dois em simultâneo.
+das abas independentemente de qual está ativa — não é específico de um
+boneco. Três timers regressivos independentes: **Pot Skills** (10 min),
+**Food ML** (1 hora) e **Plasmas** (29m40s, com aviso a 30 segundos do fim),
+cada um com anel de progresso SVG, botão Iniciar/Pausar e Reiniciar, mais um
+botão "Iniciar todos" no topo do painel.
 
 Ao chegar a zero, cada timer (`src/hooks/useCountdownTimer.ts`): toca um
 sinal sonoro via Web Audio API (`src/domain/timers/alerts.ts`, sem
@@ -276,42 +207,6 @@ ou bloquear), mostra "Terminado!" durante ~3s, e depois reinicia sozinho e
 continua a contar em loop contínuo até seres tu a pausar. O countdown segue
 um timestamp de fim (não conta ticks), por isso não desvia mesmo que o
 separador fique em segundo plano.
-
-## Tibiadrome Tracker
-
-Secção global (`src/components/tibiadrome/TibiadromeSection.tsx`), com duas partes:
-
-**Calendário de rotação**: rotações bissemanais (14 dias) encadeadas sem
-gaps, numeradas sequencialmente. Só é preciso definir uma âncora **uma
-única vez**: número da rotação + data/hora exata de início, em
-`src/data/tibiadrome/rotationAnchor.ts` (constante no código, tal como
-`GITHUB_REPO` em `config.ts` — não é um formulário que grava nada, porque o
-número e a janela de qualquer rotação passada ou futura são derivados dessa
-âncora por fórmula, sem estado mutável a manter sincronizado:
-`src/domain/tibiadrome/rotation.ts`). O cartão mostra o número da rotação
-atual, início/fim com data (fuso `Europe/Lisbon`, ajusta-se sozinho a
-WEST/WET) e tempo relativo ("há Xd HH:MM:SS" / "dentro de Xd HH:MM:SS"), a
-atualizar ao segundo.
-
-**Modificadores ativos**: lista de referência dos 9 modificadores possíveis
-(`src/data/tibiadrome/modifiers.ts` — nomes/descrições oficiais em inglês;
-os que não foram confirmados diretamente marcam um campo `confidence`, nunca
-inventados). Colas o anúncio in-game tal como aparece no jogo numa textarea
-e clicas "Submeter"; o parser (`src/domain/tibiadrome/parseModifiers.ts`)
-procura os 9 nomes no texto (tolerante a maiúsculas/pontuação/quebras de
-linha) e exige encontrar exatamente 2 — caso contrário mostra um erro claro
-em vez de assumir.
-
-Como o site é estático (sem backend), o botão "Submeter" não grava nada
-sozinho: mostra os 2 modificadores detetados e um comando pronto a copiar
-(`node scripts/save-modifier-rotation.mjs <rotação> "<mod1>" "<mod2>"`).
-Corres esse comando no terminal — ele valida os nomes, acrescenta a entrada
-a `data/tibiadrome/modifiers-history.json` (nunca sobrescreve rotações já
-registadas) e faz commit + push automaticamente, igual em espírito ao robô
-de XP mas correndo localmente em vez de agendado. O site lê esse JSON via
-`raw.githubusercontent.com` (`src/storage/tibiadromeHistory.ts`, mesmo
-padrão de `sharedHistory.ts`) para mostrar os modificadores da rotação
-atual no cartão e o histórico completo por rotação.
 
 ## Rashid Tracker
 
@@ -326,49 +221,6 @@ lógica de "que dia é hoje em Tibia" vive em `src/domain/tibiaDay.ts`;
 `src/domain/rashid/rashidSchedule.ts` só faz o lookup na tabela semanal a
 partir daí. Reutiliza o `formatDuration` do Tibiadrome Tracker para o
 countdown, a atualizar ao segundo (`src/hooks/useRashidClock.ts`).
-
-## Equipas e navegação em 2 níveis (2026-07-13)
-
-A navegação de personagens foi reestruturada: já não há uma aba por
-"boneco" a nível de topo. Em vez disso há 3 abas grandes de equipa
-(`src/constants/players.tsx` — `TEAMS`: "Equipa Baverone", "Equipa Bluey The
-Cat", "Solo"), e dentro de cada uma há uma barra secundária de abas
-(`src/components/layout/PlayerTabsBar.tsx`) com os jogadores dessa equipa
-(`PLAYERS`, cada um com `teamId`). Cada jogador — os 3 personagens originais
-(Dant Ivan/Elite Knight, Baverone/Royal Paladin, Bluey The Cat/Exalted
-Monk) e os 3 novos (Bigodes The Legend, Konczul, Sios Trader) — tem um
-painel completo (`src/components/layout/PlayerPanel.tsx`, antigo
-`CharacterPanel.tsx` generalizado): XP tracking, calculadora de hunt,
-Quests & Bosses. Todos os painéis ficam sempre montados (troca de sub-aba
-não perde nenhum rascunho).
-
-**IDs importantes para não perderes dados**: os 3 personagens originais
-mantêm exatamente os ids `elite-knight`/`royal-paladin`/`exalted-monk` (é
-a chave do `localStorage` E o nome do ficheiro em `data/scraped-history/`)
-— nunca mudar isto. Os 3 novos usam o slug (`bigodes-the-legend`,
-`konczul`, `sios-trader`), consistente com `data/team-history/`.
-`domain/types.ts`'s `CharacterId` passou de union fixa a `string` (nada no
-código fazia pattern-matching nos valores literais, por isso foi seguro
-alargar) — é isto que permite os 3 storages genéricos
-(`characterHistory.ts`, `huntStorage.ts`, `accessBossStorage.ts`) servirem
-qualquer jogador sem precisarem de saber a diferença.
-
-**XP automática por jogador**: `PlayerMeta.sharedHistorySource` diz a
-`PlayerPanel` qual histórico GitHub-raw usar —
-`fetchSharedHistory` (`data/scraped-history/`, os 3 originais) ou
-`fetchTeamPlayerSharedHistory` (`data/team-history/`, os 3 novos; robô em
-`scripts/scrape-team-experience.mjs`, corre no mesmo workflow
-`.github/workflows/scrape-experience.yml` logo a seguir ao scraper
-principal). Ambos passam por `useCharacterState`, agora parametrizado por
-uma função de fetch em vez de estar hardcoded ao dataset principal.
-
-**Nota**: a antiga funcionalidade "Equipa" (aba única com roster dinâmico,
-update diário em massa, tabela geral ordenável, previsão por segunda-feira)
-deixou de estar acessível na navegação, mas o código fica no repositório
-por agora (`src/components/team/`, `src/hooks/useTeamData.ts`,
-`src/storage/teamStorage.ts`, `src/domain/team/calculations.ts`) — não foi
-apagado, só desligado do `App.tsx`, para o caso de ser reaproveitado (ex:
-como vista "Visão geral" dentro de cada equipa).
 
 ## Validação de inputs
 

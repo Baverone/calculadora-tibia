@@ -1,0 +1,87 @@
+// Guarda-costas do histórico de XP.
+//
+// A recolha ficou dez dias parada (2026-08-21 a 08-31) sem ninguém dar por
+// isso, porque o workflow ficava verde à mesma: o guildstats.eu passou a
+// responder 403 a todos os IPs dos runners do GitHub, o scraper tratava isso
+// como falha transitória e saía com código 0. Verde todos os dias, zero dados.
+//
+// A lição não é "tratar 403 como erro" — é que a única pergunta que interessa
+// não é "o pedido correu bem?" mas "os dados estão atrasados?". É isso que
+// este script mede, e é ele que faz o workflow ficar VERMELHO (o único sinal
+// que chega ao mail) quando o histórico está mesmo a ficar para trás,
+// venha ele da Action ou do PC.
+//
+// Uso: node scripts/check-history-freshness.mjs [--max-idade-dias N]
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { CHARACTERS, DATA_DIR } from './lib/trackedPlayers.mjs';
+
+// Duas margens de folga: o guildstats só publica o dia anterior por volta das
+// 10:50 UTC (por isso "ontem" é o normal, não um atraso), e um dia perdido é
+// recuperado sozinho na recolha seguinte porque o guildstats serve ~30 dias.
+// Só a partir do terceiro dia é que há mesmo alguma coisa partida.
+const argIndex = process.argv.indexOf('--max-idade-dias');
+const MAX_AGE_DAYS = argIndex !== -1 ? Number(process.argv[argIndex + 1]) : 3;
+
+function lisbonToday() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Lisbon' }).format(new Date());
+}
+
+function daysBetween(fromIsoDate, toIsoDate) {
+  const from = Date.parse(`${fromIsoDate}T00:00:00Z`);
+  const to = Date.parse(`${toIsoDate}T00:00:00Z`);
+  return Math.round((to - from) / 86_400_000);
+}
+
+function newestDateIn(file) {
+  try {
+    const parsed = JSON.parse(readFileSync(file, 'utf-8'));
+    if (!Array.isArray(parsed) || parsed.length === 0) return null;
+    // Os ficheiros são gravados ordenados, mas não custa não confiar nisso.
+    return parsed.reduce((newest, entry) => (entry?.date > newest ? entry.date : newest), '');
+  } catch {
+    return null;
+  }
+}
+
+const today = lisbonToday();
+const stale = [];
+const ok = [];
+
+// Percorre a lista de rastreados, e não a pasta: um ficheiro que lá tenha
+// ficado de um boneco que já não se segue não é um alarme.
+{
+  const label = 'bonecos';
+  for (const { id } of CHARACTERS) {
+    const newest = newestDateIn(join(DATA_DIR, `${id}.json`));
+    if (!newest) {
+      stale.push({ id, label, newest: '(vazio/ilegível)', age: Infinity });
+      continue;
+    }
+    const age = daysBetween(newest, today);
+    (age > MAX_AGE_DAYS ? stale : ok).push({ id, label, newest, age });
+  }
+}
+
+for (const entry of ok) {
+  console.log(`  ok   [${entry.label}] ${entry.id}: último dia ${entry.newest} (há ${entry.age} dia(s)).`);
+}
+
+if (stale.length === 0) {
+  console.log(`\nHistórico em dia — nada com mais de ${MAX_AGE_DAYS} dia(s) de atraso (hoje em Lisboa: ${today}).`);
+  process.exit(0);
+}
+
+console.error('');
+for (const entry of stale) {
+  console.error(
+    `  ATRASADO  [${entry.label}] ${entry.id}: último dia ${entry.newest}` +
+      (Number.isFinite(entry.age) ? ` (há ${entry.age} dia(s)).` : '.')
+  );
+}
+console.error(
+  `\n${stale.length} ficheiro(s) com mais de ${MAX_AGE_DAYS} dia(s) de atraso (hoje em Lisboa: ${today}).\n` +
+    'A recolha do PC (scripts/scrape-xp-local.ps1) não está a correr, ou o guildstats.eu mudou outra vez.\n' +
+    'Ver scripts/scrape-xp.log e o Agendador de Tarefas do Windows.'
+);
+process.exit(1);

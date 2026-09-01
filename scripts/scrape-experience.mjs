@@ -1,24 +1,13 @@
-// Daily scraper: pulls every experience day guildstats.eu still exposes for
-// each of the 3 main characters and appends the ones missing from
-// data/scraped-history/<id>.json.
+// Recolha diária da XP dos dois bonecos: lê todos os dias que o guildstats.eu
+// ainda expõe e acrescenta os que faltam em data/scraped-history/<id>.json.
+// Nunca apaga nem sobrescreve — por isso é seguro correr as vezes que forem
+// precisas, e um dia perdido é recuperado sozinho na corrida seguinte (o
+// guildstats guarda ~30 dias).
 //
-// Runs from GitHub Actions (see .github/workflows/scrape-experience.yml)
-// hourly from 09:00 UTC. Never deletes or overwrites existing history — it
-// only appends dates that aren't recorded yet, so any day missed while the
-// workflow was down is backfilled automatically on the next run (guildstats
-// keeps ~30 days). All the actual logic lives in lib/guildstatsHistory.mjs,
-// shared with scrape-team-experience.mjs.
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+// Corre no PC, de hora a hora, por scripts/scrape-xp-local.ps1 — o guildstats
+// devolve 403 aos IPs dos runners do GitHub, por isso a Action deixou de ser
+// uma fonte fiável. Ver .github/workflows/scrape-experience.yml.
 import { runScraper } from './lib/guildstatsHistory.mjs';
-
-const CHARACTERS = [
-  { id: 'elite-knight', nick: 'Dant Ivan' },
-  { id: 'royal-paladin', nick: 'Baverone' },
-  { id: 'exalted-monk', nick: 'Bluey The Cat' },
-];
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = join(__dirname, '..', 'data', 'scraped-history');
+import { CHARACTERS, DATA_DIR } from './lib/trackedPlayers.mjs';
 
 await runScraper({ players: CHARACTERS, dataDir: DATA_DIR });

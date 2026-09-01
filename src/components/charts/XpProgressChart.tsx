@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -29,6 +29,16 @@ const MODES: { id: ChartMode; label: string }[] = [
   { id: 'daily', label: 'XP por dia' },
 ];
 
+/** `null` = o histórico todo. */
+const PERIODS: { days: number | null; label: string }[] = [
+  { days: 7, label: '7d' },
+  { days: 30, label: '30d' },
+  { days: 90, label: '90d' },
+  { days: null, label: 'Tudo' },
+];
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
 const dateFormatter = new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit' });
 const numberFormatter = new Intl.NumberFormat('pt-PT');
 const signedNumberFormatter = new Intl.NumberFormat('pt-PT', { signDisplay: 'exceptZero' });
@@ -50,6 +60,38 @@ function formatXpTick(value: number): string {
 
 export function XpProgressChart({ history, accentColor }: XpProgressChartProps) {
   const [mode, setMode] = useState<ChartMode>('combined');
+  const [periodDays, setPeriodDays] = useState<number | null>(30);
+
+  // A janela é ancorada à leitura mais recente e não a "agora": se a recolha
+  // falhar dois dias, "últimos 7 dias" continua a mostrar sete dias de dados
+  // em vez de encolher para cinco.
+  const visibleHistory = useMemo(() => {
+    if (periodDays === null || history.length === 0) return history;
+    const last = history[history.length - 1].timestamp;
+    const from = last - periodDays * MS_PER_DAY;
+    return history.filter((entry) => entry.timestamp >= from);
+  }, [history, periodDays]);
+
+  const periodToggle = (
+    <div className="chart-mode-toggle" role="tablist" aria-label="Período">
+      {PERIODS.map((period) => {
+        const isActive = periodDays === period.days;
+        return (
+          <button
+            key={period.label}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            className={isActive ? 'chart-mode-toggle__btn chart-mode-toggle__btn--active' : 'chart-mode-toggle__btn'}
+            style={isActive ? { color: accentColor, borderColor: accentColor } : undefined}
+            onClick={() => setPeriodDays(period.days)}
+          >
+            {period.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 
   const toggle = (
     <div className="chart-mode-toggle" role="tablist" aria-label="Tipo de gráfico">
@@ -77,21 +119,24 @@ export function XpProgressChart({ history, accentColor }: XpProgressChartProps) 
       <div className="xp-progress-chart">
         {toggle}
         <div className="chart-empty-state">
-          Regista pelo menos 2 leituras de XP para veres o gráfico de progressão.
+          São precisas pelo menos 2 leituras de XP para desenhar a progressão.
         </div>
       </div>
     );
   }
 
-  const dailyData = computeDailyGains(history);
-  const trendData = computeDailyXpTrend(history);
+  const dailyData = computeDailyGains(visibleHistory);
+  const trendData = computeDailyXpTrend(visibleHistory);
 
   return (
     <div className="xp-progress-chart">
-      {toggle}
+      <div className="chart-controls">
+        {toggle}
+        {periodToggle}
+      </div>
       {trendData.length === 0 ? (
         <div className="chart-empty-state">
-          Regista leituras em dias diferentes para veres este gráfico.
+          Não há leituras suficientes neste período. Experimenta um período maior.
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={260}>

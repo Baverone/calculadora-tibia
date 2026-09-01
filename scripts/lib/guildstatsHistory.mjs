@@ -209,10 +209,18 @@ async function syncPlayer({ id, nick, dataDir }) {
 
 /**
  * Runs the scrape for a list of players. One player failing never blocks the
- * others. The job only exits non-zero for an actionable failure (a bad nick,
- * or a guildstats layout change that breaks parsing); transient upstream 403s
- * (guildstats throttling the CI IP) are logged and skipped so they don't turn
- * the workflow red — the self-healing backfill recovers on a later run.
+ * others.
+ *
+ * Exit codes matter here, because a silent green run is how this scraper went
+ * unnoticed for ten days (2026-08-21 → 08-31): guildstats.eu started answering
+ * *every* GitHub Actions runner IP with 403, all three retries burned, and the
+ * old code deliberately logged a warning and exited 0. The workflow was green
+ * every day while collecting nothing.
+ *
+ * So: any failure at all now exits non-zero. Deciding whether that matters is
+ * not this script's job — check-history-freshness.mjs does it, by looking at
+ * whether the data itself is actually falling behind, which is the only
+ * question worth waking someone up for.
  */
 export async function runScraper({ players, dataDir }) {
   if (!isAfterLisbonServerSave() && process.env.FORCE_SCRAPE !== 'true') {
@@ -223,7 +231,6 @@ export async function runScraper({ players, dataDir }) {
   let addedTotal = 0;
   let successCount = 0;
   let failureCount = 0;
-  let nonTransientFailure = false;
 
   for (let i = 0; i < players.length; i++) {
     const player = players[i];
@@ -232,7 +239,6 @@ export async function runScraper({ players, dataDir }) {
       successCount++;
     } catch (error) {
       failureCount++;
-      if (!error.transient) nonTransientFailure = true;
       console.error(`[${player.id}] falhou: ${error.message}`);
     }
     // Space requests out so guildstats is less likely to 403 the next one.
@@ -241,17 +247,13 @@ export async function runScraper({ players, dataDir }) {
 
   console.log(`\nResumo: ${successCount} jogador(es) ok, ${failureCount} falha(s), ${addedTotal} dia(s) novo(s) guardado(s).`);
 
-  // Fail the job only for a real, actionable problem — a bad nick, or a
-  // guildstats layout change that breaks parsing (a non-transient failure). A
-  // transient 403 (guildstats blocking the runner's IP) isn't the scraper's
-  // fault and the backfill recovers it later, so we skip rather than turn the
-  // workflow red over something we can't fix here.
-  if (nonTransientFailure) {
+  if (failureCount > 0) {
+    if (successCount === 0) {
+      console.error(
+        'Nenhum jogador foi recolhido. Se isto correu no GitHub Actions, a causa mais provável é o ' +
+          'guildstats.eu devolver 403 ao IP do runner — a recolha fiável corre no PC (scripts/scrape-xp-local.ps1).'
+      );
+    }
     process.exitCode = 1;
-  } else if (failureCount > 0 && successCount === 0) {
-    console.warn(
-      'Todos os pedidos falharam por causas transitórias (ex.: 403 do guildstats a bloquear o IP do runner) — ' +
-        'a saltar esta execução; o próximo run recupera os dias em falta.'
-    );
   }
 }

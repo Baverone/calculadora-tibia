@@ -202,3 +202,72 @@
 .hunts-panel__outcome--ok {
   color: var(--gold);
 }
+
+/* --- Escolher que spots aparecem -------------------------------------- */
+
+.hunts-panel__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hunts-panel__choose {
+  padding: 5px 12px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+}
+
+.hunts-panel__choose:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.hunts-panel__chooser {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  background: var(--bg-panel-alt);
+}
+
+.hunts-panel__chooser legend {
+  padding: 0 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hunts-panel__chooser-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.hunts-panel__chooser-reset {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+}
+
+.hunts-panel__chooser-reset:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}

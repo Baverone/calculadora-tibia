@@ -1,16 +1,10 @@
 import { useCharacterState } from '../../hooks/useCharacterState';
-import { useSavedHunts } from '../../hooks/useSavedHunts';
 import { getLevelProgress } from '../../domain/levelProgress';
 import type { PlayerMeta } from '../../constants/players';
-import { fetchSharedHistory, fetchTeamPlayerSharedHistory } from '../../storage/sharedHistory';
-import { XpInputForm } from '../xp/XpInputForm';
 import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpForecastCard } from '../xp/XpForecastCard';
-import { WeeklyLevelForecastCard } from '../xp/WeeklyLevelForecastCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
-import { HuntCalculator } from '../hunt/HuntCalculator';
-import { AccessBossSection } from '../accessBoss/AccessBossSection';
 import { SkillTrainingCalculator } from '../skillTraining/SkillTrainingCalculator';
 
 interface PlayerPanelProps {
@@ -19,22 +13,16 @@ interface PlayerPanelProps {
 }
 
 /**
- * Everything for one player: XP input, level progress, history chart, hunt
- * calculator, and the Quests & Bosses checklist. Always kept mounted (see
- * App.tsx) so switching sub-tabs never loses a draft input or state.
+ * Aviso de dados velhos. A recolha esteve dez dias parada sem ninguém dar por
+ * isso porque a app mostrava o último valor que tinha, com a mesma cara de
+ * sempre. Agora, se a leitura mais recente tiver 3+ dias, diz-se.
  */
+const STALE_AFTER_DAYS = 3;
+
 export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
-  const fetchShared = player.sharedHistorySource === 'team' ? fetchTeamPlayerSharedHistory : fetchSharedHistory;
-  const { inputValue, setInputValue, error, history, currentExperience, commitExperience } = useCharacterState(
-    player.id,
-    fetchShared
-  );
-
-  // Owned here rather than inside HuntCalculator so the forecast's respawn
-  // picker and the hunt list stay in sync off a single source of truth.
-  const { hunts, addHunt, removeHunt } = useSavedHunts(player.id);
-
+  const { history, currentExperience, loading, daysSinceLastReading } = useCharacterState(player.id);
   const progress = currentExperience !== null ? getLevelProgress(currentExperience) : null;
+  const isStale = daysSinceLastReading !== null && daysSinceLastReading >= STALE_AFTER_DAYS;
 
   return (
     <section className={isActive ? 'character-panel' : 'character-panel character-panel--hidden'}>
@@ -46,14 +34,21 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
         </div>
       </header>
 
-      <XpInputForm
-        inputId={`xp-input-${player.id}`}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
-        onSubmit={commitExperience}
-        error={error}
-        accentColor={player.accentColor}
-      />
+      {isStale && (
+        <p className="stale-warning">
+          A leitura mais recente é de há {daysSinceLastReading} dias. A recolha diária pode estar parada — vê
+          o Agendador de Tarefas no PC.
+        </p>
+      )}
+
+      {loading && <p className="chart-empty-state">A carregar o histórico…</p>}
+
+      {!loading && !progress && (
+        <p className="chart-empty-state">
+          Ainda não há histórico para o {player.name}. A recolha corre de hora a hora no PC e publica em
+          data/scraped-history/{player.id}.json.
+        </p>
+      )}
 
       {progress && (
         <>
@@ -66,40 +61,15 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
           </div>
 
           <div className="character-panel__block">
-            <h3>Previsão dos próximos níveis</h3>
+            <h3>Previsão</h3>
             <XpForecastCard
-              characterId={player.id}
               history={history}
-              currentExperience={currentExperience}
+              currentExperience={currentExperience as number}
               accentColor={player.accentColor}
-              hunts={hunts}
-            />
-          </div>
-
-          <div className="character-panel__block">
-            <h3>Projeção de nível por semana</h3>
-            <WeeklyLevelForecastCard
-              history={history}
-              currentExperience={currentExperience}
-              accentColor={player.accentColor}
-            />
-          </div>
-
-          <div className="character-panel__block">
-            <h3>Calculadora de Hunt</h3>
-            <HuntCalculator
-              idPrefix={`hunt-${player.id}`}
-              currentExperience={currentExperience}
-              accentColor={player.accentColor}
-              hunts={hunts}
-              addHunt={addHunt}
-              removeHunt={removeHunt}
             />
           </div>
 
           <SkillTrainingCalculator player={player} />
-
-          <AccessBossSection characterId={player.id} accentColor={player.accentColor} />
         </>
       )}
     </section>

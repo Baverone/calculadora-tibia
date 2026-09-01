@@ -1,13 +1,12 @@
 import type { AppTabId } from '../../domain/types';
-import { TEAMS } from '../../constants/players';
+import { PLAYERS } from '../../constants/players';
 
 interface TabsBarProps {
   activeId: AppTabId;
   onChange: (id: AppTabId) => void;
 }
 
-const UTILITIES_TAB_ID: AppTabId = 'utilities';
-const UTILITIES_TAB_ACCENT = '#c9a227';
+const UTILITIES_ACCENT = '#c9a227';
 
 function UtilitiesIcon({ className }: { className?: string }) {
   return (
@@ -23,45 +22,36 @@ function UtilitiesIcon({ className }: { className?: string }) {
   );
 }
 
-function TeamIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.6" />
-      <circle cx="17" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
-      <path
-        d="M3 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5M14 20c0-2.4 1.6-4.5 3.7-5.2"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
+/**
+ * A barra de separadores — uma só, com os bonecos e os utilitários ao mesmo
+ * nível. Era uma navegação de dois andares (aba de equipa → aba de jogador)
+ * quando eram 6 jogadores em 3 equipas; com dois bonecos, o primeiro andar
+ * eram três abas grandes para um jogador cada.
+ */
 export function TabsBar({ activeId, onChange }: TabsBarProps) {
   return (
     <nav className="tabs-bar">
+      {PLAYERS.map((player) => (
+        <button
+          key={player.id}
+          className={player.id === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
+          style={{ '--tab-accent': player.accentColor } as React.CSSProperties}
+          onClick={() => onChange(player.id)}
+          type="button"
+        >
+          <player.Icon className="tabs-bar__icon" />
+          {player.name}
+        </button>
+      ))}
       <button
-        className={UTILITIES_TAB_ID === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
-        style={{ '--tab-accent': UTILITIES_TAB_ACCENT } as React.CSSProperties}
-        onClick={() => onChange(UTILITIES_TAB_ID)}
+        className={activeId === 'utilities' ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
+        style={{ '--tab-accent': UTILITIES_ACCENT } as React.CSSProperties}
+        onClick={() => onChange('utilities')}
         type="button"
       >
         <UtilitiesIcon className="tabs-bar__icon" />
-        Utilitários Tibia
+        Utilitários
       </button>
-      {TEAMS.map((team) => (
-        <button
-          key={team.id}
-          className={team.id === activeId ? 'tabs-bar__tab tabs-bar__tab--active' : 'tabs-bar__tab'}
-          style={{ '--tab-accent': '#c9a227' } as React.CSSProperties}
-          onClick={() => onChange(team.id)}
-          type="button"
-        >
-          <TeamIcon className="tabs-bar__icon" />
-          {team.label}
-        </button>
-      ))}
     </nav>
   );
 }
