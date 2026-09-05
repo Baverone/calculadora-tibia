@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Rotina local do Celesta (corridas e ficheiros temporarios)
+scripts/celesta/tmp/
+scripts/celesta/runs.jsonl

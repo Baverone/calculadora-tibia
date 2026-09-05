@@ -67,6 +67,7 @@ normalmente — daí a mudança.
 | --- | --- | --- |
 | PC (Agendador de Tarefas) | [`scripts/scrape-xp-local.ps1`](scripts/scrape-xp-local.ps1) | de hora a hora |
 | PC (Agendador de Tarefas) | [`scripts/push-hunts.ps1`](scripts/push-hunts.ps1) | de 5 em 5 minutos |
+| PC (Agendador de Tarefas) | [`scripts/celesta/run-celesta-local.ps1`](scripts/celesta/run-celesta-local.ps1) — Claude Code lê o Discord e escreve `celesta-hunts.json` | de hora a hora, 08:03–23:03 e 00:03 |
 | GitHub Actions | [`scrape-experience.yml`](.github/workflows/scrape-experience.yml) | 1×/dia, como alarme |
 
 `scrape-xp-local.ps1` corre os dois scrapers e faz **commit sem push** —
@@ -160,6 +161,13 @@ scripts/
   scrape-xp-local.ps1     # corre o scraper + commit (tarefa agendada, de hora a hora)
   check-history-freshness.mjs  # alarme: falha se o histórico tiver 3+ dias de atraso
   push-hunts.ps1          # publica as janelas de hunt (tarefa agendada, 5 em 5 min)
+  celesta/
+    prompt-local.md       # o que o Claude Code faz em cada corrida (Discord -> reservas)
+    run-celesta-local.ps1 # lanca o Claude Code local e regista a corrida (tarefa agendada)
+    instalar-tarefa.ps1   # regista a tarefa no Agendador (correr uma vez)
+    escrever-hunts.mjs    # reservas -> data/ e public/celesta-hunts.json
+    gaps.mjs              # reservas -> janelas livres
+    runs.jsonl            # uma linha por corrida (estado, duracao, custo) - nao vai para o git
 .github/workflows/
   scrape-experience.yml   # rede de segurança: tenta a recolha e corre o alarme
 src/

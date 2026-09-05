@@ -3,6 +3,7 @@ import { getLevelProgress } from '../../domain/levelProgress';
 import type { PlayerMeta } from '../../constants/players';
 import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpForecastCard } from '../xp/XpForecastCard';
+import { HuntPlannerCard } from '../xp/HuntPlannerCard';
 import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { SkillTrainingCalculator } from '../skillTraining/SkillTrainingCalculator';
@@ -65,6 +66,15 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
             <XpForecastCard
               history={history}
               currentExperience={currentExperience as number}
+              accentColor={player.accentColor}
+            />
+          </div>
+
+          <div className="character-panel__block">
+            <h3>Calculadora de hunt</h3>
+            <HuntPlannerCard
+              personagem={player.id}
+              xpAtual={currentExperience as number}
               accentColor={player.accentColor}
             />
           </div>

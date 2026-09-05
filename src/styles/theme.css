@@ -872,3 +872,107 @@ body {
   color: var(--text-muted);
   font-size: 0.78rem;
 }
+
+/* --- Calculadora de hunt ---------------------------------------------- */
+
+.hunt-bonus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: 4px 0 14px;
+}
+
+.hunt-bonus__item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.hunt-bonus__item--nested {
+  padding-left: 8px;
+  border-left: 2px solid var(--border-gold);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.hunt-bonus__tag {
+  padding: 1px 7px;
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.hunt-bonus__count {
+  width: 56px;
+  padding: 3px 8px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  color: var(--text-parchment);
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.hunt-bonus__hint {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.hunt-planner__mult {
+  margin: 0 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-gold);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.hunt-planner__headline {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.hunt-planner__headline strong {
+  font-size: 1.15rem;
+}
+
+.hunt-planner__verdict {
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  color: var(--error);
+}
+
+.hunt-planner__verdict--ok {
+  color: #5fbf7f;
+}
+
+.hunt-planner__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.hunt-planner__table th {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(90, 70, 48, 0.4);
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+.hunt-planner__table td {
+  text-align: right;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(90, 70, 48, 0.4);
+}
+
+.hunt-planner__table tr:last-child th,
+.hunt-planner__table tr:last-child td {
+  border-bottom: none;
+}

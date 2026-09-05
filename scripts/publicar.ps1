@@ -6,9 +6,13 @@
 #
 #   powershell -ExecutionPolicy Bypass -File C:\Users\Catarina\calculadora-tibia\scripts\publicar.ps1 "grafico so com XP por dia"
 #
-# Nao faz push, de proposito. O push-hunts.ps1 ja corre de 5 em 5 minutos, ja
-# verifica se ha commits por enviar, e e o unico que faz push -- dois scripts
-# a empurrar para o mesmo sitio e como se arranjam conflitos a meio da noite.
+# Commita E envia. A versao anterior so commitava e deixava o push-hunts.ps1
+# enviar dentro de 5 minutos -- a ideia era haver um unico script a fazer push,
+# para os dois nao se atropelarem. Na pratica isso queria dizer que "publicar"
+# nao publicava nada durante cinco minutos, o que nao e o que a palavra quer
+# dizer. O atropelo resolve-se como o push-hunts ja o resolvia: pull --rebase
+# --autostash antes de empurrar, e se mesmo assim falhar, a corrida seguinte
+# do push-hunts apanha o commit que ficou por enviar.
 #
 # Gravado em UTF-8 com BOM: o Windows PowerShell 5.1 le um .ps1 sem BOM como
 # ANSI, e a mensagem de commit que passares pode ter acentos.
@@ -43,5 +47,25 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host ''
-Write-Host 'Commit feito. O push-hunts.ps1 envia-o dentro de 5 minutos.' -ForegroundColor Green
+Write-Host 'A enviar...' -ForegroundColor Cyan
+
+# --autostash porque o git recusa-se a fazer rebase com qualquer coisa por
+# commitar na arvore, mesmo em ficheiros que nao nos dizem respeito.
+git pull --rebase --autostash | Out-Null
+if ($LASTEXITCODE -ne 0) {
+  git rebase --abort
+  Write-Host ''
+  Write-Host 'O rebase falhou - o commit esta feito mas por enviar. Resolve a mao com git status.' -ForegroundColor Yellow
+  exit 1
+}
+
+git push | Out-Null
+if ($LASTEXITCODE -ne 0) {
+  Write-Host ''
+  Write-Host 'O push falhou - o commit esta feito e o push-hunts.ps1 tenta outra vez dentro de 5 minutos.' -ForegroundColor Yellow
+  exit 1
+}
+
+Write-Host ''
+Write-Host 'Publicado no GitHub.' -ForegroundColor Green
 Write-Host ''
