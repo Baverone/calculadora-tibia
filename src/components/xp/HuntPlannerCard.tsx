@@ -50,7 +50,12 @@ export function HuntPlannerCard({ personagem, xpAtual, accentColor }: HuntPlanne
   );
 
   const resultado = useMemo(() => {
-    if (nivelAlvo === null || nivelAlvo < 1 || xpHora === null || xpHora <= 0 || horas === null) return null;
+    // O nível tem de ser inteiro, e não só >= 1: o `experienceForLevel` recusa
+    // níveis fracionários com uma excepção, e um "1500,5" escrito no campo
+    // (que o input de tipo number aceita à mesma) rebentava a app toda em vez
+    // de simplesmente não mostrar resultado.
+    if (nivelAlvo === null || !Number.isInteger(nivelAlvo) || nivelAlvo < 1) return null;
+    if (xpHora === null || xpHora <= 0 || horas === null) return null;
     return calcularHunt(xpAtual, nivelAlvo, xpHora, horas, boosts, opcoes);
   }, [xpAtual, nivelAlvo, xpHora, horas, boosts, opcoes]);
 
