@@ -21,7 +21,13 @@ export function getCachedVocation(characterId: string): Vocation | null {
 }
 
 export function setCachedVocation(characterId: string, vocation: Vocation): void {
-  localStorage.setItem(cacheKey(characterId), vocation);
+  try {
+    localStorage.setItem(cacheKey(characterId), vocation);
+  } catch {
+    // Janela privada ou armazenamento cheio — a vocação volta a ser detetada
+    // no próximo arranque. Sem isto a excepção rebentava dentro do onClick da
+    // escolha manual e o botão não chegava a fazer nada.
+  }
 }
 
 /** Tibia vocation strings are always "[Rank] [BaseVocation]" (e.g. "Royal Paladin", "Master Sorcerer"). */

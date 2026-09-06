@@ -48,6 +48,13 @@ export function getSkillTrainingConfig(characterId: CharacterId): SkillTrainingC
 }
 
 export function saveSkillTrainingConfig(characterId: CharacterId, config: SkillTrainingConfig): SkillTrainingConfig {
-  localStorage.setItem(storageKey(characterId), JSON.stringify(config));
+  try {
+    localStorage.setItem(storageKey(characterId), JSON.stringify(config));
+  } catch {
+    // Janela privada ou armazenamento cheio — como em huntPlannerStorage, a
+    // calculadora continua a funcionar, só não se lembra dos valores da
+    // próxima vez. Sem isto a excepção subia de dentro do updater do
+    // useState e tirava a app inteira do ar a meio de escrever um nível.
+  }
   return config;
 }
