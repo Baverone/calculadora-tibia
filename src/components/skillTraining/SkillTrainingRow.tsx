@@ -82,6 +82,15 @@ export function SkillTrainingRow({
         )
       : null;
 
+  // A primeira mensagem que houver, por ordem de importância. Estava escrito
+  // como uma cadeia de `??` sobre ternários que devolviam '' — e como '' não é
+  // nullish, o `??` parava aí: um nível válido com uma percentagem inválida
+  // mostrava uma caixa de erro vermelha vazia, sem dizer o que estava mal.
+  const mensagemErro =
+    levelError ??
+    (entry.level.trim() !== '' && !levelResult.ok ? levelResult.error : null) ??
+    (entry.percent.trim() !== '' && !percentMissingResult.ok ? percentMissingResult.error : null);
+
   const hasLoyalty = loyaltyBonusPercent > 0;
   const displayedLevel = levelResult.ok ? levelResult.value : 0;
   const displayedMissing = percentMissingResult.ok ? percentMissingResult.value : 0;
@@ -125,13 +134,7 @@ export function SkillTrainingRow({
         </div>
       </div>
 
-      {(levelError ||
-        (entry.level.trim() !== '' && !levelResult.ok) ||
-        (entry.percent.trim() !== '' && !percentMissingResult.ok)) && (
-        <p className="field-error">
-          {levelError ?? (!levelResult.ok ? levelResult.error : '') ?? (!percentMissingResult.ok ? percentMissingResult.error : '')}
-        </p>
-      )}
+      {mensagemErro && <p className="field-error">{mensagemErro}</p>}
 
       {result && hasLoyalty && (
         <p className="skill-training-base-hint">
