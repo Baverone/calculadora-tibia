@@ -20,8 +20,21 @@ import { CHARACTERS, DATA_DIR } from './lib/trackedPlayers.mjs';
 // 10:50 UTC (por isso "ontem" é o normal, não um atraso), e um dia perdido é
 // recuperado sozinho na recolha seguinte porque o guildstats serve ~30 dias.
 // Só a partir do terceiro dia é que há mesmo alguma coisa partida.
+//
+// O valor passado é validado: `--max-idade-dias` sem número (ou com lixo) dava
+// NaN, e como toda a comparação com NaN é falsa nenhum ficheiro contava como
+// atrasado — o alarme saía 0 a dizer "mais de NaN dia(s)". Um guarda-costas
+// que se cala por causa de um argumento mal escrito é exatamente o modo de
+// falha que este ficheiro existe para impedir.
 const argIndex = process.argv.indexOf('--max-idade-dias');
 const MAX_AGE_DAYS = argIndex !== -1 ? Number(process.argv[argIndex + 1]) : 3;
+
+if (!Number.isFinite(MAX_AGE_DAYS) || MAX_AGE_DAYS < 0) {
+  console.error(
+    `--max-idade-dias precisa de um número >= 0 (recebi ${JSON.stringify(process.argv[argIndex + 1] ?? null)}).`
+  );
+  process.exit(2);
+}
 
 function lisbonToday() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Lisbon' }).format(new Date());
