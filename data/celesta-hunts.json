@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-06T21:05:40.756Z",
-  "referenceTime": "23:04",
+  "generatedAt": "2026-09-06T22:05:20.003Z",
+  "referenceTime": "00:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,14 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "02:00",
-          "end": "19:30",
-          "minutes": 1050
-        },
-        {
-          "start": "22:30",
-          "end": "23:04",
-          "minutes": 34
+          "start": "00:04",
+          "end": "23:01",
+          "minutes": 1377
         }
       ]
     },
@@ -23,9 +18,19 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "23:04",
-          "end": "23:04",
-          "minutes": 1440
+          "start": "01:00",
+          "end": "10:10",
+          "minutes": 550
+        },
+        {
+          "start": "13:10",
+          "end": "14:40",
+          "minutes": 90
+        },
+        {
+          "start": "15:40",
+          "end": "00:04",
+          "minutes": 504
         }
       ]
     },
@@ -33,9 +38,9 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "00:00",
+          "start": "00:04",
           "end": "08:30",
-          "minutes": 510
+          "minutes": 506
         },
         {
           "start": "10:00",
@@ -44,8 +49,8 @@
         },
         {
           "start": "17:30",
-          "end": "23:04",
-          "minutes": 334
+          "end": "00:04",
+          "minutes": 394
         }
       ]
     },
@@ -53,14 +58,9 @@
       "name": "Feru Way (Hell Hub)",
       "free": [
         {
-          "start": "02:00",
-          "end": "15:10",
-          "minutes": 790
-        },
-        {
-          "start": "18:10",
-          "end": "19:00",
-          "minutes": 50
+          "start": "00:04",
+          "end": "23:01",
+          "minutes": 1377
         }
       ]
     },
@@ -88,9 +88,9 @@
           "minutes": 130
         },
         {
-          "start": "21:45",
-          "end": "23:04",
-          "minutes": 79
+          "start": "22:46",
+          "end": "00:04",
+          "minutes": 78
         }
       ]
     },
@@ -111,6 +111,11 @@
           "start": "21:31",
           "end": "22:05",
           "minutes": 34
+        },
+        {
+          "start": "23:05",
+          "end": "00:04",
+          "minutes": 59
         }
       ]
     },
@@ -136,6 +141,11 @@
           "start": "20:00",
           "end": "20:30",
           "minutes": 30
+        },
+        {
+          "start": "23:30",
+          "end": "00:04",
+          "minutes": 34
         }
       ]
     },
@@ -143,17 +153,17 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "11:15",
-          "end": "23:04",
-          "minutes": 709
+          "start": "00:04",
+          "end": "23:30",
+          "minutes": 1406
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) — 23:04 a 23:04",
-    "Stag Catacombs -1 — 11:15 a 23:04",
-    "Feru Infernatil Seal (Mazoran) — 17:30 a 23:04",
-    "Feru DT Seal -1 (Shulgrax) — 02:00 a 19:30"
+    "Stag Catacombs -1 — 00:04 a 23:30",
+    "Feru DT Seal -1 (Shulgrax) — 00:04 a 23:01",
+    "Feru DT Seal -2 (Shulgrax) — 15:40 a 00:04",
+    "Feru Way (Hell Hub) — 00:04 a 23:01"
   ]
 }
