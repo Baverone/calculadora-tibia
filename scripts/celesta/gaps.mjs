@@ -49,7 +49,20 @@ export function calcularJanelas(reservas, agoraHHMM, janelaMinima = 30) {
       if (!mo) continue;
       const s = paraMinutos(mo[1]);
       const e = paraMinutos(mo[2]);
-      if (anterior !== null && s < anterior) dia += 1;
+      if (anterior === null) {
+        // A PRIMEIRA linha tambem pode ja ser do dia seguinte, e isso nao se
+        // deteta por quebra na sequencia porque nao ha nada antes dela. O que
+        // se sabe e que o bot lista a partir de "agora" e nunca mostra uma
+        // reserva que ja acabou: se a linha, colocada em hoje, terminasse
+        // antes de agora, e porque e de amanha. Sem isto, uma reserva das
+        // 02:00 lida as 22:00 caia toda no passado, era descartada, e o spot
+        // aparecia livre 24h seguidas -- livre exatamente a hora a que estava
+        // reservado.
+        const fimHoje = e <= s ? e + MINUTOS_POR_DIA : e;
+        if (fimHoje <= agora) dia = 1;
+      } else if (s < anterior) {
+        dia += 1;
+      }
       anterior = s;
       let inicio = dia * MINUTOS_POR_DIA + s;
       let fim = dia * MINUTOS_POR_DIA + e;
