@@ -61,28 +61,14 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchAndParse(nick) {
-  const encodedNick = encodeURIComponent(nick).replace(/%20/g, '+');
-  const url = `https://guildstats.eu/include/character/tab.php?nick=${encodedNick}&tab=experience`;
-
-  let response;
-  try {
-    response = await fetch(url, { headers: REQUEST_HEADERS });
-  } catch (networkError) {
-    // DNS/connection blips are transient — worth a retry / not a real bug.
-    networkError.transient = true;
-    throw networkError;
-  }
-  if (!response.ok) {
-    const httpError = new Error(`HTTP ${response.status}`);
-    // 403 (guildstats blocking a CI IP), 429 and 5xx are transient upstream
-    // conditions, not a bug in this scraper — flagged so the job can skip
-    // instead of failing red. A 404 (bad nick) etc. stays non-transient.
-    httpError.transient = response.status === 403 || response.status === 429 || response.status >= 500;
-    throw httpError;
-  }
-
-  const $ = cheerio.load(await response.text());
+/**
+ * Lê a tabela de experiência de um fragmento HTML do guildstats. Exportado
+ * para poder ser testado sem rede (scripts/lib/guildstatsHistory.test.mjs) —
+ * este parser já partiu uma vez, quando o guildstats redesenhou a página em
+ * agosto de 2026, e é a única peça deste ficheiro que depende do layout deles.
+ */
+export function parseExperienceRows(html) {
+  const $ = cheerio.load(html);
   const rows = $('table tbody tr');
   if (rows.length === 0) {
     throw new Error('nenhuma linha de histórico (o layout pode ter mudado)');
@@ -105,9 +91,20 @@ async function fetchAndParse(nick) {
     // ignores that trailing text, where Number() would return NaN.
     const level = parseInt(cells.eq(3).text().trim(), 10);
     const experienceText = cells.eq(4).find('span').first().text().trim() || cells.eq(4).text().trim();
-    const experience = Number(experienceText.replace(/,/g, ''));
+    // Number('') é 0, não NaN: uma célula de experiência vazia (coluna que
+    // muda de sítio, linha de totais, layout novo) passava o teste do
+    // Number.isFinite e entrava no histórico como um dia de 0 XP — que depois
+    // nunca mais sai, porque o merge nunca sobrescreve o que já lá está.
+    const experienceDigits = experienceText.replace(/,/g, '');
+    const experience = Number(experienceDigits);
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(level) || !Number.isFinite(experience)) return;
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      !Number.isFinite(level) ||
+      experienceDigits === '' ||
+      !Number.isFinite(experience)
+    )
+      return;
     parsed.push({ date, level, experience });
   });
 
@@ -116,6 +113,30 @@ async function fetchAndParse(nick) {
   }
 
   return parsed;
+}
+
+async function fetchAndParse(nick) {
+  const encodedNick = encodeURIComponent(nick).replace(/%20/g, '+');
+  const url = `https://guildstats.eu/include/character/tab.php?nick=${encodedNick}&tab=experience`;
+
+  let response;
+  try {
+    response = await fetch(url, { headers: REQUEST_HEADERS });
+  } catch (networkError) {
+    // DNS/connection blips are transient — worth a retry / not a real bug.
+    networkError.transient = true;
+    throw networkError;
+  }
+  if (!response.ok) {
+    const httpError = new Error(`HTTP ${response.status}`);
+    // 403 (guildstats blocking a CI IP), 429 and 5xx are transient upstream
+    // conditions, not a bug in this scraper — flagged so the job can skip
+    // instead of failing red. A 404 (bad nick) etc. stays non-transient.
+    httpError.transient = response.status === 403 || response.status === 429 || response.status >= 500;
+    throw httpError;
+  }
+
+  return parseExperienceRows(await response.text());
 }
 
 /**
