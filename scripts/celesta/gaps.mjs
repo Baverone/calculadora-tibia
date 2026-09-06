@@ -13,6 +13,17 @@
 const MINUTOS_POR_DIA = 1440;
 const LINHA = /^(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})\s*(.*)$/;
 
+/**
+ * A linha tem o formato "HH:MM - HH:MM Quem" que o bot Letter usa?
+ *
+ * O calcularJanelas ignora em silencio o que nao percebe, e isso, se o bot
+ * mudar o formato, da um spot "livre 24h" -- uma resposta errada com toda a
+ * confianca. Quem escreve o ficheiro usa isto para se recusar a escrever.
+ */
+export function linhaLegivel(bruta) {
+  return LINHA.test(String(bruta).trim());
+}
+
 export function paraMinutos(hhmm) {
   const [h, m] = hhmm.split(':').map(Number);
   return h * 60 + m;

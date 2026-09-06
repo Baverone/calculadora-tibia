@@ -5,7 +5,7 @@
 // depois da meia-noite ja apareceu como janela livre.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calcularJanelas, destaques, paraHoras, paraMinutos } from './gaps.mjs';
+import { calcularJanelas, destaques, linhaLegivel, paraHoras, paraMinutos } from './gaps.mjs';
 
 const soUm = (reservas, agora, minima = 30) => calcularJanelas(reservas, agora, minima)[0];
 
@@ -80,6 +80,14 @@ test('paraMinutos e paraHoras sao inversos dentro da volta de 24h', () => {
   assert.equal(paraMinutos('00:00'), 0);
   assert.equal(paraMinutos('23:59'), 1439);
   assert.equal(paraHoras(1440 + 120), '02:00');
+});
+
+test('linhaLegivel distingue o formato do bot de tudo o resto', () => {
+  assert.equal(linhaLegivel('22:00 - 23:30 Baverone'), true);
+  assert.equal(linhaLegivel('  22:00-23:30  '), true);
+  assert.equal(linhaLegivel('SEM RESERVAS'), false);
+  assert.equal(linhaLegivel('22:00 ate 23:30 Baverone'), false);
+  assert.equal(linhaLegivel('Baverone reservou das 22h as 23h'), false);
 });
 
 test('destaques so escolhem janelas com uma hora de noite', () => {

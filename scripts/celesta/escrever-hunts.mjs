@@ -15,7 +15,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { calcularJanelas, destaques } from './gaps.mjs';
+import { calcularJanelas, destaques, linhaLegivel } from './gaps.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FUSO_DO_BOT = 'Europe/Berlin';
@@ -47,6 +47,27 @@ if (typeof reservas !== 'object' || reservas === null || Array.isArray(reservas)
 const normalizadas = {};
 for (const [spot, valor] of Object.entries(reservas)) {
   normalizadas[spot] = Array.isArray(valor) ? valor : [String(valor)];
+}
+
+// Um spot que tem linhas de reserva mas nenhuma no formato esperado sai daqui
+// como "livre 24h", que e a pior resposta possivel: errada e confiante, e
+// escrita no ficheiro que a app mostra. Se o bot mudar o formato das linhas,
+// mais vale este script rebentar e a corrida ficar registada como FALHA.
+const semNadaLegivel = [];
+for (const [spot, linhas] of Object.entries(normalizadas)) {
+  if (linhas.length === 0 || linhas[0] === 'SEM RESERVAS') continue;
+  const legiveis = linhas.filter(linhaLegivel).length;
+  if (legiveis === 0) semNadaLegivel.push(`${spot}: ${JSON.stringify(linhas[0])}`);
+  else if (legiveis < linhas.length) {
+    console.warn(`Aviso: ${spot} tem ${linhas.length - legiveis} linha(s) que não percebi — foram ignoradas.`);
+  }
+}
+
+if (semNadaLegivel.length > 0) {
+  console.error('Nenhuma linha de reserva percebida nestes spots (o formato do bot mudou?):');
+  for (const linha of semNadaLegivel) console.error(`  ${linha}`);
+  console.error('Esperado "HH:MM - HH:MM Quem". Nada foi escrito.');
+  process.exit(2);
 }
 
 const spots = calcularJanelas(normalizadas, horaRef, JANELA_MINIMA);
