@@ -1,9 +1,10 @@
-// Shared guildstats.eu scraping + history-merging logic, used by both
-// scrape-experience.mjs (the 3 main characters) and
-// scrape-team-experience.mjs (the auto-tracked Equipa players). The two
-// scripts were byte-for-byte duplicates of each other apart from their
-// player list and output dir; keeping the logic here means a fix lands in
-// both at once instead of needing a "keep in sync" comment.
+// Lógica partilhada de scraping do guildstats.eu + merge do histórico.
+//
+// Nasceu partilhada porque havia dois scrapers (os bonecos principais e os
+// jogadores da aba "Equipa") byte a byte iguais tirando a lista de jogadores e
+// a pasta de saída. A aba Equipa saiu na limpeza de setembro de 2026 e hoje só
+// o scrape-experience.mjs chama isto — o `runScraper({ players, dataDir })`
+// fica parametrizado à mesma, que é o que torna estas funções testáveis.
 //
 // Endpoint discovered by inspecting guildstats.eu's own front-end JS: the
 // character page loads its "Experience" tab via this internal AJAX route,

@@ -117,8 +117,8 @@ export function CelestaHuntsPanel() {
 
       {status === 'empty' && (
         <p className="hunts-panel__note">
-          Ainda não há dados. A tarefa agendada corre de hora a hora entre as 09:00 e a 01:00 e
-          escreve <code>data/celesta-hunts.json</code> no repo.
+          Ainda não há dados. A tarefa agendada corre de hora a hora entre as 08:03 e as 23:03,
+          mais uma vez às 00:03, e escreve <code>data/celesta-hunts.json</code> no repo.
         </p>
       )}
 

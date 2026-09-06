@@ -36,8 +36,14 @@ Outros comandos:
 ```bash
 npm run build     # build de produção (inclui verificação de tipos TypeScript)
 npm run preview   # serve o build de produção localmente
-npm run lint       # linter (oxlint)
+npm run lint      # linter (oxlint)
+npm test          # testes dos scripts .mjs (node --test, sem rede)
 ```
+
+Os testes cobrem a lógica pura dos scripts — o parser da tabela do guildstats
+e o cálculo das janelas livres do Celesta —, com fixtures locais e sem um
+único pedido de rede. O lado React/TypeScript não tem testes: a verificação
+é o `tsc` do `npm run build`.
 
 ## Stack
 
@@ -142,10 +148,14 @@ exp(level) = round((50/3) * (level^3 - 6*level^2 + 17*level - 12))
 ```
 
 É usada diretamente (em vez de uma tabela estática) para que qualquer nível —
-incluindo acima de 3500 — funcione automaticamente. O ficheiro
-A tabela estática de níveis 1–3500 que existia como dataset de referência
-foi apagada: pesava 216 KB, viajava em cada clone e nada no código a
-importava — a fórmula acima cobre qualquer nível, incluindo acima de 3500.
+incluindo acima de 3500 — funcione automaticamente. A tabela estática de
+níveis 1–3500 que existia como dataset de referência foi apagada: pesava
+216 KB, viajava em cada clone e nada no código a importava.
+
+A mesma fórmula está copiada em
+[`scripts/lib/guildstatsHistory.mjs`](scripts/lib/guildstatsHistory.mjs), para
+os scripts continuarem a ser ficheiros Node soltos sem passo de build. Se um
+lado mudar, o outro tem de mudar também.
 
 ## Estrutura do projeto
 
@@ -156,6 +166,7 @@ data/
 scripts/
   lib/
     guildstatsHistory.mjs # scraping + merge de histórico
+    guildstatsHistory.test.mjs # parser da tabela, com HTML de fixture
     trackedPlayers.mjs    # quem é rastreado e para que pasta
   scrape-experience.mjs   # recolha diária (corre no PC)
   scrape-xp-local.ps1     # corre o scraper + commit (tarefa agendada, de hora a hora)
@@ -167,6 +178,7 @@ scripts/
     instalar-tarefa.ps1   # regista a tarefa no Agendador (correr uma vez)
     escrever-hunts.mjs    # reservas -> data/ e public/celesta-hunts.json
     gaps.mjs              # reservas -> janelas livres
+    gaps.test.mjs         # casos da meia-noite, sobreposições, formato do bot
     runs.jsonl            # uma linha por corrida (estado, duracao, custo) - nao vai para o git
 .github/workflows/
   scrape-experience.yml   # rede de segurança: tenta a recolha e corre o alarme
@@ -203,8 +215,9 @@ src/
 Painel global (`src/components/timers/TimersPanel.tsx`), visível por cima
 das abas independentemente de qual está ativa — não é específico de um
 boneco. Três timers regressivos independentes: **Pot Skills** (10 min),
-**Food ML** (1 hora) e **Plasmas** (29m40s, com aviso a 30 segundos do fim),
-cada um com anel de progresso SVG, botão Iniciar/Pausar e Reiniciar, mais um
+**Food ML** (1 hora) e **Plasmas** (29m40s, com aviso por voz quando faltam
+10 segundos no relógio — ou seja, 30 segundos antes de os 30 minutos de
+plasma acabarem), cada um com anel de progresso SVG, botão Iniciar/Pausar e Reiniciar, mais um
 botão "Iniciar todos" no topo do painel.
 
 Ao chegar a zero, cada timer (`src/hooks/useCountdownTimer.ts`): toca um
