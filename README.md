@@ -245,9 +245,27 @@ countdown, a atualizar ao segundo (`src/hooks/useRashidClock.ts`).
 
 ## Validação de inputs
 
-- XP atual: inteiro, não negativo (`src/domain/validation.ts`).
-- Raw Experience/h da hunt: número positivo.
-- Objetivos de nível: lista separada por vírgulas/espaços, cada um inteiro
-  entre 1 e `MAX_KNOWN_LEVEL` (3500).
+Mensagens de erro aparecem sempre sob o respetivo formulário. Quem valida o
+quê, hoje:
+
+- **Treino de skills** (`src/domain/validation.ts`): nível atual —
+  `parseNonNegativeInteger`, inteiro e não negativo, mais um mínimo por skill
+  (10 nas de combate, 0 no Magic Level); % que falta — `parsePercentMissing`,
+  entre 0 e 100; nível objetivo — inteiro, comparado com o nível **base** (sem
+  a inflação da Loyalty).
+- **Calculadora de hunt** (`src/components/xp/HuntPlannerCard.tsx`): nível alvo
+  inteiro >= 1, XP/h maior que zero, horas não negativas. Sem os três não há
+  resultado nenhum, em vez de um resultado a meio.
+- **Stamina** (`src/domain/stamina.ts`): `parseStaminaToMinutes` aceita
+  "39:30", "39", "39.5" ou "39,5" e recusa fora de 0:00–42:00;
+  `parseDurationToMinutes` faz o mesmo para a duração da caçada.
+- **Flechas** (`src/domain/arrows/arrowsCalculator.ts`): flechas não negativas
+  e minutos maiores que zero, senão não há taxa.
+
+O `validation.ts` traz ainda `parseLevelList`, `validateLevelPlanTarget`,
+`parseFutureDate`, `parsePositiveNumber` e `parseNonNegativeNumber`, que
+ficaram sem quem os chamasse depois da limpeza de setembro de 2026 (a tabela
+nível-a-nível e o input manual de XP saíram). Ficam por decidir: usar ou
+apagar.
 
 Mensagens de erro aparecem sob o respetivo formulário.
