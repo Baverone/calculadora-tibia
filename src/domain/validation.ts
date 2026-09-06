@@ -3,6 +3,16 @@
 
 export type ValidationResult<T> = { ok: true; value: T } | { ok: false; error: string };
 
+/**
+ * `Number('')` é 0, não NaN — e como estes parsers limpam espaços, pontos de
+ * milhar e o símbolo de percentagem antes de converter, um input feito só
+ * desses caracteres ("...", ",", "%") ficava vazio e passava como um zero
+ * perfeitamente válido. Um zero que ninguém escreveu é pior do que um erro.
+ */
+function ficouVazio(normalized: string): boolean {
+  return normalized === '';
+}
+
 export function parseNonNegativeInteger(raw: string, fieldLabel: string): ValidationResult<number> {
   const trimmed = raw.trim();
   if (trimmed === '') {
@@ -12,7 +22,7 @@ export function parseNonNegativeInteger(raw: string, fieldLabel: string): Valida
   const normalized = trimmed.replace(/\s|\./g, '').replace(',', '.');
   const value = Number(normalized);
 
-  if (!Number.isFinite(value)) {
+  if (ficouVazio(normalized) || !Number.isFinite(value)) {
     return { ok: false, error: `${fieldLabel} tem de ser um número válido.` };
   }
   if (value < 0) {
@@ -34,7 +44,7 @@ export function parsePositiveNumber(raw: string, fieldLabel: string): Validation
   const normalized = trimmed.replace(/\s|\./g, '').replace(',', '.');
   const value = Number(normalized);
 
-  if (!Number.isFinite(value)) {
+  if (ficouVazio(normalized) || !Number.isFinite(value)) {
     return { ok: false, error: `${fieldLabel} tem de ser um número válido.` };
   }
   if (value <= 0) {
@@ -54,7 +64,7 @@ export function parseNonNegativeNumber(raw: string, fieldLabel: string): Validat
   const normalized = trimmed.replace(/\s|\./g, '').replace(',', '.');
   const value = Number(normalized);
 
-  if (!Number.isFinite(value)) {
+  if (ficouVazio(normalized) || !Number.isFinite(value)) {
     return { ok: false, error: `${fieldLabel} tem de ser um número válido.` };
   }
   if (value < 0) {
@@ -75,7 +85,7 @@ export function parsePercentMissing(raw: string): ValidationResult<number> {
   const normalized = trimmed.replace(',', '.').replace('%', '');
   const value = Number(normalized);
 
-  if (!Number.isFinite(value)) {
+  if (ficouVazio(normalized) || !Number.isFinite(value)) {
     return { ok: false, error: 'Percentagem tem de ser um número válido.' };
   }
   if (value < 0 || value > 100) {
