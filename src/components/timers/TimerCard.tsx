@@ -47,9 +47,13 @@ export const TimerCard = forwardRef<TimerCardHandle, TimerCardProps>(function Ti
   // once per cycle — the fired set is cleared whenever a new cycle starts.
   const firedAlertsRef = useRef<Set<number>>(new Set());
 
+  // "Novo ciclo" é o relógio estar outra vez cheio: depois do reinício
+  // automático no fim, ou de carregar em Reiniciar. Isto estava ligado ao
+  // `isRunning`, o que também limpava o conjunto ao retomar uma pausa — pausar
+  // aos 8 segundos e continuar fazia o aviso do plasma tocar segunda vez.
   useEffect(() => {
-    if (timer.isRunning) firedAlertsRef.current.clear();
-  }, [timer.isRunning]);
+    if (timer.remainingMs >= durationSeconds * 1000) firedAlertsRef.current.clear();
+  }, [timer.remainingMs, durationSeconds]);
 
   useEffect(() => {
     if (!alerts || !timer.isRunning) return;
