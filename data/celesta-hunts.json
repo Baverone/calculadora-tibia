@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-08T19:05:47.073Z",
-  "referenceTime": "21:04",
+  "generatedAt": "2026-09-08T20:06:13.795Z",
+  "referenceTime": "22:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -23,19 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "21:04",
-          "end": "21:35",
-          "minutes": 31
-        },
-        {
           "start": "01:00",
           "end": "15:00",
           "minutes": 840
         },
         {
           "start": "18:00",
-          "end": "21:04",
-          "minutes": 184
+          "end": "22:04",
+          "minutes": 244
         }
       ]
     },
@@ -43,14 +38,9 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "22:00",
+          "start": "00:00",
           "end": "15:30",
-          "minutes": 1050
-        },
-        {
-          "start": "19:15",
-          "end": "21:04",
-          "minutes": 109
+          "minutes": 930
         }
       ]
     },
@@ -74,8 +64,8 @@
         },
         {
           "start": "20:20",
-          "end": "21:04",
-          "minutes": 44
+          "end": "21:30",
+          "minutes": 70
         }
       ]
     },
@@ -128,14 +118,14 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "23:00",
+          "start": "23:44",
           "end": "07:00",
-          "minutes": 480
+          "minutes": 436
         },
         {
           "start": "08:00",
-          "end": "10:20",
-          "minutes": 140
+          "end": "08:30",
+          "minutes": 30
         },
         {
           "start": "13:20",
@@ -149,16 +139,16 @@
         },
         {
           "start": "19:00",
-          "end": "21:04",
-          "minutes": 124
+          "end": "22:04",
+          "minutes": 184
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) — 18:00 a 21:04",
-    "Feru Infernatil Seal (Mazoran) — 22:00 a 15:30",
-    "Stag Catacombs -1 — 19:00 a 21:04",
-    "Feru Infernatil Seal (Mazoran) — 19:15 a 21:04"
+    "Feru DT Seal -2 (Shulgrax) — 18:00 a 22:04",
+    "Stag Catacombs -1 — 19:00 a 22:04",
+    "Feru DT Seal -1 (Shulgrax) — 23:31 a 17:00",
+    "Stag Catacombs -1 — 23:44 a 07:00"
   ]
 }
