@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-07T23:05:46.036Z",
-  "referenceTime": "01:04",
+  "generatedAt": "2026-09-08T07:05:16.580Z",
+  "referenceTime": "09:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,30 +8,40 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "01:04",
+          "start": "09:04",
           "end": "18:00",
-          "minutes": 1016
+          "minutes": 536
         },
         {
           "start": "19:00",
           "end": "20:00",
           "minutes": 60
+        },
+        {
+          "start": "01:01",
+          "end": "09:04",
+          "minutes": 483
         }
       ]
     },
     {
       "name": "Feru DT Seal -2 (Shulgrax)",
-      "free": [],
-      "noBookings": true
+      "free": [
+        {
+          "start": "10:00",
+          "end": "16:00",
+          "minutes": 360
+        },
+        {
+          "start": "18:20",
+          "end": "09:04",
+          "minutes": 884
+        }
+      ]
     },
     {
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
-        {
-          "start": "01:04",
-          "end": "07:30",
-          "minutes": 386
-        },
         {
           "start": "10:00",
           "end": "11:30",
@@ -39,8 +49,8 @@
         },
         {
           "start": "13:30",
-          "end": "01:04",
-          "minutes": 694
+          "end": "09:04",
+          "minutes": 1174
         }
       ]
     },
@@ -48,14 +58,9 @@
       "name": "Feru Way (Hell Hub)",
       "free": [
         {
-          "start": "03:00",
+          "start": "01:00",
           "end": "08:15",
-          "minutes": 315
-        },
-        {
-          "start": "22:59",
-          "end": "01:04",
-          "minutes": 125
+          "minutes": 435
         }
       ]
     },
@@ -63,9 +68,19 @@
       "name": "Roshamuul Upper (Depot)",
       "free": [
         {
-          "start": "01:04",
-          "end": "23:50",
-          "minutes": 1366
+          "start": "09:04",
+          "end": "10:07",
+          "minutes": 63
+        },
+        {
+          "start": "14:08",
+          "end": "17:00",
+          "minutes": 172
+        },
+        {
+          "start": "23:31",
+          "end": "06:00",
+          "minutes": 389
         }
       ]
     },
@@ -73,20 +88,15 @@
       "name": "Roshamuul West",
       "free": [
         {
-          "start": "01:04",
-          "end": "23:10",
-          "minutes": 1326
+          "start": "05:30",
+          "end": "09:04",
+          "minutes": 214
         }
       ]
     },
     {
       "name": "Norcferatu East",
       "free": [
-        {
-          "start": "01:04",
-          "end": "08:45",
-          "minutes": 461
-        },
         {
           "start": "09:45",
           "end": "10:20",
@@ -96,6 +106,11 @@
           "start": "12:20",
           "end": "14:50",
           "minutes": 150
+        },
+        {
+          "start": "02:00",
+          "end": "09:04",
+          "minutes": 424
         }
       ]
     },
@@ -103,14 +118,9 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "03:00",
-          "end": "07:00",
-          "minutes": 240
-        },
-        {
-          "start": "08:00",
+          "start": "09:04",
           "end": "10:45",
-          "minutes": 165
+          "minutes": 101
         },
         {
           "start": "11:45",
@@ -119,16 +129,21 @@
         },
         {
           "start": "19:15",
-          "end": "01:04",
-          "minutes": 349
+          "end": "07:00",
+          "minutes": 705
+        },
+        {
+          "start": "08:00",
+          "end": "09:04",
+          "minutes": 64
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) — livre o dia todo",
-    "Feru Infernatil Seal (Mazoran) — 13:30 a 01:04",
-    "Roshamuul Upper (Depot) — 01:04 a 23:50",
-    "Roshamuul West — 01:04 a 23:10"
+    "Feru Infernatil Seal (Mazoran) — 13:30 a 09:04",
+    "Feru DT Seal -2 (Shulgrax) — 18:20 a 09:04",
+    "Stag Catacombs -1 — 19:15 a 07:00",
+    "Roshamuul Upper (Depot) — 23:31 a 06:00"
   ]
 }
