@@ -37,13 +37,26 @@ algo falhar, escreve o que falhou e termina — nunca fiques à espera.
 
 ### 1. Correr o /summary no canal #letter
 
+Se as ferramentas do Chrome disserem que há **mais do que um browser
+ligado**, escolhe por esta ordem (`list_connected_browsers` →
+`select_browser`): (1) o que tiver `deviceId` a começar por `bce85195` — é o
+Chrome onde vive a sessão de Discord do Baverone; (2) senão, o primeiro com
+`isLocal: true`. Nunca um remoto (`isLocal: false`).
+
+**Confirmação obrigatória da conta** antes de escrever seja o que for: no
+Discord, o painel do utilizador (canto inferior esquerdo) tem de mostrar
+**Baverone**. Se mostrar outro nome, ou o ecrã de login, fecha o separador e
+termina com `RESULTADO: FALHA discord: sessão de outro utilizador/sem sessão`
+— e se houver outro browser local por experimentar, tenta-o primeiro.
+
 Com as ferramentas do Chrome, abre um separador novo em
 https://discord.com/channels/806152499760201738/1482823845114286213
 (canal #letter do servidor Celesta Community) e espera ~5 s.
 
-Confirma que a sessão é a do Baverone (a página mostra o canal e a caixa de
-escrever mensagem). Se aparecer o ecrã de login, fecha o separador e termina
-com `RESULTADO: FALHA discord sem sessão`.
+Confirma que a sessão é a do Baverone: o nome no painel do utilizador
+(canto inferior esquerdo) tem de ser Baverone, e a página mostra o canal e a
+caixa de escrever mensagem. Se for outro nome ou o ecrã de login, fecha o
+separador e termina com `RESULTADO: FALHA discord sem sessão do Baverone`.
 
 Clica na caixa de mensagem, escreve `/summary`, espera ~3 s pelo seletor de
 comandos e carrega Enter duas vezes: o primeiro Enter seleciona o comando, o
