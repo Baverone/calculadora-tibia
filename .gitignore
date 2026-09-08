@@ -26,3 +26,8 @@ dist-ssr
 # Rotina local do Celesta (corridas e ficheiros temporarios)
 scripts/celesta/tmp/
 scripts/celesta/runs.jsonl
+
+# Publicacao automatica (scripts/publicar-agendado.ps1)
+scripts/.publicar-agora
+scripts/.publicar-vivo
+PUBLICACAO-FALHOU.txt
