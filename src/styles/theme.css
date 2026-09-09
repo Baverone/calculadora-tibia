@@ -976,3 +976,115 @@ body {
 .hunt-planner__table tr:last-child td {
   border-bottom: none;
 }
+
+/* --- Telemóvel --------------------------------------------------------
+ *
+ * O tema não tinha uma única media query. Num ecrã de 390px isso dava:
+ *  - três separadores lado a lado com "Bluey The Cat" espremido a meio de uma
+ *    barra sem quebra de linha;
+ *  - os três timers em coluna, porque `minmax(160px, 1fr)` + 34px de padding
+ *    não cabiam duas colunas, e cada anel tem 120px — a app abria com um ecrã
+ *    inteiro só de timers antes de se ver seja o que for;
+ *  - botões de 24px de altura, metade do alvo de toque recomendado.
+ *
+ * O corte fica nos 560px: acima disso o layout de 880px já respirava.
+ */
+@media (max-width: 560px) {
+  .app-shell {
+    padding: 14px 10px 48px;
+  }
+
+  .app-header h1 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
+  /* Ícone por cima do nome: cabem os três sem cortar o nome mais comprido. */
+  .tabs-bar {
+    gap: 4px;
+  }
+
+  .tabs-bar__tab {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 4px;
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
+
+  .tabs-bar__icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .timers-panel,
+  .hunts-panel,
+  .tibiadrome-section,
+  .character-panel {
+    padding: 14px 12px;
+  }
+
+  /* Duas colunas fixas em vez de auto-fit: com o padding reduzido cabem, e
+     assim não dependem de a conta do minmax dar certo ao pixel. */
+  .timers-panel__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .timer-card__ring-wrap {
+    width: 96px;
+    height: 96px;
+  }
+
+  .timer-card__time {
+    font-size: 1.05rem;
+  }
+
+  /* Alvos de toque: os botões pequenos ficavam com ~24px de altura. */
+  .timer-card__actions button,
+  .chart-mode-toggle__btn,
+  .player-tabs-bar__tab,
+  .vocation-selector__option,
+  .hunts-panel__reload,
+  .hunts-panel__choose,
+  .hunts-panel__chooser-reset {
+    min-height: 40px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hunts-panel__chooser-item,
+  .hunts-panel__toggle {
+    min-height: 36px;
+  }
+
+  .level-progress-card__value {
+    font-size: 1.35rem;
+  }
+
+  /* Números de 11 dígitos em duas colunas não cabem lado a lado. */
+  .level-progress-card__details {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .xp-forecast__table,
+  .hunt-planner__table,
+  .hunt-scenario-table {
+    font-size: 0.78rem;
+  }
+
+  .xp-forecast__table th,
+  .xp-forecast__table td,
+  .hunt-planner__table th,
+  .hunt-planner__table td,
+  .hunt-scenario-table th,
+  .hunt-scenario-table td {
+    padding: 6px 4px;
+  }
+
+  .recent-history-list li {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+}

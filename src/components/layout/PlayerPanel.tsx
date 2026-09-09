@@ -1,12 +1,22 @@
+import { Suspense, lazy } from 'react';
 import { useCharacterState } from '../../hooks/useCharacterState';
 import { getLevelProgress } from '../../domain/levelProgress';
 import type { PlayerMeta } from '../../constants/players';
 import { LevelProgressCard } from '../xp/LevelProgressCard';
 import { XpForecastCard } from '../xp/XpForecastCard';
 import { HuntPlannerCard } from '../xp/HuntPlannerCard';
-import { XpProgressChart } from '../charts/XpProgressChart';
 import { RecentHistoryList } from '../charts/RecentHistoryList';
 import { SkillTrainingCalculator } from '../skillTraining/SkillTrainingCalculator';
+
+/**
+ * O gráfico arrasta o Recharts atrás dele — sozinho, dois terços do JavaScript
+ * da app. Carregado à parte, os timers, o Rashid e os spots do Celesta
+ * aparecem sem esperar por ele, que é o que interessa a quem abre isto no
+ * telemóvel para ver se pode ir caçar.
+ */
+const XpProgressChart = lazy(() =>
+  import('../charts/XpProgressChart').then((module) => ({ default: module.XpProgressChart }))
+);
 
 interface PlayerPanelProps {
   player: PlayerMeta;
@@ -57,7 +67,9 @@ export function PlayerPanel({ player, isActive }: PlayerPanelProps) {
 
           <div className="character-panel__block">
             <h3>Progressão</h3>
-            <XpProgressChart history={history} accentColor={player.accentColor} />
+            <Suspense fallback={<div className="chart-empty-state">A carregar o gráfico…</div>}>
+              <XpProgressChart history={history} accentColor={player.accentColor} />
+            </Suspense>
             <RecentHistoryList history={history} />
           </div>
 
