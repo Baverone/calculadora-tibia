@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T11:05:19.100Z",
-  "referenceTime": "13:04",
+  "generatedAt": "2026-09-09T11:10:34.585Z",
+  "referenceTime": "13:06",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "13:04",
+          "start": "13:06",
           "end": "17:00",
-          "minutes": 236
+          "minutes": 234
         },
         {
           "start": "20:00",
@@ -19,8 +19,8 @@
         },
         {
           "start": "23:30",
-          "end": "13:04",
-          "minutes": 814
+          "end": "13:06",
+          "minutes": 816
         }
       ]
     },
@@ -28,9 +28,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "13:04",
+          "start": "13:06",
           "end": "15:00",
-          "minutes": 116
+          "minutes": 114
         },
         {
           "start": "18:00",
@@ -39,8 +39,8 @@
         },
         {
           "start": "22:00",
-          "end": "13:04",
-          "minutes": 904
+          "end": "13:06",
+          "minutes": 906
         }
       ]
     },
@@ -54,8 +54,8 @@
         },
         {
           "start": "21:40",
-          "end": "13:04",
-          "minutes": 924
+          "end": "13:06",
+          "minutes": 926
         }
       ]
     },
@@ -69,8 +69,8 @@
         },
         {
           "start": "09:40",
-          "end": "13:04",
-          "minutes": 204
+          "end": "13:06",
+          "minutes": 206
         }
       ]
     },
@@ -89,8 +89,8 @@
         },
         {
           "start": "11:05",
-          "end": "13:04",
-          "minutes": 119
+          "end": "13:06",
+          "minutes": 121
         }
       ]
     },
@@ -109,8 +109,8 @@
         },
         {
           "start": "10:00",
-          "end": "13:04",
-          "minutes": 184
+          "end": "13:06",
+          "minutes": 186
         }
       ]
     },
@@ -124,8 +124,8 @@
         },
         {
           "start": "12:00",
-          "end": "13:04",
-          "minutes": 64
+          "end": "13:06",
+          "minutes": 66
         }
       ]
     },
@@ -139,15 +139,15 @@
         },
         {
           "start": "08:00",
-          "end": "13:04",
-          "minutes": 304
+          "end": "13:06",
+          "minutes": 306
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal (Mazoran) — 21:40 a 13:04",
-    "Feru DT Seal -2 (Shulgrax) — 22:00 a 13:04",
+    "Feru Infernatil Seal (Mazoran) — 21:40 a 13:06",
+    "Feru DT Seal -2 (Shulgrax) — 22:00 a 13:06",
     "Feru DT Seal -2 (Shulgrax) — 18:00 a 19:50",
     "Stag Catacombs -1 — 23:00 a 07:00"
   ]
