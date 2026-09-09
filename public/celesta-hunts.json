@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T22:04:57.110Z",
-  "referenceTime": "00:03",
+  "generatedAt": "2026-09-09T23:05:48.948Z",
+  "referenceTime": "01:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "00:03",
+          "start": "01:04",
           "end": "16:00",
-          "minutes": 957
+          "minutes": 896
         }
       ]
     },
@@ -18,14 +18,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "00:03",
+          "start": "01:04",
           "end": "16:30",
-          "minutes": 987
+          "minutes": 926
         },
         {
           "start": "19:30",
-          "end": "00:03",
-          "minutes": 273
+          "end": "01:04",
+          "minutes": 334
         }
       ]
     },
@@ -33,9 +33,19 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "00:03",
-          "end": "21:42",
-          "minutes": 1299
+          "start": "01:04",
+          "end": "16:00",
+          "minutes": 896
+        },
+        {
+          "start": "19:00",
+          "end": "20:01",
+          "minutes": 61
+        },
+        {
+          "start": "22:01",
+          "end": "01:04",
+          "minutes": 183
         }
       ]
     },
@@ -43,9 +53,9 @@
       "name": "Feru Way (Hell Hub)",
       "free": [
         {
-          "start": "02:00",
+          "start": "01:04",
           "end": "05:00",
-          "minutes": 180
+          "minutes": 236
         },
         {
           "start": "09:40",
@@ -59,8 +69,8 @@
         },
         {
           "start": "21:30",
-          "end": "00:03",
-          "minutes": 153
+          "end": "01:04",
+          "minutes": 214
         }
       ]
     },
@@ -68,9 +78,9 @@
       "name": "Roshamuul Upper (Depot)",
       "free": [
         {
-          "start": "00:03",
+          "start": "01:20",
           "end": "06:00",
-          "minutes": 357
+          "minutes": 280
         },
         {
           "start": "12:10",
@@ -79,8 +89,8 @@
         },
         {
           "start": "23:31",
-          "end": "00:03",
-          "minutes": 32
+          "end": "01:04",
+          "minutes": 93
         }
       ]
     },
@@ -88,9 +98,9 @@
       "name": "Roshamuul West",
       "free": [
         {
-          "start": "00:03",
+          "start": "01:10",
           "end": "02:00",
-          "minutes": 117
+          "minutes": 50
         },
         {
           "start": "05:30",
@@ -109,8 +119,8 @@
         },
         {
           "start": "23:31",
-          "end": "00:03",
-          "minutes": 32
+          "end": "01:04",
+          "minutes": 93
         }
       ]
     },
@@ -118,14 +128,19 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "00:03",
+          "start": "01:04",
           "end": "07:40",
-          "minutes": 457
+          "minutes": 396
         },
         {
           "start": "13:01",
           "end": "15:00",
           "minutes": 119
+        },
+        {
+          "start": "00:31",
+          "end": "01:04",
+          "minutes": 33
         }
       ]
     },
@@ -133,9 +148,9 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "04:35",
+          "start": "02:30",
           "end": "07:00",
-          "minutes": 145
+          "minutes": 270
         },
         {
           "start": "08:00",
@@ -159,16 +174,16 @@
         },
         {
           "start": "23:00",
-          "end": "00:03",
-          "minutes": 63
+          "end": "01:04",
+          "minutes": 124
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal (Mazoran) — 00:03 a 21:42",
-    "Feru DT Seal -2 (Shulgrax) — 19:30 a 00:03",
-    "Feru Way (Hell Hub) — 21:30 a 00:03",
-    "Feru DT Seal -1 (Shulgrax) — 00:03 a 16:00"
+    "Feru DT Seal -2 (Shulgrax) — 19:30 a 01:04",
+    "Feru Way (Hell Hub) — 21:30 a 01:04",
+    "Feru Infernatil Seal (Mazoran) — 22:01 a 01:04",
+    "Stag Catacombs -1 — 23:00 a 01:04"
   ]
 }
