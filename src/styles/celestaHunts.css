@@ -107,6 +107,50 @@
   font-size: 0.9rem;
 }
 
+/* --- Livres agora ------------------------------------------------------
+   A primeira coisa a ler no telemóvel: onde é que dá para entrar já. Fica
+   antes de "Melhores janelas", que responde a outra pergunta (a melhor janela
+   da noite) e de manhã não serve para nada. */
+
+.hunts-panel__now {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--gold);
+  border-left-width: 4px;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.hunts-panel__now-list {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-parchment);
+}
+
+.hunts-panel__now-list strong {
+  color: var(--gold);
+}
+
+.hunts-spot__now {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.hunts-spot__now--open {
+  color: var(--gold);
+}
+
+.hunts-spot--open .hunts-spot__name {
+  color: var(--gold);
+}
+
+.hunts-spot__window--current {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
 .hunts-panel__spots {
   display: flex;
   flex-direction: column;

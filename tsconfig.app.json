@@ -22,5 +22,8 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // Os testes do dominio correm no Node (node:test), nao no browser: precisam
+  // dos tipos do Node, que este projeto nao tem. Vao no tsconfig.node.json.
+  "exclude": ["src/**/*.test.ts"]
 }

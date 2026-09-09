@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'celesta-spot-filter';
+const LISBON_KEY = 'celesta-show-lisbon';
 
 /**
  * Que spots do Celesta mostrar. Guarda-se a lista dos escolhidos, e não a dos
@@ -26,5 +27,28 @@ export function saveSelectedSpots(names: string[] | null): void {
   } catch {
     // localStorage cheio ou bloqueado (janela privada) — o filtro fica só
     // nesta sessão, o painel continua a funcionar.
+  }
+}
+
+/**
+ * Mostrar também a hora de Lisboa nas janelas.
+ *
+ * Guarda-se pela mesma razão que o filtro: quem joga daqui quer a hora de
+ * Lisboa sempre, e tinha de voltar a picar a caixa a cada abertura da app.
+ */
+export function loadShowLisbon(): boolean {
+  try {
+    return localStorage.getItem(LISBON_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function saveShowLisbon(value: boolean): void {
+  try {
+    if (value) localStorage.setItem(LISBON_KEY, '1');
+    else localStorage.removeItem(LISBON_KEY);
+  } catch {
+    // Ver acima: sem localStorage a preferência vive só nesta sessão.
   }
 }

@@ -64,5 +64,17 @@ export function useCelestaHunts() {
     return () => clearTimeout(id);
   }, [outcome]);
 
+  // Voltar ao separador (ou ao browser, no telemóvel) vai buscar dados novos.
+  // Sem isto, quem deixasse a app aberta voltava a ela para encontrar o aviso
+  // de "estes dados já têm mais de hora e meia" e nada a fazer senão carregar
+  // no botão — quando a tarefa agendada já tinha escrito um summary novo.
+  useEffect(() => {
+    function onVisibilityChange() {
+      if (document.visibilityState === 'visible') reload();
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [reload]);
+
   return { data, status, refreshing, outcome, reload };
 }

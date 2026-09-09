@@ -81,3 +81,102 @@ export function totalFreeMinutes(spot: HuntSpotStatus): number {
   if (spot.noBookings) return 24 * 60;
   return spot.free.reduce((sum, w) => sum + w.minutes, 0);
 }
+
+/* --- "Está livre agora?" ----------------------------------------------
+ *
+ * As janelas não trazem data: são "HH:MM - HH:MM" numa volta de 24h que
+ * começa em `referenceTime`. Para responder à pergunta que se faz ao abrir
+ * isto no telemóvel — este spot está livre AGORA? — só é preciso saber
+ * quantos minutos passaram desde essa referência, e comparar com o desvio de
+ * cada janela dentro da mesma volta.
+ *
+ * O relógio de Berlim não entra na conta: os minutos decorridos saem do
+ * `generatedAt`, que é um instante absoluto. Vale mais ou menos 2 minutos de
+ * folga (o `referenceTime` é o footer do summary, escrito um pouco antes de o
+ * ficheiro ser gerado) e nenhuma dependência de fusos.
+ */
+
+const MINUTES_PER_DAY = 24 * 60;
+
+function toMinutes(hhmm: string): number | null {
+  const [h, m] = hhmm.split(':').map(Number);
+  if (!Number.isInteger(h) || !Number.isInteger(m)) return null;
+  return h * 60 + m;
+}
+
+/**
+ * Minutos passados desde o momento a que as janelas se referem.
+ *
+ * `null` quando não dá para responder com honestidade: data inválida, relógio
+ * do dispositivo atrás do ficheiro, ou ficheiro com 24h+ — a partir daí a
+ * conta dava a volta e dizia "livre agora" com toda a confiança sobre uma
+ * janela de ontem.
+ */
+export function minutesSinceReference(data: CelestaHuntsData, now: number): number | null {
+  const generated = Date.parse(data.generatedAt);
+  if (Number.isNaN(generated)) return null;
+
+  const elapsed = Math.floor((now - generated) / 60000);
+  if (elapsed < 0 || elapsed >= MINUTES_PER_DAY) return null;
+  return elapsed;
+}
+
+export interface SpotAvailability {
+  /** `free` = dá para entrar já; `busy` = está reservado neste momento. */
+  state: 'free' | 'busy';
+  /** A janela a decorrer (state `free`) ou a próxima a abrir (state `busy`). */
+  window: HuntWindow | null;
+  /** "HH:MM" a que isto muda: fim da janela atual, ou início da próxima. */
+  changesAt: string | null;
+  /** Minutos até essa mudança. `null` quando não há próxima janela nas 24h. */
+  minutesUntilChange: number | null;
+}
+
+/**
+ * O estado do spot neste instante. `null` quando `minutesSinceReference` não
+ * sabe responder — nesse caso o painel mostra só as janelas, sem inventar um
+ * "agora".
+ */
+export function spotAvailability(
+  spot: HuntSpotStatus,
+  data: CelestaHuntsData,
+  now: number
+): SpotAvailability | null {
+  const elapsed = minutesSinceReference(data, now);
+  if (elapsed === null) return null;
+
+  if (spot.noBookings) {
+    return { state: 'free', window: null, changesAt: null, minutesUntilChange: null };
+  }
+
+  const anchor = toMinutes(data.referenceTime);
+  if (anchor === null) return null;
+
+  let next: { window: HuntWindow; startsIn: number } | null = null;
+
+  for (const window of spot.free) {
+    const start = toMinutes(window.start);
+    if (start === null) continue;
+
+    // Desvio da janela dentro da volta de 24h que começa na referência. É isto
+    // que põe uma janela "00:00 - 02:04" no fim do dia e não no princípio.
+    const offset = (((start - anchor) % MINUTES_PER_DAY) + MINUTES_PER_DAY) % MINUTES_PER_DAY;
+
+    if (offset <= elapsed && elapsed < offset + window.minutes) {
+      return {
+        state: 'free',
+        window,
+        changesAt: window.end,
+        minutesUntilChange: offset + window.minutes - elapsed,
+      };
+    }
+
+    if (offset > elapsed && (next === null || offset - elapsed < next.startsIn)) {
+      next = { window, startsIn: offset - elapsed };
+    }
+  }
+
+  return next
+    ? { state: 'busy', window: next.window, changesAt: next.window.start, minutesUntilChange: next.startsIn }
+    : { state: 'busy', window: null, changesAt: null, minutesUntilChange: null };
+}
