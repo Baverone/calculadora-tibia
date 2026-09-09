@@ -56,6 +56,12 @@ verificação é o `tsc` do `npm run build`.
 - **React + Vite + TypeScript** — arranque e HMR rápidos, tipos para manter os
   cálculos (níveis, XP, hunt) com contratos claros à medida que o projeto crescer.
 - **Recharts** para o gráfico de progressão de XP.
+- **A app abre no separador onde ficou** (`src/storage/activeTab.ts`,
+  setembro de 2026). Abria sempre no Baverone, e quem a abre no telemóvel
+  antes de ir caçar abre-a para ver os spots — dois toques de cada vez. O id
+  guardado é confrontado com os que existem hoje, para um boneco que saia da
+  app não deixar ninguém num painel que já não existe. Sem `localStorage`
+  (janela privada) abre como sempre abriu.
 - Sem backend próprio: persistência local via `localStorage` (inputs manuais)
   + um repositório GitHub público como "base de dados" partilhada só-leitura
   (histórico recolhido automaticamente — ver secção abaixo).
@@ -152,6 +158,38 @@ O workflow continua a tentar a recolha (com `continue-on-error`), para
 voltar a funcionar sozinho se o guildstats algum dia deixar de bloquear os
 runners.
 
+### O mesmo alarme, para as janelas de hunt (setembro de 2026)
+
+[`scripts/check-hunts-freshness.mjs`](scripts/check-hunts-freshness.mjs) faz
+a mesma pergunta ao `data/celesta-hunts.json`. Até aqui esse ficheiro não
+tinha rede de segurança nenhuma: se a tarefa que lê o Discord parasse, o
+painel dizia "há 9 horas" e mais nada — zero mail, zero vermelho. A mesma
+falha de agosto, noutro ficheiro.
+
+O que muda em relação à XP é o **horário**. A tarefa corre de hora a hora
+entre as 08:03 e as 23:03, mais uma vez às 00:03; entre as 00:30 e as 08:00
+o ficheiro envelhece porque ninguém o escreve, e às 08:00 tem legitimamente
+~8h. Por isso o alarme não conta tempo de relógio: conta os **minutos de
+horário** decorridos desde o `generatedAt`. **Quatro horas de horário** sem
+dados novos são quatro corridas falhadas seguidas — é o limiar, e é
+`--max-idade-horas`. Fora do horário não há alarme nenhum: um aviso que toca
+todas as noites é um aviso que se ignora.
+
+Corre em três sítios:
+
+- no workflow diário, a seguir ao da XP e com `if: always()` para os dois
+  não se taparem um ao outro (é o caminho que chega ao mail);
+- no teste da tarefa `tibia-push` do ai-pc, que corre de 5 em 5 minutos — é
+  o que dá o sinal em minutos e não no dia seguinte;
+- à mão: `node scripts/check-hunts-freshness.mjs`.
+
+A **decisão está duplicada** em `src/domain/celestaHunts.ts`
+(`isCollectionStalled`), porque é a app que pinta o painel de vermelho e os
+scripts não têm passo de build para importar TypeScript. Como a fórmula da
+experiência: se um lado mudar, o outro tem de mudar também. O lado
+TypeScript é o que tem testes (`src/domain/celestaHunts.test.ts`), incluindo
+o caso das 08:00 e o do horário de inverno.
+
 ### Como a app lê isto
 
 A app (`src/storage/sharedHistory.ts`) busca este JSON diretamente do
@@ -199,6 +237,7 @@ scripts/
   scrape-experience.mjs   # recolha diária (corre no PC)
   scrape-xp-local.ps1     # corre o scraper + commit (tarefa agendada, de hora a hora)
   check-history-freshness.mjs  # alarme: falha se o histórico tiver 3+ dias de atraso
+  check-hunts-freshness.mjs    # alarme: falha se as janelas de hunt estiverem paradas 4h+ de horário
   push-hunts.ps1          # publica as janelas de hunt (tarefa agendada, 5 em 5 min)
   celesta/
     prompt-local.md       # o que o Claude Code faz em cada corrida (Discord -> reservas)
@@ -264,6 +303,21 @@ presta, ou quando o relógio do dispositivo está atrás do ficheiro. Aí não
 aparece estado nenhum — só as janelas, que essas não dependem do relógio. Ao
 fim de uma volta completa a conta dava a volta e uma janela de ontem passava
 por "livre agora": errada e confiante, que é o pior que há.
+
+**"A recolha parou" (setembro de 2026).** Passados os 4 h de horário do
+alarme de frescura (ver acima), o painel troca o aviso ambarelo de "mais de
+hora e meia" por um vermelho cheio: *"Dados parados há Xh — a recolha do
+Discord pode ter parado."* São coisas diferentes — uma é um cuidado a ter,
+a outra é uma avaria do outro lado — e dizer as duas ao mesmo tempo escondia
+a segunda.
+
+**"Melhores janelas da noite" (setembro de 2026).** O bloco chamava-se só
+"Melhores janelas" e é calculado uma vez, quando o ficheiro é escrito, a
+olhar só para as 17:00–01:00. Às dez da manhã isso é a noite de hoje; às
+00:30 é a noite seguinte, e não havia como saber de qual das duas se
+tratava. Ganhou o nome certo e o carimbo de quando foi calculado
+(`formatGeneratedStamp`). Recalcular no browser com o "agora" real fica por
+decidir — obrigava a trazer o `destaques` do `gaps.mjs` para o domínio.
 
 ## Timers de hunt
 
