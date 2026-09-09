@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T09:05:18.572Z",
-  "referenceTime": "11:04",
+  "generatedAt": "2026-09-09T10:05:26.234Z",
+  "referenceTime": "12:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "11:04",
+          "start": "12:04",
           "end": "17:00",
-          "minutes": 356
+          "minutes": 296
         },
         {
           "start": "20:00",
@@ -19,8 +19,8 @@
         },
         {
           "start": "23:30",
-          "end": "11:04",
-          "minutes": 694
+          "end": "12:04",
+          "minutes": 754
         }
       ]
     },
@@ -28,9 +28,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "11:04",
+          "start": "12:04",
           "end": "15:00",
-          "minutes": 236
+          "minutes": 176
         },
         {
           "start": "18:00",
@@ -39,8 +39,8 @@
         },
         {
           "start": "22:00",
-          "end": "11:04",
-          "minutes": 784
+          "end": "12:04",
+          "minutes": 844
         }
       ]
     },
@@ -54,8 +54,8 @@
         },
         {
           "start": "21:40",
-          "end": "11:04",
-          "minutes": 804
+          "end": "12:04",
+          "minutes": 864
         }
       ]
     },
@@ -69,8 +69,8 @@
         },
         {
           "start": "09:40",
-          "end": "11:04",
-          "minutes": 84
+          "end": "12:04",
+          "minutes": 144
         }
       ]
     },
@@ -86,12 +86,22 @@
           "start": "01:03",
           "end": "06:00",
           "minutes": 297
+        },
+        {
+          "start": "11:05",
+          "end": "12:04",
+          "minutes": 59
         }
       ]
     },
     {
       "name": "Roshamuul West",
       "free": [
+        {
+          "start": "12:04",
+          "end": "12:45",
+          "minutes": 41
+        },
         {
           "start": "00:30",
           "end": "04:00",
@@ -104,8 +114,8 @@
         },
         {
           "start": "10:00",
-          "end": "11:04",
-          "minutes": 64
+          "end": "12:04",
+          "minutes": 124
         }
       ]
     },
@@ -116,11 +126,6 @@
           "start": "02:00",
           "end": "08:45",
           "minutes": 405
-        },
-        {
-          "start": "09:45",
-          "end": "11:04",
-          "minutes": 79
         }
       ]
     },
@@ -128,14 +133,9 @@
       "name": "Stag Catacombs -1",
       "free": [
         {
-          "start": "11:04",
-          "end": "14:30",
-          "minutes": 206
-        },
-        {
-          "start": "16:30",
-          "end": "17:00",
-          "minutes": 30
+          "start": "12:04",
+          "end": "14:00",
+          "minutes": 116
         },
         {
           "start": "23:00",
@@ -144,15 +144,15 @@
         },
         {
           "start": "08:00",
-          "end": "11:04",
-          "minutes": 184
+          "end": "12:04",
+          "minutes": 244
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal (Mazoran) — 21:40 a 11:04",
-    "Feru DT Seal -2 (Shulgrax) — 22:00 a 11:04",
+    "Feru Infernatil Seal (Mazoran) — 21:40 a 12:04",
+    "Feru DT Seal -2 (Shulgrax) — 22:00 a 12:04",
     "Feru DT Seal -2 (Shulgrax) — 18:00 a 19:50",
     "Stag Catacombs -1 — 23:00 a 07:00"
   ]
