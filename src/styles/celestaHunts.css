@@ -75,6 +75,16 @@
   margin: 0 0 14px;
 }
 
+/* A recolha parada não é o mesmo que dados com hora e meia: aqui não há
+   reservas novas a caminho, há uma tarefa avariada. Por isso o vermelho
+   cheio, e não só o contorno. */
+.hunts-panel__banner--stalled {
+  background: var(--error);
+  border-color: var(--error);
+  color: #1a1206;
+  font-weight: 600;
+}
+
 .hunts-panel__note {
   color: var(--text-muted);
   font-size: 0.9rem;
@@ -90,6 +100,15 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* O carimbo de quando o bloco foi calculado. Minúsculas de propósito: é uma
+   nota de rodapé dentro da etiqueta, não parte do título. */
+.hunts-panel__label-note {
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: normal;
+  opacity: 0.8;
 }
 
 .hunts-panel__highlights {

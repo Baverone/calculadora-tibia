@@ -8,8 +8,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   formatAge,
+  formatGeneratedStamp,
   formatLength,
+  isCollectionStalled,
+  isWithinCollectionHours,
   minutesSinceReference,
+  serviceMinutesSinceGenerated,
   spotAvailability,
   toLisbon,
   totalFreeMinutes,
@@ -162,4 +166,80 @@ test('formatAge nao arrisca uma idade quando a data nao presta', () => {
   assert.equal(formatAge({ ...dados([]), generatedAt: 'x' }, passados(10)), 'data desconhecida');
   assert.equal(formatAge(dados([]), passados(0)), 'agora mesmo');
   assert.equal(formatAge(dados([]), passados(94)), 'há 1h34');
+});
+
+/* --- Alarme de frescura ------------------------------------------------
+ *
+ * Os instantes estao escritos em UTC de proposito: setembro em Lisboa e WEST
+ * (UTC+1), e e essa hora +1 que decide se a tarefa devia estar a correr. Ha
+ * tambem um caso de janeiro (WET, UTC+0) para o horario nao passar a andar
+ * uma hora ao lado quando o verao acabar.
+ */
+
+function geradoEm(iso: string, referenceTime = '02:04'): CelestaHuntsData {
+  return { ...dados([], referenceTime), generatedAt: iso };
+}
+
+const em = (iso: string) => Date.parse(iso);
+
+test('isWithinCollectionHours: das 08:00 as 00:30 de Lisboa, e mais nada', () => {
+  assert.equal(isWithinCollectionHours(em('2026-09-09T06:59:00Z')), false); // 07:59
+  assert.equal(isWithinCollectionHours(em('2026-09-09T07:00:00Z')), true); // 08:00
+  assert.equal(isWithinCollectionHours(em('2026-09-09T09:00:00Z')), true); // 10:00
+  assert.equal(isWithinCollectionHours(em('2026-09-09T23:30:00Z')), true); // 00:30
+  assert.equal(isWithinCollectionHours(em('2026-09-09T23:31:00Z')), false); // 00:31
+  assert.equal(isWithinCollectionHours(em('2026-09-09T02:00:00Z')), false); // 03:00
+});
+
+test('isWithinCollectionHours segue o relogio de Lisboa tambem no inverno', () => {
+  // Janeiro: WET, sem a hora a mais. As 07:30 continua a ser fora do horario
+  // e as 08:00 dentro -- e nao 06:30/07:00, que era o que uma conta em UTC dava.
+  assert.equal(isWithinCollectionHours(em('2026-01-15T07:30:00Z')), false);
+  assert.equal(isWithinCollectionHours(em('2026-01-15T08:00:00Z')), true);
+});
+
+test('a noite nao conta para a idade: as 08:00 o ficheiro das 00:06 esta em dia', () => {
+  const ficheiro = geradoEm('2026-09-08T23:06:00Z'); // 00:06 de Lisboa
+  assert.equal(serviceMinutesSinceGenerated(ficheiro, em('2026-09-09T07:00:00Z')), 24);
+  assert.equal(isCollectionStalled(ficheiro, em('2026-09-09T07:00:00Z')), false);
+});
+
+test('quatro horas de horario sem dados novos acendem o alarme', () => {
+  const ficheiro = geradoEm('2026-09-08T23:06:00Z'); // 00:06 de Lisboa
+  // 11:00 de Lisboa: 24 min da madrugada + 3h da manha = 3h24 de horario.
+  assert.equal(serviceMinutesSinceGenerated(ficheiro, em('2026-09-09T10:00:00Z')), 204);
+  assert.equal(isCollectionStalled(ficheiro, em('2026-09-09T10:00:00Z')), false);
+  // 12:00 de Lisboa: 4h24. Quatro corridas de hora a hora que nao aconteceram.
+  assert.equal(serviceMinutesSinceGenerated(ficheiro, em('2026-09-09T11:00:00Z')), 264);
+  assert.equal(isCollectionStalled(ficheiro, em('2026-09-09T11:00:00Z')), true);
+});
+
+test('fora do horario nao ha alarme, por muito velho que o ficheiro esteja', () => {
+  const ontem = geradoEm('2026-09-08T08:00:00Z'); // 09:00 de Lisboa, vespera
+  assert.equal(isCollectionStalled(ontem, em('2026-09-09T02:00:00Z')), false); // 03:00
+  // E a mesma coisa volta a acender assim que a tarefa devia ter corrido.
+  assert.equal(isCollectionStalled(ontem, em('2026-09-09T07:30:00Z')), true); // 08:30
+});
+
+test('o alarme cala-se quando nao ha data em que confiar', () => {
+  const estragado = geradoEm('nao e uma data');
+  assert.equal(serviceMinutesSinceGenerated(estragado, em('2026-09-09T11:00:00Z')), null);
+  assert.equal(isCollectionStalled(estragado, em('2026-09-09T11:00:00Z')), false);
+});
+
+test('relogio atras do ficheiro nao vira idade negativa', () => {
+  const ficheiro = geradoEm('2026-09-09T11:00:00Z');
+  assert.equal(serviceMinutesSinceGenerated(ficheiro, em('2026-09-09T10:00:00Z')), 0);
+});
+
+test('o limiar e um argumento -- mudar de ideias nao obriga a mexer na conta', () => {
+  const ficheiro = geradoEm('2026-09-08T23:06:00Z');
+  assert.equal(isCollectionStalled(ficheiro, em('2026-09-09T10:00:00Z'), 180), true);
+  assert.equal(isCollectionStalled(ficheiro, em('2026-09-09T11:00:00Z'), 360), false);
+});
+
+test('formatGeneratedStamp diz a que noite as melhores janelas se referem', () => {
+  // 00:06 UTC = 02:06 em Berlim; a referencia do bot e as 02:04 do dia 9.
+  assert.equal(formatGeneratedStamp(geradoEm('2026-09-09T00:06:00Z')), '09/09, 02:04');
+  assert.equal(formatGeneratedStamp(geradoEm('nao e uma data')), null);
 });

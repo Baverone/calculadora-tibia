@@ -3,8 +3,10 @@ import { useCelestaHunts } from '../../hooks/useCelestaHunts';
 import { loadSelectedSpots, loadShowLisbon, saveSelectedSpots, saveShowLisbon } from '../../storage/spotFilter';
 import {
   formatAge,
+  formatGeneratedStamp,
   formatLength,
   formatWindow,
+  isCollectionStalled,
   isStale,
   spotAvailability,
   toLisbon,
@@ -239,17 +241,35 @@ export function CelestaHuntsPanel() {
             </label>
           </div>
 
-          {isStale(data, now) && (
-            <p className="hunts-panel__banner">
-              ⚠️ Estes dados já têm mais de hora e meia — pode haver reservas novas desde então.
+          {/* Dois avisos, e só um de cada vez. "Mais de hora e meia" é um
+              cuidado a ter; "parados há Xh" é uma avaria do outro lado, e
+              dizer as duas coisas ao mesmo tempo escondia a segunda. */}
+          {isCollectionStalled(data, now) ? (
+            <p className="hunts-panel__banner hunts-panel__banner--stalled">
+              ⛔ Dados parados {formatAge(data, now)} — a recolha do Discord pode ter parado.
             </p>
+          ) : (
+            isStale(data, now) && (
+              <p className="hunts-panel__banner">
+                ⚠️ Estes dados já têm mais de hora e meia — pode haver reservas novas desde então.
+              </p>
+            )
           )}
 
           <FreeNowStrip entries={entries} />
 
+          {/* "da noite" e a data não são enfeite: o bloco é calculado uma vez,
+              quando o ficheiro é escrito, e só olha para as 17:00–01:00. Às
+              10 da manhã fala da noite de hoje; às 00:30 já é a seguinte, e
+              sem o carimbo não havia como saber de qual das duas se trata. */}
           {data.highlights && data.highlights.length > 0 && (
             <div className="hunts-panel__highlights">
-              <span className="hunts-panel__label">Melhores janelas</span>
+              <span className="hunts-panel__label">
+                Melhores janelas da noite
+                {formatGeneratedStamp(data) && (
+                  <em className="hunts-panel__label-note"> · calculadas a {formatGeneratedStamp(data)}</em>
+                )}
+              </span>
               <ul>
                 {data.highlights.map((line) => (
                   <li key={line}>{line}</li>

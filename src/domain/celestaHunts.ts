@@ -63,6 +63,154 @@ export function formatWindow(window: HuntWindow): string {
   return `${window.start} - ${window.end}`;
 }
 
+/* --- Alarme de frescura ------------------------------------------------
+ *
+ * `isStale` (hora e meia) responde a "isto pode estar desatualizado". Não
+ * responde à pergunta que interessa mais, e que é a mesma que o
+ * check-history-freshness.mjs faz à XP desde os dez dias parados de agosto:
+ * **a recolha ainda está viva?** Um ficheiro de nove horas não é "um bocado
+ * velho", é a tarefa do Discord parada — e até setembro de 2026 isso não
+ * dizia nada a ninguém, nem no painel nem no mail.
+ *
+ * O que torna esta conta diferente da da XP é o horário: a tarefa corre de
+ * hora a hora entre as 08:03 e as 23:03, mais uma vez às 00:03. Entre as
+ * 00:30 e as 08:00 o ficheiro envelhece porque ninguém o escreve — é o
+ * normal, não uma avaria. Às 08:00 o ficheiro tem legitimamente ~8h.
+ *
+ * Por isso não se conta o tempo de relógio: contam-se os **minutos de
+ * horário** decorridos desde `generatedAt`. Quatro horas de horário sem
+ * dados novos são quatro corridas falhadas seguidas (sugestão da revisão de
+ * 09/09/2026 — o número é do André).
+ *
+ * A mesma decisão está copiada em `scripts/check-hunts-freshness.mjs`, que é
+ * o lado que pinta o workflow de vermelho. Se um lado mudar, o outro tem de
+ * mudar também.
+ */
+
+/** 08:00 em minutos — a que horas a tarefa volta a correr. */
+const COLLECTION_START_MINUTE = 8 * 60;
+/** 00:30 em minutos — a última corrida do dia (00:03) mais folga. */
+const COLLECTION_END_MINUTE = 30;
+/** Minutos de horário por dia: 00:00–00:30 mais 08:00–24:00. */
+const SERVICE_MINUTES_PER_DAY = COLLECTION_END_MINUTE + (24 * 60 - COLLECTION_START_MINUTE);
+
+/** Limiar do alarme, em minutos de horário. */
+export const STALLED_AFTER_SERVICE_MINUTES = 4 * 60;
+
+// O horário é de Lisboa porque é o relógio do PC que agenda a tarefa. Um só
+// formatter, reutilizado: isto é chamado a cada minuto pelo painel.
+const lisbonParts = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Lisbon',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+});
+
+interface LisbonClock {
+  /** Dias desde a época, em dias de calendário de Lisboa. */
+  day: number;
+  /** Minutos desde a meia-noite de Lisboa. */
+  minuteOfDay: number;
+}
+
+function lisbonClock(ms: number): LisbonClock | null {
+  if (!Number.isFinite(ms)) return null;
+  const parts: Record<string, string> = {};
+  for (const part of lisbonParts.formatToParts(new Date(ms))) parts[part.type] = part.value;
+
+  const year = Number(parts.year);
+  const month = Number(parts.month);
+  const day = Number(parts.day);
+  const hour = Number(parts.hour);
+  const minute = Number(parts.minute);
+  if ([year, month, day, hour, minute].some((n) => !Number.isInteger(n))) return null;
+
+  return { day: Date.UTC(year, month - 1, day) / 86_400_000, minuteOfDay: hour * 60 + minute };
+}
+
+/** Está agora dentro do horário em que a tarefa devia estar a escrever? */
+export function isWithinCollectionHours(now: number): boolean {
+  const clock = lisbonClock(now);
+  if (clock === null) return false;
+  return clock.minuteOfDay <= COLLECTION_END_MINUTE || clock.minuteOfDay >= COLLECTION_START_MINUTE;
+}
+
+/**
+ * Um relógio que só anda dentro do horário da tarefa: a diferença entre dois
+ * valores destes é o tempo que a tarefa teve para correr e não correu.
+ */
+function serviceClock(ms: number): number | null {
+  const clock = lisbonClock(ms);
+  if (clock === null) return null;
+
+  const m = clock.minuteOfDay;
+  const withinDay =
+    m <= COLLECTION_END_MINUTE
+      ? m
+      : m < COLLECTION_START_MINUTE
+        ? COLLECTION_END_MINUTE
+        : COLLECTION_END_MINUTE + (m - COLLECTION_START_MINUTE);
+
+  return clock.day * SERVICE_MINUTES_PER_DAY + withinDay;
+}
+
+/**
+ * Minutos de horário da tarefa desde o ficheiro ter sido escrito. `null`
+ * quando a data não presta — aí não se inventa um alarme.
+ */
+export function serviceMinutesSinceGenerated(data: CelestaHuntsData, now: number): number | null {
+  const generated = Date.parse(data.generatedAt);
+  if (Number.isNaN(generated)) return null;
+
+  const from = serviceClock(generated);
+  const to = serviceClock(now);
+  if (from === null || to === null) return null;
+  return Math.max(0, to - from);
+}
+
+/**
+ * A recolha do Discord parou? Só responde "sim" dentro do horário da tarefa:
+ * às quatro da manhã ninguém está à espera de dados novos, e um alarme que
+ * toca de noite todas as noites é um alarme que se ignora.
+ */
+export function isCollectionStalled(
+  data: CelestaHuntsData,
+  now: number,
+  thresholdMinutes: number = STALLED_AFTER_SERVICE_MINUTES
+): boolean {
+  if (!isWithinCollectionHours(now)) return false;
+  const elapsed = serviceMinutesSinceGenerated(data, now);
+  return elapsed !== null && elapsed > thresholdMinutes;
+}
+
+/**
+ * Quando é que as "melhores janelas" foram calculadas — "09/09, 02:04", em
+ * hora de Berlim como tudo o resto no painel.
+ *
+ * O bloco é calculado uma vez, no momento em que o ficheiro é escrito, e só
+ * olha para as 17:00–01:00. Às dez da manhã isso é a noite de hoje; às 00:30
+ * é a noite seguinte, e sem esta etiqueta não havia como saber qual das duas.
+ */
+const berlinDate = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Berlin',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+export function formatGeneratedStamp(data: CelestaHuntsData): string | null {
+  const generated = Date.parse(data.generatedAt);
+  if (Number.isNaN(generated)) return null;
+
+  const parts: Record<string, string> = {};
+  for (const part of berlinDate.formatToParts(new Date(generated))) parts[part.type] = part.value;
+  if (!parts.day || !parts.month) return null;
+
+  return `${parts.day}/${parts.month}, ${data.referenceTime}`;
+}
+
 export function formatLength(minutes: number): string {
   if (minutes < 60) return `${minutes}min`;
   const hours = Math.floor(minutes / 60);
