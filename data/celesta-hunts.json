@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T14:05:54.651Z",
-  "referenceTime": "16:04",
+  "generatedAt": "2026-09-09T14:10:30.501Z",
+  "referenceTime": "16:05",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -14,8 +14,8 @@
         },
         {
           "start": "23:30",
-          "end": "16:04",
-          "minutes": 994
+          "end": "16:05",
+          "minutes": 995
         }
       ]
     },
@@ -23,14 +23,14 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "16:04",
+          "start": "16:05",
           "end": "19:50",
-          "minutes": 226
+          "minutes": 225
         },
         {
           "start": "22:00",
-          "end": "16:04",
-          "minutes": 1084
+          "end": "16:05",
+          "minutes": 1085
         }
       ]
     },
@@ -39,8 +39,8 @@
       "free": [
         {
           "start": "21:40",
-          "end": "16:04",
-          "minutes": 1104
+          "end": "16:05",
+          "minutes": 1105
         }
       ]
     },
@@ -54,8 +54,8 @@
         },
         {
           "start": "09:40",
-          "end": "16:04",
-          "minutes": 384
+          "end": "16:05",
+          "minutes": 385
         }
       ]
     },
@@ -73,9 +73,9 @@
           "minutes": 297
         },
         {
-          "start": "11:05",
-          "end": "16:04",
-          "minutes": 299
+          "start": "12:10",
+          "end": "16:05",
+          "minutes": 235
         }
       ]
     },
@@ -134,16 +134,16 @@
         },
         {
           "start": "08:00",
-          "end": "16:04",
-          "minutes": 484
+          "end": "16:05",
+          "minutes": 485
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal (Mazoran) — 21:40 a 16:04",
-    "Feru DT Seal -2 (Shulgrax) — 16:04 a 19:50",
-    "Feru DT Seal -2 (Shulgrax) — 22:00 a 16:04",
-    "Feru DT Seal -1 (Shulgrax) — 23:30 a 16:04"
+    "Feru Infernatil Seal (Mazoran) — 21:40 a 16:05",
+    "Feru DT Seal -2 (Shulgrax) — 22:00 a 16:05",
+    "Feru DT Seal -2 (Shulgrax) — 16:05 a 19:50",
+    "Feru DT Seal -1 (Shulgrax) — 23:30 a 16:05"
   ]
 }
