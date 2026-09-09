@@ -37,13 +37,19 @@ Outros comandos:
 npm run build     # build de produção (inclui verificação de tipos TypeScript)
 npm run preview   # serve o build de produção localmente
 npm run lint      # linter (oxlint)
-npm test          # testes dos scripts .mjs (node --test, sem rede)
+npm test          # testes dos scripts .mjs e do domínio .ts (node --test, sem rede)
 ```
 
 Os testes cobrem a lógica pura dos scripts — o parser da tabela do guildstats
-e o cálculo das janelas livres do Celesta —, com fixtures locais e sem um
-único pedido de rede. O lado React/TypeScript não tem testes: a verificação
-é o `tsc` do `npm run build`.
+e o cálculo das janelas livres do Celesta — e, desde setembro de 2026, também
+o domínio TypeScript da app, com fixtures locais e sem um único pedido de rede.
+
+O `npm test` corre com `--experimental-strip-types`, que é o que permite ao
+`node --test` executar um `.test.ts` sem passo de build nem dependências
+novas. Os ficheiros `src/**/*.test.ts` saem do `tsconfig.app.json` (que não
+tem os tipos do Node) e entram no `tsconfig.node.json` — é a única razão por
+que os dois tsconfig se tocam. Componentes React continuam sem testes: aí a
+verificação é o `tsc` do `npm run build`.
 
 ## Stack
 
@@ -54,7 +60,29 @@ e o cálculo das janelas livres do Celesta —, com fixtures locais e sem um
   + um repositório GitHub público como "base de dados" partilhada só-leitura
   (histórico recolhido automaticamente — ver secção abaixo).
 - Sem framework CSS — tema próprio em `src/styles/theme.css` (dourado/escuro,
-  sem assets oficiais do Tibia).
+  sem assets oficiais do Tibia). Uma media query aos 560px trata do telemóvel
+  (ver "Telemóvel" abaixo).
+- **O gráfico carrega à parte.** O Recharts sozinho eram dois terços do
+  JavaScript da app (604 KB → 250 KB no arranque, 180 KB → 78 KB gzipped) e
+  estava no caminho crítico de quem só quer ver os timers e os spots livres.
+  `PlayerPanel` importa-o com `React.lazy`.
+
+## Telemóvel
+
+O tema não tinha uma única media query, e o ecrã de referência é um telemóvel
+de 390px — é aí que a app se abre para ver se dá para caçar. O que estava mal
+e ficou corrigido em setembro de 2026, tudo em `@media (max-width: 560px)`:
+
+- Os três separadores lado a lado espremiam "Bluey The Cat"; passam a ícone
+  por cima do nome.
+- Os três timers caíam em coluna (o `minmax(160px, 1fr)` não dava duas colunas
+  com 34px de padding), e com anéis de 120px isso era um ecrã inteiro de
+  timers antes de se ver seja o que for. Agora são duas colunas fixas com
+  anéis de 96px.
+- Botões de 24px de altura — metade do alvo de toque recomendado — passam a
+  ter 40px mínimos.
+- O cartão de nível punha dois números de 11 dígitos lado a lado; passam a
+  ficar um por linha.
 
 ## Recolha automática diária de XP
 
@@ -209,6 +237,33 @@ src/
 - **Persistência diferente** (ex: backend, IndexedDB): só os ficheiros em
   `src/storage/` precisam de mudar — o resto da app não sabe onde os dados
   são guardados.
+
+## Spots livres do Celesta
+
+Painel em Utilitários → Spots (`src/components/hunt/CelestaHuntsPanel.tsx`),
+alimentado por `data/celesta-hunts.json`. As janelas não trazem data: são
+"HH:MM - HH:MM" numa volta de 24h que começa no `referenceTime` (o footer do
+summary do bot, em hora de Berlim).
+
+**"Livre agora" (setembro de 2026).** O painel mostrava as janelas e mais
+nada, e a pergunta que se faz ao abrir isto no telemóvel antes de ir caçar é
+outra: *dá para entrar já?* Responder a isso a olho obrigava a comparar o
+relógio com uma lista de intervalos onde "00:00 - 02:04" era de amanhã e não
+de há duas horas. Agora há uma linha "Livres agora" no topo e um estado por
+spot ("livre agora, até às 17:00" / "ocupado, livre às 20:00").
+
+A conta está em `spotAvailability` (`src/domain/celestaHunts.ts`) e é
+deliberadamente ignorante de fusos: os minutos decorridos saem do
+`generatedAt`, que é um instante absoluto, e comparam-se com o desvio de cada
+janela dentro da mesma volta de 24h. Custa uns 2 minutos de folga (o
+`referenceTime` é escrito um pouco antes de o ficheiro ser gerado) e poupa
+toda a matemática de Berlim/Lisboa/horário de verão.
+
+**Recusa-se a responder** quando o ficheiro tem 24h ou mais, quando a data não
+presta, ou quando o relógio do dispositivo está atrás do ficheiro. Aí não
+aparece estado nenhum — só as janelas, que essas não dependem do relógio. Ao
+fim de uma volta completa a conta dava a volta e uma janela de ontem passava
+por "livre agora": errada e confiante, que é o pior que há.
 
 ## Timers de hunt
 

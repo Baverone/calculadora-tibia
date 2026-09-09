@@ -6,7 +6,11 @@ interface RecentHistoryListProps {
   maxEntries?: number;
 }
 
-const dateFormatter = new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+// Sem hora: o guildstats só publica o total do dia, e o timestamp é meio-dia
+// UTC inventado para manter a ordenação estável. Mostrar "13:00" ao lado de
+// cada leitura era dar por exata uma hora que ninguém mediu — e que ainda por
+// cima mudava para "12:00" no inverno.
+const dateFormatter = new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: '2-digit' });
 const numberFormatter = new Intl.NumberFormat('pt-PT');
 
 export function RecentHistoryList({ history, maxEntries = 5 }: RecentHistoryListProps) {
