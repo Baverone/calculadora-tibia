@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T16:06:42.034Z",
-  "referenceTime": "18:05",
+  "generatedAt": "2026-09-09T17:05:21.584Z",
+  "referenceTime": "19:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,14 +8,14 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "18:05",
+          "start": "19:15",
           "end": "20:30",
-          "minutes": 145
+          "minutes": 75
         },
         {
           "start": "23:30",
-          "end": "18:05",
-          "minutes": 1115
+          "end": "19:04",
+          "minutes": 1174
         }
       ]
     },
@@ -23,14 +23,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "18:05",
-          "end": "19:50",
-          "minutes": 105
-        },
-        {
-          "start": "22:00",
-          "end": "16:30",
-          "minutes": 1110
+          "start": "19:30",
+          "end": "19:04",
+          "minutes": 1414
         }
       ]
     },
@@ -69,8 +64,8 @@
         },
         {
           "start": "12:10",
-          "end": "18:05",
-          "minutes": 355
+          "end": "15:30",
+          "minutes": 200
         }
       ]
     },
@@ -95,11 +90,6 @@
         {
           "start": "14:00",
           "end": "14:30",
-          "minutes": 30
-        },
-        {
-          "start": "15:50",
-          "end": "16:20",
           "minutes": 30
         }
       ]
@@ -139,16 +129,15 @@
         },
         {
           "start": "15:30",
-          "end": "18:05",
-          "minutes": 155
+          "end": "16:15",
+          "minutes": 45
         }
       ]
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) — 22:00 a 16:30",
-    "Feru DT Seal -1 (Shulgrax) — 23:30 a 18:05",
-    "Feru Infernatil Seal (Mazoran) — 22:21 a 16:00",
-    "Feru DT Seal -1 (Shulgrax) — 18:05 a 20:30"
+    "Feru DT Seal -2 (Shulgrax) — 19:30 a 19:04",
+    "Feru DT Seal -1 (Shulgrax) — 23:30 a 19:04",
+    "Feru Infernatil Seal (Mazoran) — 22:21 a 16:00"
   ]
 }
