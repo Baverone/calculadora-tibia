@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T17:05:21.584Z",
-  "referenceTime": "19:04",
+  "generatedAt": "2026-09-09T17:09:27.806Z",
+  "referenceTime": "19:05",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -14,8 +14,8 @@
         },
         {
           "start": "23:30",
-          "end": "19:04",
-          "minutes": 1174
+          "end": "19:05",
+          "minutes": 1175
         }
       ]
     },
@@ -24,8 +24,8 @@
       "free": [
         {
           "start": "19:30",
-          "end": "19:04",
-          "minutes": 1414
+          "end": "19:05",
+          "minutes": 1415
         }
       ]
     },
@@ -136,8 +136,8 @@
     }
   ],
   "highlights": [
-    "Feru DT Seal -2 (Shulgrax) — 19:30 a 19:04",
-    "Feru DT Seal -1 (Shulgrax) — 23:30 a 19:04",
+    "Feru DT Seal -2 (Shulgrax) — 19:30 a 19:05",
+    "Feru DT Seal -1 (Shulgrax) — 23:30 a 19:05",
     "Feru Infernatil Seal (Mazoran) — 22:21 a 16:00"
   ]
 }
