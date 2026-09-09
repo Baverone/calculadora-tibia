@@ -1,7 +1,8 @@
-export type UtilityTabId = 'hunts' | 'stamina' | 'arrows';
+import type { UtilityTabId } from '../../domain/types';
 
 const UTILITY_TAB_ACCENT = '#c9a227';
 
+// Os ids são os de `UTILITY_TAB_IDS`; aqui só se lhes dá um rótulo.
 const UTILITY_TABS: { id: UtilityTabId; label: string }[] = [
   { id: 'hunts', label: 'Spots' },
   { id: 'stamina', label: 'Stamina' },

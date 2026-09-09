@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import type { AppTabId } from './domain/types';
+import { UTILITY_TAB_IDS, type AppTabId, type UtilityTabId } from './domain/types';
 import { PLAYERS } from './constants/players';
 import { TabsBar } from './components/layout/TabsBar';
 import { PlayerPanel } from './components/layout/PlayerPanel';
-import { UtilityTabsBar, type UtilityTabId } from './components/layout/UtilityTabsBar';
+import { UtilityTabsBar } from './components/layout/UtilityTabsBar';
+import { loadTab, saveTab } from './storage/activeTab';
 import { TimersPanel } from './components/timers/TimersPanel';
 import { TibiadromeSection } from './components/tibiadrome/TibiadromeSection';
 import { RashidCard } from './components/rashid/RashidCard';
@@ -11,9 +12,25 @@ import { StaminaCalculator } from './components/stamina/StaminaCalculator';
 import { CelestaHuntsPanel } from './components/hunt/CelestaHuntsPanel';
 import { ArrowsCalculator } from './components/arrows/ArrowsCalculator';
 
+const APP_TAB_IDS: readonly AppTabId[] = [...PLAYERS.map((player) => player.id), 'utilities'];
+
 function App() {
-  const [activeTab, setActiveTab] = useState<AppTabId>(PLAYERS[0].id);
-  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>('hunts');
+  // A app abre onde ficou da última vez. Sem nada guardado (primeira visita,
+  // ou localStorage bloqueado) abre no primeiro boneco, como sempre abriu.
+  const [activeTab, setActiveTab] = useState<AppTabId>(() => loadTab('main', APP_TAB_IDS) ?? PLAYERS[0].id);
+  const [activeUtilityTab, setActiveUtilityTab] = useState<UtilityTabId>(
+    () => loadTab('utility', UTILITY_TAB_IDS) ?? 'hunts'
+  );
+
+  function changeTab(id: AppTabId) {
+    setActiveTab(id);
+    saveTab('main', id);
+  }
+
+  function changeUtilityTab(id: UtilityTabId) {
+    setActiveUtilityTab(id);
+    saveTab('utility', id);
+  }
 
   const showingUtilities = activeTab === 'utilities';
 
@@ -29,9 +46,9 @@ function App() {
 
       <TibiadromeSection />
 
-      <TabsBar activeId={activeTab} onChange={setActiveTab} />
+      <TabsBar activeId={activeTab} onChange={changeTab} />
 
-      {showingUtilities && <UtilityTabsBar activeId={activeUtilityTab} onChange={setActiveUtilityTab} />}
+      {showingUtilities && <UtilityTabsBar activeId={activeUtilityTab} onChange={changeUtilityTab} />}
 
       {/* Os painéis ficam todos montados (só escondidos) para que um filtro ou
           um campo meio preenchido não se perca ao trocar de separador. */}
