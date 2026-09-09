@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-09T11:10:34.585Z",
-  "referenceTime": "13:06",
+  "generatedAt": "2026-09-09T12:05:39.288Z",
+  "referenceTime": "14:04",
   "timezone": "Europe/Berlin",
   "minWindowMinutes": 30,
   "spots": [
@@ -8,9 +8,9 @@
       "name": "Feru DT Seal -1 (Shulgrax)",
       "free": [
         {
-          "start": "13:06",
+          "start": "14:04",
           "end": "17:00",
-          "minutes": 234
+          "minutes": 176
         },
         {
           "start": "20:00",
@@ -19,8 +19,8 @@
         },
         {
           "start": "23:30",
-          "end": "13:06",
-          "minutes": 816
+          "end": "14:04",
+          "minutes": 874
         }
       ]
     },
@@ -28,9 +28,9 @@
       "name": "Feru DT Seal -2 (Shulgrax)",
       "free": [
         {
-          "start": "13:06",
+          "start": "14:04",
           "end": "15:00",
-          "minutes": 114
+          "minutes": 56
         },
         {
           "start": "18:00",
@@ -39,8 +39,8 @@
         },
         {
           "start": "22:00",
-          "end": "13:06",
-          "minutes": 906
+          "end": "14:04",
+          "minutes": 964
         }
       ]
     },
@@ -48,14 +48,14 @@
       "name": "Feru Infernatil Seal (Mazoran)",
       "free": [
         {
-          "start": "13:30",
+          "start": "14:04",
           "end": "15:30",
-          "minutes": 120
+          "minutes": 86
         },
         {
           "start": "21:40",
-          "end": "13:06",
-          "minutes": 926
+          "end": "14:04",
+          "minutes": 984
         }
       ]
     },
@@ -69,8 +69,8 @@
         },
         {
           "start": "09:40",
-          "end": "13:06",
-          "minutes": 206
+          "end": "14:04",
+          "minutes": 264
         }
       ]
     },
@@ -89,8 +89,8 @@
         },
         {
           "start": "11:05",
-          "end": "13:06",
-          "minutes": 121
+          "end": "14:04",
+          "minutes": 179
         }
       ]
     },
@@ -109,8 +109,8 @@
         },
         {
           "start": "10:00",
-          "end": "13:06",
-          "minutes": 186
+          "end": "14:04",
+          "minutes": 244
         }
       ]
     },
@@ -118,14 +118,19 @@
       "name": "Norcferatu East",
       "free": [
         {
-          "start": "02:00",
-          "end": "08:45",
-          "minutes": 405
+          "start": "14:04",
+          "end": "15:00",
+          "minutes": 56
         },
         {
-          "start": "12:00",
-          "end": "13:06",
-          "minutes": 66
+          "start": "02:00",
+          "end": "07:40",
+          "minutes": 340
+        },
+        {
+          "start": "13:01",
+          "end": "14:04",
+          "minutes": 63
         }
       ]
     },
@@ -139,15 +144,15 @@
         },
         {
           "start": "08:00",
-          "end": "13:06",
-          "minutes": 306
+          "end": "14:04",
+          "minutes": 364
         }
       ]
     }
   ],
   "highlights": [
-    "Feru Infernatil Seal (Mazoran) — 21:40 a 13:06",
-    "Feru DT Seal -2 (Shulgrax) — 22:00 a 13:06",
+    "Feru Infernatil Seal (Mazoran) — 21:40 a 14:04",
+    "Feru DT Seal -2 (Shulgrax) — 22:00 a 14:04",
     "Feru DT Seal -2 (Shulgrax) — 18:00 a 19:50",
     "Stag Catacombs -1 — 23:00 a 07:00"
   ]
