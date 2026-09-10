@@ -17,11 +17,10 @@
 #     "o pedido correu mal?", mas "ha quantos dias e que nao entra XP nova?".
 #     Apanha tanto o guildstats a mudar como o PC desligado ou a tarefa
 #     agendada apagada.
-#  3. Desde 09/09/2026 faz a mesma pergunta as janelas de hunt do Celesta
-#     (check-hunts-freshness.mjs). O celesta-hunts.json nao tinha alarme
-#     nenhum: com a tarefa do Discord parada, o painel dizia "ha 9 horas" e
-#     mais nada. Este passo corre sempre (if: always()), para o alarme da XP
-#     e o das hunts nao se taparem um ao outro.
+#  3. O alarme das janelas de hunt do Celesta (check-hunts-freshness.mjs)
+#     esteve aqui de 09/09 a 10/09/2026 e saiu: o Andre desligou a recolha
+#     do Discord, por isso o ficheiro deixou de ser actualizado de proposito
+#     e o alarme so daria vermelho a mentir. O script fica no repo.
 name: Scrape Tibia Experience
 
 on:
@@ -74,11 +73,3 @@ jobs:
       # venha ela da Action ou do PC.
       - name: Histórico está a ficar para trás?
         run: node scripts/check-history-freshness.mjs
-
-      # O mesmo, para as janelas de hunt. O cron das 12:00 UTC cai as 13:00 em
-      # Lisboa, dentro do horario da tarefa do Discord; se o GitHub se atrasar
-      # para depois das 00:30 este passo passa sem alarme, de proposito -- ver
-      # o cabecalho do script.
-      - name: Janelas de hunt estão paradas?
-        if: always()
-        run: node scripts/check-hunts-freshness.mjs
