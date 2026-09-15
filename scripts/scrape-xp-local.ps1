@@ -20,7 +20,7 @@
 # significa zero corridas entre os dois.
 
 $ErrorActionPreference = 'Continue'
-$repo = 'C:\Users\Catarina\calculadora-tibia'
+$repo = 'C:\Users\Catarina\tibiavault'
 $log  = Join-Path $repo 'scripts\scrape-xp.log'
 
 function Write-Log($msg) {

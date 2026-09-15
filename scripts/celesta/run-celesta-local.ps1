@@ -25,7 +25,7 @@
 # Instalar a tarefa agendada (uma vez): scripts\celesta\instalar-tarefa.ps1
 
 $ErrorActionPreference = 'Continue'
-$repo   = 'C:\Users\Catarina\calculadora-tibia'
+$repo   = 'C:\Users\Catarina\tibiavault'
 $log    = Join-Path $repo 'scripts\celesta-local.log'
 $runs   = Join-Path $repo 'scripts\celesta\runs.jsonl'
 $prompt = Join-Path $repo 'scripts\celesta\prompt-local.md'

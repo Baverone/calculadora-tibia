@@ -1,5 +1,5 @@
 Atualiza as janelas livres de hunt do mundo Celesta (Tibia) neste projeto, a
-calculadora-tibia (raiz: C:\Users\Catarina\calculadora-tibia). Trabalho de
+TibiaVault (raiz: C:\Users\Catarina\tibiavault). Trabalho de
 rotina, sem ninguém a ver: não peças confirmações nem faças perguntas. Se
 algo falhar, escreve o que falhou e termina — nunca fiques à espera.
 
@@ -135,7 +135,7 @@ Grava os 8 spots em `scripts/celesta/tmp/reservas.json` como um único mapa
 `{"Nome do spot": ["HH:MM - HH:MM Quem", ...] | "SEM RESERVAS"}` e corre:
 
 ```
-node C:\Users\Catarina\calculadora-tibia\scripts\celesta\escrever-hunts.mjs <HH:MM da referência> C:\Users\Catarina\calculadora-tibia\scripts\celesta\tmp\reservas.json
+node C:\Users\Catarina\tibiavault\scripts\celesta\escrever-hunts.mjs <HH:MM da referência> C:\Users\Catarina\tibiavault\scripts\celesta\tmp\reservas.json
 ```
 
 Confirma que a saída começa por `Escrito: 8 spots`. Se der erro, termina com

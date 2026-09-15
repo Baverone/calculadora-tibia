@@ -15,7 +15,7 @@
 # Para remover: Unregister-ScheduledTask -TaskName 'Celesta - spots livres (Claude local)' -Confirm:$false
 
 $nome   = 'Celesta - spots livres (Claude local)'
-$repo   = 'C:\Users\Catarina\calculadora-tibia'
+$repo   = 'C:\Users\Catarina\tibiavault'
 $script = Join-Path $repo 'scripts\celesta\run-celesta-local.ps1'
 
 if (-not (Test-Path -LiteralPath $script)) { Write-Error "nao encontro $script"; exit 1 }

@@ -6,7 +6,7 @@
 # Isto trata dessas duas coisas e mais nada.
 #
 # Correr uma vez:
-#   powershell -ExecutionPolicy Bypass -File C:\Users\Catarina\calculadora-tibia\scripts\aplicar-limpeza.ps1
+#   powershell -ExecutionPolicy Bypass -File C:\Users\Catarina\tibiavault\scripts\aplicar-limpeza.ps1
 #
 # Nao faz push. Deixa o commit feito e o push-hunts.ps1, que ja corre de 5 em
 # 5 minutos, envia-o -- e tambem o unico que faz push, para os dois nao se
@@ -22,7 +22,7 @@
 # situacoes perfeitamente normais, e com 'Stop' isso rebenta o script a meio.
 # Cada passo verifica o seu proprio $LASTEXITCODE.
 $ErrorActionPreference = 'Continue'
-$repo = 'C:\Users\Catarina\calculadora-tibia'
+$repo = 'C:\Users\Catarina\tibiavault'
 Set-Location -LiteralPath $repo
 
 Write-Host ''

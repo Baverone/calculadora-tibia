@@ -27,7 +27,7 @@
 #     pode haver um git a serio a trabalhar do outro lado.
 
 $ErrorActionPreference = 'Continue'
-$repo       = 'C:\Users\Catarina\calculadora-tibia'
+$repo       = 'C:\Users\Catarina\tibiavault'
 $log        = Join-Path $repo 'scripts\push-hunts.log'
 $lock       = Join-Path $repo '.git\index.lock'
 $publicados = @('data/celesta-hunts.json', 'public/celesta-hunts.json')

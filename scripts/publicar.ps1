@@ -4,7 +4,7 @@
 # cada vez que muda alguma coisa na app, os ficheiros ficam na pasta por
 # commitar. Isto e o passo que falta, numa linha:
 #
-#   powershell -ExecutionPolicy Bypass -File C:\Users\Catarina\calculadora-tibia\scripts\publicar.ps1 "grafico so com XP por dia"
+#   powershell -ExecutionPolicy Bypass -File C:\Users\Catarina\tibiavault\scripts\publicar.ps1 "grafico so com XP por dia"
 #
 # Commita E envia. A versao anterior so commitava e deixava o push-hunts.ps1
 # enviar dentro de 5 minutos -- a ideia era haver um unico script a fazer push,
@@ -23,7 +23,7 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$repo = 'C:\Users\Catarina\calculadora-tibia'
+$repo = 'C:\Users\Catarina\tibiavault'
 Set-Location -LiteralPath $repo
 
 git add -A
