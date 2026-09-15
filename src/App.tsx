@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1>Calculadora de Experiência do Tibia</h1>
+        <h1>TibiaVault</h1>
       </header>
 
       <TimersPanel />

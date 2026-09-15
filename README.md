@@ -1,4 +1,9 @@
-# Calculadora de Experiência do Tibia
+# TibiaVault
+
+> Chamava-se **Calculadora de Experiência do Tibia** (`calculadora-tibia`) até
+> 15/09/2026; passou a TibiaVault, a par do `riftvault` e do `mtgvault`
+> (decisão do André). Repositório `Baverone/tibiavault`, pasta local
+> `C:\Users\Catarina\tibiavault`. O GitHub redirecciona o nome antigo.
 
 Aplicação web para acompanhar o progresso de XP de dois personagens —
 **Baverone** (Royal Paladin) e **Bluey The Cat** (Exalted Monk) — com
